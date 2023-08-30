@@ -1,0 +1,14 @@
+.avatar_wrapper {
+    width: 52px;
+    height: 52px;
+
+}
+
+.avatar_img {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 5px 5px -2px var(--color-shadow-default);
+
+    border-radius: 100px;
+    object-fit: cover;
+}
