@@ -1,0 +1,11 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+$azul-principal: #1B89BA;
+
+.landing {
+    background-image: url(../../assets/home_background.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}

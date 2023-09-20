@@ -12,15 +12,15 @@ function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transpare
     
     const bgColor = {
         transparent: "transparent text-gray-700 hover:bg-secondary",
-        primary: "bg-primary hover:bg-primary_light",
-        secondary: "bg-secondary text-gray-900 hover:bg-secondary_dark",
+        primary: "bg-[#1B89BA] hover:bg-primary_light drop-shadow-xl",
+        secondary: "bg-white text-[#108abd] hover:bg-secondary_dark drop-shadow-xl",
         alert: "bg-alert hover:bg-alert_light",
         attention: "bg-attention hover:bg-attention_light",
         confirm: "bg-confirm"
     }
 
     return(  
-        <button className={`w-full py-2 px-4 border-none rounded font-medium text-white text-lg flex items-center justify-center gap-2 cursor-pointer transition-all ${bgColor[variant]}`} {...props}>
+        <button className={`w-full py-2 px-4 border-none rounded-[15px] font-medium text-white text-lg flex items-center justify-center gap-2 cursor-pointer transition-all ${bgColor[variant]}`} {...props}>
             { IconLeft && <IconLeft /> }
             { props.children }
             { IconRight && <IconRight /> }
