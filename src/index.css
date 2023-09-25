@@ -29,3 +29,10 @@ ul {
   list-style: none;
 }
 
+:root{
+  --address-blue:#148AF6;
+  --standart-black:#333333;
+  --standart-gray:#666666;
+  --date-gray:#828282;
+  --outline-gray:#C5C5C5;
+}

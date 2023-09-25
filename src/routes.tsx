@@ -10,6 +10,7 @@ import CpfCadastrado from "./pages/CpfRegistered";
 import Cpf from "./pages/CPF/Cpf";
 import RecoverPassword from "./pages/Recuperar Senha";
 import Error from "./pages/Error";
+import Teste from "./pages/Teste";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
                 path: "/app/dados-pessoais",
                 element: <PersonalData />
             },
+            {
+                path:"/app/teste",
+                element:<Teste/>
+            }
         ]
     }, {
         path: "/login",
