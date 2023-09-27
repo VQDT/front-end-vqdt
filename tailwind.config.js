@@ -10,6 +10,8 @@ export default {
         primary: "#108ABD",
         primary_dark: "#176181",
         primary_light: "#61B3D4",
+        primary_red: "#F63B42",
+        concrete: "#95A5A6",
         secondary: "#F5F5F5",
         secondary_dark: "#C5C5C5",
         alert: "#E52207",
