@@ -2,7 +2,7 @@ import { ReactNode, ElementType, ButtonHTMLAttributes } from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     children?: ReactNode;
-    variant?: "primary" | "secondary" | "alert" | "attention" | "confirm" | "transparent";
+    variant?: "primary" | "secondary" | "alert" | "attention" | "confirm" | "transparent"| "close";
     iconLeft?: ElementType;
     iconRight?: ElementType;
     shadow?: boolean;
@@ -16,7 +16,8 @@ function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transpare
         secondary: "bg-secondary border-none text-gray-900 hover:bg-secondary_dark",
         alert: "bg-white text-primary_red border border-primary_red hover:bg-primary_red hover:text-white",
         attention: "bg-attention border-none hover:bg-attention_light",
-        confirm: "bg-confirm border-none"
+        confirm: "bg-confirm border-none",
+        close: "bg-concrete border hover:bg-white hover:text-concrete hover:border-concrete"
     }
 
     return(  

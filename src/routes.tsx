@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
+import {AiOutlineArrowLeft} from 'react-icons/ai'
 
-import Modal from "./components/Modal1";
+import Modal from "./components/Modal";
 import Home from "./pages/Home"
 import Login from "./layout/login";
 import Layout from "./layout/app";
@@ -18,8 +19,15 @@ export const router = createBrowserRouter([
         element: <Home />,
     },
     {
-        path: "/modal1",
-        element: <Modal />,
+        path: "/modal",
+        element: <Modal title="ATENÇÃO" 
+                        bg_color="bg-primary_red" 
+                        content="Digite sua senha para encerrar a prova." 
+                        input="true" 
+                        buttons={[
+                            {label: "VOLTAR", variant: "primary", icon: AiOutlineArrowLeft},
+                            {label: "ENCERRAR", variant: "alert"}
+                          ]}/>,
     }, {
         path: "/app",
         element: <Layout />,
