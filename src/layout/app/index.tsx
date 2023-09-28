@@ -1,34 +1,54 @@
 import { Outlet } from "react-router-dom";
-import Avatar from "../../components/Avatar";
 import logo from "../../assets/logo.png";
+import { BiExit } from "react-icons/bi"
 
 function Layout() {
-    return(
-        <>
-            <header className="w-full h-max p-4 bg-white">
-                <div className="w-full max-w-[1200px] m-auto flex justify-between items-center">
-                    <img src={logo} className="h-[52px]"/>
-                    <nav className="ml-auto mr-8">
-                        <ul className="pr-4 flex items-center gap-8">
-                            <li className="text-gray-600 text-lg font-medium hover:text-primary">
-                                <a href="/app/agendamento" className="py-2 transition-colors hover:border-b-4 hover:border-primary">Agendamento</a>
-                            </li> 
-                            <li className="text-gray-600 text-lg font-medium hover:text-primary">
-                                <a href="/app/provas" className="py-2 transition-colors hover:border-b-4 hover:border-primary">Provas</a>
-                            </li>
-                            <li className="text-gray-600 text-lg font-medium hover:text-primary">
-                                <a href="/app/dados-pessoais" className="py-2 transition-colors hover:border-b-4 hover:border-primary">Dados Pessoais</a>
-                            </li>
-                        </ul>
-                    </nav>
-                    <Avatar url="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"/>
-                </div>
-            </header>
-            <main className="w-full max-w-[1200px] m-auto py-8">
-                <Outlet></Outlet>
-            </main>
-        </>
-    );
+
+  return (
+    <>
+      <header className="w-full h-[63px] bg-[#108ABD]">
+        <div className="w-full  m-auto flex justify-between items-center">
+          <div className="bg-white py-[5.5px] pl-5 pr-5 rounded-tr-xl">
+            <img src={logo} className="h-[52px]" />
+          </div>
+          <nav className="ml-auto mr-4">
+            <ul className="pr-4 flex items-center gap-8">
+              <li className="text-white text-lg font-medium hover:text-white h-[63px] border-r pr-8 flex items-center">
+                <a
+                  href="/app/agendamento"
+                  className="py-2 transition-colors hover:border-b-4 hover:border-white"
+                >
+                  PREPARATÓRIOS
+                </a>
+              </li>
+              <li className="text-white text-lg font-medium hover:text-white h-[63px] border-r pr-8 flex items-center">
+                <a
+                  href="/app/provas"
+                  className="py-2 transition-colors hover:border-b-4 hover:border-white"
+                >
+                  PROVAS
+                </a>
+              </li>
+              <li className="text-white text-lg font-medium hover:text-white h-[63px] border-r pr-8 flex items-center">
+                <a
+                  href="/app/dados-pessoais"
+                  className="py-2 transition-colors hover:border-b-4 hover:border-white"
+                >
+                  DADOS PESSOAIS
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <button className="text-white text-lg font-medium hover:text-white h-[63px] pr-8 flex items-center">
+            <span className="flex py-2 transition-colors hover:border-b-4 hover:border-white">{<BiExit/>} SAIR</span>
+          </button>
+        </div>
+      </header>
+      <main className="w-full max-w-[1200px] m-auto py-8">
+        <Outlet></Outlet>
+      </main>
+    </>
+  );
 }
 
 export default Layout;
