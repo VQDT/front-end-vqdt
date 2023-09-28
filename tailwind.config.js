@@ -19,7 +19,8 @@ export default {
         attention: "#F3BE02",
         attention_light: "#fAD345",
         confirm: "#168821",
-        confirm_light: "#3CAC47"
+        confirm_light: "#3CAC47",
+        midnight: "#2C3E50"
       }
     },
   },
