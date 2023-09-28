@@ -14,7 +14,7 @@ function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transpare
         transparent: "transparent text-gray-700 border-none hover:bg-secondary",
         primary: "bg-primary border border-primary hover:bg-primary_light hover:border-primary_light",
         secondary: "bg-secondary border-none text-gray-900 hover:bg-secondary_dark",
-        alert: "bg-white text-[#F63B42] border border-primary_red hover:bg-primary_red hover:text-white",
+        alert: "bg-white text-primary_red border border-primary_red hover:bg-primary_red hover:text-white",
         attention: "bg-attention border-none hover:bg-attention_light",
         confirm: "bg-confirm border-none"
     }
