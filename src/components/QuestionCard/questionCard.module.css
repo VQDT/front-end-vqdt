@@ -1,0 +1,110 @@
+.roundedCheckbox {
+  appearance: none;
+  background-color: #fafafa;
+  border: 2px solid #108abd;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.roundedCheckbox:checked {
+  background-color: #108abd;
+  border-color: #108abd;
+}
+
+.roundedCheckbox:checked:hover {
+  background-color: #61b3d4;
+  border-color: #61b3d4;
+}
+
+.roundedCheckbox:hover {
+  border-color: #61b3d4;
+}
+
+.roundedCheckbox:after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  background-color: white;
+  transform: translate(-50%, -50%);
+}
+
+/* ---------------------------PAIN---------------------------- */
+
+.imgCheckbox {
+  width: 240px;
+  height: 240px;
+
+  border-radius: 12px;
+}
+.imgCheckbox input {
+  display: none;
+}
+
+.imgCheckbox label {
+  display: flex;
+  justify-content: center;
+  border: #108abd 2px solid;
+  border-radius: 12px;
+}
+
+.imgCheckbox label:hover {
+  border-radius: 12px;
+  border: #61b3d4 2px solid;
+  background-color: #61b3d4;
+}
+
+.imgCheckbox label img {
+  border-radius: 4px;
+  margin: 20px;
+  width: 200px;
+  height: 200px;
+}
+
+.imgChecked {
+  width: 240px;
+  height: 240px;
+  border: 2px dotted #108abd;
+  border-radius: 12px;
+  display: flex;
+}
+.imgChecked input {
+  display: none;
+}
+
+.imgChecked label {
+  display: flex;
+  justify-content: center;
+  border: #108abd 5px solid;
+  border-radius: 8px;
+  margin: 7px;
+}
+
+.imgChecked label:hover {
+    display: flex;
+    justify-content: center;
+    border: #108abd 5px solid;
+    border-radius: 8px;
+    margin: 7px;
+  }
+
+.imgChecked:hover {
+  border-radius: 12px;
+  border: #61b3d4 2px solid;
+  background-color: #61b3d4;
+}
+
+.imgChecked label img {
+  display: flex;
+  border-radius: 4px;
+  margin: 6px 8px 10px 8px;
+  width: 200px;
+  height: 200px;
+}
