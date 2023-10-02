@@ -1,31 +1,42 @@
-import { ReactNode, ElementType, ButtonHTMLAttributes } from "react";
+import { ReactNode, MouseEvent } from "react";
+import style from "./styles.module.css";
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
-    children?: ReactNode;
-    variant?: "primary" | "secondary" | "alert" | "attention" | "confirm" | "transparent";
-    iconLeft?: ElementType;
-    iconRight?: ElementType;
-    shadow?: boolean;
+interface ButtonProps {
+  children: ReactNode | ReactNode[];
+  variant?: "solid" | "outline";
+  color?: "default" | "confirm" | "alert" | "warning" | "disable";
+  type?: "button" | "submit" | "reset";
+  handleClick?: (event: MouseEvent) => void;
 }
 
-function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transparent", ...props }: ButtonProps) {
-    
-    const bgColor = {
-        transparent: "transparent text-gray-700 hover:bg-secondary",
-        primary: "bg-primary hover:bg-primary_light",
-        secondary: "bg-secondary text-gray-900 hover:bg-secondary_dark",
-        alert: "bg-alert hover:bg-alert_light",
-        attention: "bg-attention hover:bg-attention_light",
-        confirm: "bg-confirm"
-    }
+function Button({variant = "solid", color = "default", children, handleClick, type = "button"}: ButtonProps) {
 
-    return(  
-        <button className={`w-full py-2 px-4 border-none rounded font-medium text-white text-lg flex items-center justify-center gap-2 cursor-pointer transition-all ${bgColor[variant]}`} {...props}>
-            { IconLeft && <IconLeft /> }
-            { props.children }
-            { IconRight && <IconRight /> }
-        </button>
-    );
+  const variantClass = {
+    solid: style.solid,
+    outline: style.outline
+  }
+
+  const colorClass = {
+    default: style.default,
+    confirm: style.confirm,
+    alert: style.alert,
+    warning: style.warning,
+    disable: style.disable
+  }
+
+  return(
+    <button 
+      className={`
+        ${style.button} 
+        ${variantClass[variant]} 
+        ${colorClass[color]}
+      `}
+      type={type}
+      onClick={handleClick}
+    >
+      { children }
+    </button>
+  );
 }
 
-export default Button
+export default Button;
