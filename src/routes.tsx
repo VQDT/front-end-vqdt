@@ -1,5 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 
+import Sobre from "./components/about_proof";
+
 
 import Home from "./pages/Home"
 import Login from "./layout/login";
@@ -16,6 +18,10 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <Home />,
+    },
+    {
+        path: "/sobre",
+        element: <Sobre />,
     },
     {
         path: "/app",
