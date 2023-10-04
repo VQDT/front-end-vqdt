@@ -1,5 +1,4 @@
 import Button from "./components/Button";
-import Header from "./components/Header";
 import ListCard from "./components/ListCard";
 import TestCard from "./components/TestCard";
 import { AiOutlineCalendar, AiFillAlert } from "react-icons/ai";
@@ -7,7 +6,6 @@ import { AiOutlineCalendar, AiFillAlert } from "react-icons/ai";
 function App() {
     return (
         <>
-            <Header />
             <ListCard>
                 <TestCard 
                     handleClick={console.log}
