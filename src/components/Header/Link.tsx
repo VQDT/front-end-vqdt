@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./styles.module.css";
 
 interface LinkProps {
   children: ReactNode;
@@ -8,8 +7,8 @@ interface LinkProps {
 
 function Link({ url, children }: LinkProps) {
   return(
-    <li className={style.linkContainer}>
-      <a href={url} className={style.link}>
+    <li className="px-6 text-White text-base font-medium flex justify-center items-center flex-grow flex-shrink hover:text-Light border-l border-White first:border-none">
+      <a href={url} className="text-inherit cursor-pointer flex justify-center items-center gap-2">
         { children}
       </a>
     </li>

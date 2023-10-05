@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./styles.module.css";
 
 interface NavigationProps {
   children: ReactNode;
@@ -7,7 +6,7 @@ interface NavigationProps {
 
 function Navigation({ children }: NavigationProps) {
   return(
-    <nav className={style.navigation}>
+    <nav className="flex justify-end">
       { children }
     </nav>
   );
