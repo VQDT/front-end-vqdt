@@ -95,7 +95,7 @@ function Prova() {
       ],
     },
     {
-      number: "2",
+      number: "3",
       subject: "HUMANAS",
       img: "https://images.alphacoders.com/550/550417.jpg",
       title: "Qual a influência da comunicação nos fluxos migratórios?",
@@ -116,7 +116,6 @@ function Prova() {
         { text: "", img: "https://images.alphacoders.com/550/550417.jpg" },
       ],
     },
-    // Add more QuestionData objects as needed
   ];
 
   return (

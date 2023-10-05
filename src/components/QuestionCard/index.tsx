@@ -64,7 +64,7 @@ function QuestionCard(props: QuestionDataProps) {
           </span>
         </div>
         <p className="my-5 text-midnight font-medium">{data.question}</p>
-        <div className={isImg ? "flex flex-wrap justify-between gap-10" :"flex flex-col gap-2"}>
+        <div className={isImg ? "flex flex-wrap justify-left gap-10" :"flex flex-col gap-2"}>
           {data.choices.map((choice, index) =>
             choice.img === "" ? (
               <label key={index} className="font-sm text-midnight flex">

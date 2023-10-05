@@ -1,5 +1,7 @@
 import logo from "../../assets/logo.png";
 import Button from "../Button";
+import Countdown from "../CountDown";
+import "./style.module.css"
 
 interface DataProva {
   ending: Date;
@@ -18,31 +20,18 @@ function MenuProva(props: MenuProvaProps) {
   const { data } = props;
 
   return (
-    <div className="max-w-[400px] w-full p-7 fixed">
+    <div className="max-h-screen overflow-y-auto max-w-[400px] w-full p-7 fixed">
       <section className="bg-white w-full rounded-xl py-5 px-2 mb-6 shadow-lg">
         <img src={logo} />
       </section>
-      <section className="bg-white w-full rounded-xl p-5 flex justify-between align-middle shadow-lg">
-        <span className="h-[45px] my-[7.5px] font-semibold text-primary">
-          TEMPO
-          <br />
-          RESTANTE
-        </span>
-        <div className="text-[40px]">
-          <span>1</span>
-          <span className="text-concrete">:</span>
-          <span>12</span>
-          <span className="text-concrete">:</span>
-          <span>08</span>
-        </div>
-      </section>
+      <Countdown availableTime={2}/>
       <h1 className="text-white font-semibold text-2xl py-5 flex justify-center">
         PROGRESSO
       </h1>
       {data.subjects.map((subject, index) => (
         <section
           key={index}
-          className="p-5 bg-white mb-3 flex justify-between rounded-xl shadow-lg"
+          className="p-5 bg-white mb-[0.6rem] flex justify-between rounded-xl shadow-lg"
         >
           <span className="font-semibold text-primary text-xl py-[2px]">
             {subject.name}
