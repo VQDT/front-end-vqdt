@@ -1,9 +1,41 @@
-import { Outlet } from "react-router-dom";
+import Button from "./components/Button";
+import ListCard from "./components/ListCard";
+import TestCard from "./components/TestCard";
+import { AiOutlineCalendar, AiFillAlert } from "react-icons/ai";
 
 function App() {
     return (
         <>
-            <Outlet></Outlet>
+            <ListCard>
+                <TestCard 
+                    handleClick={console.log}
+                    icon={AiOutlineCalendar}
+                    title="Supletivo" 
+                    subText="12/10/1993" 
+                    description="Exame de aprovação do candidato no programa Vem Que Dá Tempo."
+                />
+
+                <TestCard 
+                    handleClick={console.log}
+                    icon={AiOutlineCalendar}
+                    title="Supletivo" 
+                    subText="12/10/1993" 
+                    description="Exame de aprovação do candidato no programa Vem Que Dá Tempo."
+                />
+
+                <TestCard 
+                    handleClick={console.log}
+                    icon={AiOutlineCalendar}
+                    title="Supletivo" 
+                    subText="12/10/1993" 
+                    description="Exame de aprovação do candidato no programa Vem Que Dá Tempo."
+                />
+      
+            </ListCard>
+            <Button variant="solid" color="warning">
+                <AiFillAlert />
+                ATENÇÃO
+            </Button>
         </>
     );
 }
