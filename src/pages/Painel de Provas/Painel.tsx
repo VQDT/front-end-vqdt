@@ -4,10 +4,18 @@ import TestCard from "../../components/TestCard";
 import ListCard from "../../components/ListCard";
 import { useEffect, useState } from "react";
 import instance from "../../axios";
+import { Link } from "react-router-dom";
+
+type TestCard = {
+    id: string;
+    name: string;
+    description: string;
+    dateStart: string;
+}
 
 function Painel() {
-    const id = "6be4ae08-4659-41c3-90a6-e774277c653f"
-    const [tests, setTests] = useState([]);
+    const id = "014f79e8-b891-4329-85a5-bb54ba5692ea"
+    const [tests, setTests] = useState<TestCard[]>([]);
     
     useEffect(() => {
       return () => {
@@ -28,11 +36,13 @@ function Painel() {
             <ListCard>
                 {
                     tests.map(test => (
-                        <TestCard handleClick={console.log}
-                        title={test.test.name}
-                        subText={test.test.dateStart} 
-                        description={test.test.description}
-                        icon={AiOutlineCalendar} />
+                        <Link to={`details/${test.id}`}>
+                            <TestCard handleClick={console.log}
+                            title={test.name}
+                            subText={test.dateStart} 
+                            description={test.description}
+                            icon={AiOutlineCalendar} />
+                        </Link>
                     ))
                 }
             </ListCard>
