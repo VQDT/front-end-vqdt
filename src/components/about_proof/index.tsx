@@ -7,10 +7,10 @@ type Props = {}
 
 function index({}: Props) {
   return (
-    <div className=" flex flex-col w-full max-w-[1200px] bg-white h-[760px] rounded-[10px] p-8">
-      <div className="flex  bg-[#EEF1F4] h-[83px] rounded-[10px] gap-[150px] mb-[50px]">
-        <div className="flex justify-center items-center rounded-l-lg rounded-br-lg bg-primary w-[415px] ">
-          <h1 className="text-white text-[30px] font-bold ">EXAME SUPLETIVO</h1>
+    <div className=" flex flex-col w-full max-w-[500px] bg-white h-[760px] xl:rounded-[10px] p-8">
+      <div className="xl:flex  xl:bg-[#EEF1F4] xl:h-[83px] rounded-[10px] gap-[150px] mb-[50px]">
+        <div className="flex justify-center rounded-[5px] items-center xl:rounded-l-lg xl:rounded-br-lg bg-primary xl:w-[415px] ">
+          <h1 className="text-white xl:text-[30px] font-bold ">EXAME SUPLETIVO</h1>
         </div>
         <div className="flex items-center ml-[150px] gap-9">
           <div className="flex items-center gap-1" >
