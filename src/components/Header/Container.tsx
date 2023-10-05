@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./styles.module.css";
 
 interface ContainerProps {
   children: ReactNode;
@@ -7,7 +6,7 @@ interface ContainerProps {
 
 function Container({ children }: ContainerProps) {
   return(
-    <header className={style.container}>
+    <header className="h-16 bg-Blue flex justify-between">
       { children }
     </header>
   );

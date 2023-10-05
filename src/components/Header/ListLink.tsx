@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./styles.module.css";
 
 interface ListLinkProps {
   children: ReactNode | ReactNode[];
@@ -7,7 +6,7 @@ interface ListLinkProps {
 
 function ListLink({ children }: ListLinkProps) {
   return(
-    <ul className={style.listLink}>
+    <ul className="flex">
       { children }
     </ul>
   );
