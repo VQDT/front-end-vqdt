@@ -6,9 +6,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     iconLeft?: ElementType;
     iconRight?: ElementType;
     shadow?: boolean;
+    classes?: string;
 }
 
-function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transparent", ...props }: ButtonProps) {
+function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transparent", classes, ...props }: ButtonProps) {
     
     const bgColor = {
         transparent: "transparent text-gray-700 border-none hover:bg-secondary",
@@ -21,7 +22,7 @@ function Button({ iconLeft: IconLeft, iconRight: IconRight, variant = "transpare
     }
 
     return(  
-        <button className={`w-full py-2 px-4  rounded font-medium  text-lg flex items-center justify-center gap-2 cursor-pointer transition-all ${bgColor[variant]}`} {...props}>
+        <button className={`w-full py-2 px-4  rounded font-medium  text-lg flex items-center justify-center gap-2 cursor-pointer transition-all ${bgColor[variant]} ${classes}`} {...props}>
             { IconLeft && <IconLeft /> }
             { props.children }
             { IconRight && <IconRight /> }
