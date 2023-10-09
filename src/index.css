@@ -13,7 +13,7 @@ html, body {
   min-width: 320px;
   min-height: 100vh;
 
-  background-color: #108ABD;
+  background-color: #FFFFFF;
 }
 
 h1 {
@@ -29,3 +29,60 @@ ul {
   list-style: none;
 }
 
+@layer components {
+  .button {
+    @apply px-4 py-3 text-base font-medium rounded-xl flex justify-center items-center gap-2;
+  }
+
+  .button.solid {
+    @apply !text-White !border-none;
+  }
+
+  .button.outline {
+    @apply bg-transparent !outline-none border;
+  }
+  
+  
+  .default {
+    @apply bg-Blue border-Blue text-Blue hover:bg-Blue70;
+
+  }
+
+  .confirm {
+    @apply bg-Green border-Green text-Green hover:bg-Green70;
+  }
+
+  .alert {
+    @apply bg-Red border-Red text-Red hover:bg-Red70;
+  }
+
+  .warning {
+    @apply bg-Orange border-Orange text-Orange hover:bg-Orange70;
+  }
+
+  .disable {
+    @apply bg-Silver border-Silver text-Silver hover:bg-Silver;
+  }
+  
+  .outline.default {
+    @apply hover:bg-Blue25;
+  }
+  
+  .outline.confirm {
+    @apply hover:bg-Green25;
+  }
+
+  .outline.alert {
+    @apply hover:bg-Red25;
+  }
+
+  
+  .outline.warning {
+    @apply hover:bg-Orange25;
+  }
+
+  
+  .outline.disable {
+    @apply hover:bg-White;
+  }
+}
