@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./style.module.css";
 
 interface DescriptionProps {
   children: ReactNode;
@@ -7,7 +6,11 @@ interface DescriptionProps {
 
 function Description({ children }: DescriptionProps) {
   return(
-    <p className={style.description}>{ children }</p>
+    <div className="w-full overflow-hidden text-ellipsis v" >
+      <p className="text-LightTextSecondary text-sm">
+        { children }
+      </p>
+    </div>
   );
 }
 

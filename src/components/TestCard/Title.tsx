@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./style.module.css";
 
 interface TitleProps {
   children: ReactNode;
@@ -7,7 +6,7 @@ interface TitleProps {
 
 function Title({ children }: TitleProps) {
   return(
-    <p className={ style.title }>
+    <p className="w-40 h-full bg-Blue rounded-br-xl text-White text-lg font-semibold flex items-center justify-center flex-shrink-0">
       { children }
     </p>
   );
