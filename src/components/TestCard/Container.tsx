@@ -1,5 +1,4 @@
 import { ReactNode, MouseEvent } from "react";
-import style from "./style.module.css";
 
 interface ContainerProps {
   children: ReactNode[];
@@ -7,9 +6,13 @@ interface ContainerProps {
 }
 
 function Container({ children, handleClick }: ContainerProps) {
-  return(
-    <li className={style.container} onClick={handleClick}>
-      { children }
+  return (
+    <li
+      className="w-80 h-44 p-3 bg-White border border-dashed border-Blue rounded-md  
+        transition-all cursor-pointer list-none hover:border-solid flex flex-col flex-shrink-0"
+      onClick={handleClick}
+    >
+      {children}
     </li>
   );
 }

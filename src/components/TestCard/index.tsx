@@ -9,17 +9,18 @@ interface TestCardProps {
   title: string;
   subText: string;
   description: string;
+  variant?: "default" | "confirm" | "warning" | "alert";
   icon: ElementType;
   handleClick?: (event: MouseEvent) => void;
 }
 
-function TestCard({ title, subText, description, icon: Icon, handleClick }: TestCardProps) {
+function TestCard({ title, subText, description, variant = "default", icon: Icon, handleClick }: TestCardProps) {
   return(
     <Container handleClick={handleClick}>
       <Header>
         <Title>{ title }</Title>
-        <SubText>
-          <Icon size="20" color="#95A5A6"/>
+        <SubText variant={variant}>
+          <Icon size="20"/>
           {subText}
         </SubText>
       </Header>
