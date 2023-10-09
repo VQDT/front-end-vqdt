@@ -15,7 +15,7 @@ function Header() {
           <Link url="#">PREPARATÓRIO</Link>
           <Link url="#">PROVAS</Link>
           <Link url="#">DADOS PESSOAIS</Link>
-          <Link url="#"> <RiLogoutBoxLine size={18}/>SAIR</Link>
+          <Link url="#"> <RiLogoutBoxLine size={16}/>SAIR</Link>
         </ListLink>
       </Navigation>
     </Container>

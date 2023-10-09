@@ -1,13 +1,15 @@
 import { ReactNode } from "react";
-import style from "./style.module.css";
 
 interface SubTextProps {
   children: ReactNode[] | ReactNode;
+  variant: string;
 }
 
-function SubText({ children }: SubTextProps) {
+function SubText({ children, variant }: SubTextProps) {
   return(
-    <div className={style.subText}>{ children }</div>
+    <div className={`${variant} w-full text-sm font-medium flex justify-center items-center gap-1 hover:bg-inherit bg-inherit`}>
+      { children }
+    </div>
   );
 }
 

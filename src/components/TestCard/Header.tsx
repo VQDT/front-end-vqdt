@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import style from "./style.module.css";
 
 interface HeaderProps {
   children: ReactNode[];
@@ -7,7 +6,7 @@ interface HeaderProps {
 
 function Header({ children }: HeaderProps) {
   return(
-    <div className={style.header}>
+    <div className="w-full h-12 mb-2 bg-Tertiary flex items-center flex-shrink-0">
       { children }
     </div>
   );

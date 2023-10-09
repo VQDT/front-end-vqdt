@@ -29,9 +29,13 @@ ul {
   list-style: none;
 }
 
+#root {
+  min-height: 100vh
+}
+
 @layer components {
   .button {
-    @apply px-4 py-3 text-base font-medium rounded-xl flex justify-center items-center gap-2;
+    @apply px-10 py-3 text-2xl font-medium rounded-xl flex justify-center items-center gap-2;
   }
 
   .button.solid {

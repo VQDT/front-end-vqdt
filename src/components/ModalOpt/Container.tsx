@@ -1,14 +1,14 @@
 import { ReactNode } from "react";
 
 interface ContainerProps {
-  children: ReactNode;
+  children: ReactNode[];
 }
 
 function Container({ children }: ContainerProps) {
   return(
-    <header className="h-16 bg-Blue border-b border-Light flex justify-between">
-      { children }
-    </header>
+    <div className="w-[720px] h-80 rounded-3xl shadow-md flex flex-col">
+      {children}
+    </div>
   );
 }
 
