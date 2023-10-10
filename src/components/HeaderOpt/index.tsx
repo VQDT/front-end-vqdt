@@ -15,7 +15,7 @@ import Button from '@mui/material/Button';
 import Image from "../Header/Image";
 import logo from "../../assets/logo.png";
 import { useState } from 'react';
-import { AiOutlineLogout, AiOutlineRollback } from 'react-icons/ai';
+import { AiOutlineLogout } from 'react-icons/ai';
 
 interface Props {
   window?: () => Window;
