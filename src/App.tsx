@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router";
 import ListCard from "./components/ListCard";
 import TestCard from "./components/TestCard";
 import { AiOutlineCalendar, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 
 function App() {
+
+    const navigate = useNavigate();
+
     return (
         <div className="px-6">
             <h2 className="text-Blue text-lg font-bold uppercase">PROVAS AGENDADAS</h2>
@@ -21,7 +25,7 @@ function App() {
             <ListCard>
                 <TestCard 
                     variant="confirm"
-                    handleClick={console.log}
+                    handleClick={() => navigate("./aboutTest")}
                     icon={AiOutlineCheckCircle}
                     title="Supletivo" 
                     subText="12/10/1993" 

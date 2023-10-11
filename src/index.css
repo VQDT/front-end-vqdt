@@ -35,7 +35,7 @@ ul {
 
 @layer components {
   .button {
-    @apply px-10 py-3 text-2xl font-medium rounded-xl flex justify-center items-center gap-2;
+    @apply px-10 py-3 text-lg font-medium rounded-xl flex justify-center items-center flex-shrink-0 gap-2;
   }
 
   .button.solid {

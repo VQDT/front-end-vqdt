@@ -1,27 +1,30 @@
+import { ReactNode } from "react";
 import Container from "./Container";
 import Header from "./Header";
+import ModalContainer from "./ModalContainer";
 import Main from "./Main";
-import Text from "./Text";
 import Buttons from "./Buttons";
-import { ReactNode } from "react";
+import Text from "./Text";
 
 interface ModalProps {
   title: string;
   text: string;
   variant?: "alert" | "default" | "confirm" | "warning"; 
-  children: ReactNode[] | ReactNode;
+  children?: ReactNode[] | ReactNode;
 }
 
 function Modal({ children, title, text, variant = "default" }: ModalProps) {
   return(
     <Container>
-      <Header title={title} variant={variant}></Header>
-      <Main>
-        <Text text={text}/>
-        <Buttons>
-          { children }
-        </Buttons>
-      </Main>
+      <ModalContainer >
+        <Header title={title} variant={variant}></Header>
+        <Main >
+          <Text text={text}/>
+          <Buttons>
+            { children }
+          </Buttons>
+        </Main>
+      </ModalContainer>
     </Container>
   );
 }
