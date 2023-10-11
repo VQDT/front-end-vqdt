@@ -11,8 +11,9 @@ import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Image from "../Header/Image";
 import logo from "../../assets/logo.png";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
+import { useNavigate} from "react-router-dom";
 
 interface Props {
   window?: () => Window;
@@ -22,9 +23,22 @@ const drawerWidth = 240;
 const navItems = ["Provas", "Dados Pessoais", "Sair"];
 
 function HeaderOpt({ window }: Props) {
-  const [mobileOpen, setMobileOpen] = useState(false);
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [loggedOut, setLoggedOut] = useState(false)
+  const navigation = useNavigate()
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
+
+  const Logout = () => {
+    sessionStorage.removeItem('token');
+    setLoggedOut(true)
+  }
+
+  useEffect(() =>{
+    if(!sessionStorage.getItem('token')){
+      navigation("/login")
+    }
+  },[navigation, loggedOut]);
 
   const linkListDrawer = navItems.map((item) => {
     if (item === "Sair") {
@@ -84,6 +98,7 @@ function HeaderOpt({ window }: Props) {
             color: "#ffffff", fontSize: "18px",
             display: "flex", justifyContent: "center", alignItems: "center", gap: "5px"
           }}
+          onClick={Logout}
         >
           <RiLogoutBoxRLine className="flex-shrink-0"/>
           {item}

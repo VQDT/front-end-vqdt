@@ -15,7 +15,7 @@ function Login() {
     
     function submit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        instance.post("/users/auth/login", { cpf, password})
+        instance.post("/users/auth/login", {cpf, password})
             .then((res)=> {
                console.log(res);
                sessionStorage.setItem("token", res.data.token);
