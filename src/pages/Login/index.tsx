@@ -26,7 +26,6 @@ function Login() {
         .then(
             res => {
                 console.log(res.data);
-                setTests(res.data);
             }
         )
         .catch((err) => {
@@ -36,17 +35,19 @@ function Login() {
     }, [id])
     return (
         <>
-            <div className="bg-Blue w-full h-screen">
+            <div className="bg-Blue w-full h-screen p-3">
                <div className="flex justify-center content-center w-full h-screen flex-wrap">
-                    <img src={logo} width={500} className="mb-4"/>
-                    <div className="bg-white w-96 rounded-xl p-8 justify-center content-center">
-                        <div className="mb-2">
-                            <Input placeholder="Email" onchange={(ev) => setEmail(ev)} value={email}/>
-                            <Input placeholder="Senha" onchange={(ev)=> setPass(ev)} value={pass}/>
-                        </div>
-                        <Link className="text-xs text-slate-500" to={"#"}>Esqueceu a senha?</Link>
-                        <div className="mt-3">
-                            <Button size="w-full">Entrar</Button>
+                    <div>
+                        <img src={logo} width={500} className="mb-4"/>
+                        <div className="bg-white w-full rounded-xl p-8 justify-center content-center">
+                            <div className="mb-2">
+                                <Input placeholder="Email" type='email' onChange={(ev) => setEmail(ev.target.value)} value={email}/>
+                                <Input placeholder="Senha" type='password' onChange={(ev)=> setPass(ev.target.value)} value={pass}/>
+                            </div>
+                            <Link className="text-xs text-slate-500" to={"#"}>Esqueceu a senha?</Link>
+                            <div className="mt-3">
+                                <Button size="w-full">Entrar</Button>
+                            </div>
                         </div>
                     </div>
                </div>

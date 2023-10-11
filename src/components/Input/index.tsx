@@ -1,12 +1,13 @@
-interface InputProps extends HTMLInputElement{
+import { InputHTMLAttributes } from "react";
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement>{
 }
 
-function Input({ type = "text", placeholder = "default" }: InputProps) {
+function Input({ className, ...rest}: InputProps) {
   return(
-    <input 
-      className={`border rounded-lg p-2 w-full my-2`}
-      type={type}
-      placeholder={placeholder}
+    <input
+      {...rest}
+      className={`border rounded-lg p-2 w-full my-2 ${className}`}
     />
   );
 }
