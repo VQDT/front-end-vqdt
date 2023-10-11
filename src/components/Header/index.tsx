@@ -71,7 +71,7 @@ function Header({ window }: Props) {
           to={item.to}
           className="
           h-full py-0 px-5 
-          border-l border-White rounded-none text-lg 
+          rounded-none text-lg 
           text-White hover:text-LightTextSecondary font-semibold
           flex justify-center items-center gap-1"
         >
@@ -86,7 +86,7 @@ function Header({ window }: Props) {
           to={item.to}
           className="
             h-full py-0 px-5 
-            border-l border-White rounded-none text-lg 
+            border-r border-White rounded-none text-lg 
             text-White hover:text-LightTextSecondary uppercase font-semibold
             flex justify-center items-center gap-1"
         >
