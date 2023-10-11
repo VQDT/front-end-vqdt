@@ -5,9 +5,9 @@ interface TitleProps {
 }
 
 function Title({ children }: TitleProps) {
-  return(
-    <p className="w-40 h-full bg-Blue rounded-br-xl text-White text-lg font-semibold flex items-center justify-center flex-shrink-0">
-      { children }
+  return (
+    <p className="min-w-max h-fit p-4 bg-Blue rounded-sm rounded-br-xl text-White text-lg font-semibold uppercase flex-1 flex items-center justify-center flex-shrink-0">
+      {children}
     </p>
   );
 }
