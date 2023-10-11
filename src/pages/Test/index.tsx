@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router";
-import ListCard from "./components/ListCard";
-import TestCard from "./components/TestCard";
+import ListCard from "../../components/ListCard";
+import TestCard from "../../components/TestCard";
 import { AiOutlineCalendar, AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 
 
-function App() {
+function Test() {
 
     const navigate = useNavigate();
 
@@ -25,7 +25,7 @@ function App() {
             <ListCard>
                 <TestCard 
                     variant="confirm"
-                    handleClick={() => navigate("./aboutTest")}
+                    handleClick={() => navigate("/sobre-prova")}
                     icon={AiOutlineCheckCircle}
                     title="Supletivo" 
                     subText="12/10/1993" 
@@ -45,4 +45,4 @@ function App() {
     );
 }
 
-export default App;
+export default Test;

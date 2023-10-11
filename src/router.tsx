@@ -1,33 +1,38 @@
 import { createBrowserRouter } from "react-router-dom";
-import App from "./App";
 import Layout from "./layout/app";
-import Painel from "./pages/Painel de Provas/Painel";
 import Login from "./pages/Login";
 import AboutTest from "./pages/AboutTest";
+import Test from "./pages/Test";
+import PersonalData from "./pages/PersonalData";
+import Preparatory from "./pages/Preparatory";
 
 const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <Layout />,
-        children:[
-            {
-                path: "/",
-                element: <App />,
-            },
-            {
-                path: "/painel",
-                element: <Painel />,
-            },
-            {
-                path: "/aboutTest",
-                element: <AboutTest />,
-            },
-        ]
-    },
-    {
-        path: '/login',
-        element: <Login />,
-    }
+  {
+    path: "/",
+    element: <Layout />,
+    children: [
+      {
+        path: "/preparatorio",
+        element: <Preparatory />,
+      },
+      {
+        path: "/dados-pessoais",
+        element: <PersonalData />,
+      },
+      {
+        path: "/provas",
+        element: <Test />,
+      },
+      {
+        path: "/sobre-prova",
+        element: <AboutTest />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
 ]);
 
 export default router;
