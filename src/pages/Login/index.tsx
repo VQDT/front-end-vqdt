@@ -1,10 +1,10 @@
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import logo from "../../assets/logo.png";
-//import hooks from "../../hooks";
+import hooks from "../../hooks";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 type BodyType = {
     cpf: string;
@@ -13,7 +13,8 @@ type BodyType = {
 
 function Login() {
 
-    //const { user, login } = hooks.useAuthContext();
+    const navigate = useNavigate();
+    const { user, login } = hooks.useAuthContext();
 
     const [body, setBody] = useState<BodyType>({
         cpf: "",
@@ -43,16 +44,16 @@ function Login() {
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
         body.cpf = body.cpf.replace(/[^0-9]/g, '');
-        console.log(body)
-        //login(body.cpf, body.password);
-        /*if(user) {
-          console.log(user);
-        }*/
+        login(body.cpf, body.password);
+        if(user && sessionStorage.getItem('token')) {
+          console.log(user)
+          navigate('/provas')
+        }
     }
 
     return (
         <>
-            <div className="bg-Blue w-full h-screen p-3">
+            <div className="bg-Blue w-full h-screen px-3">
                 <div className="flex justify-center content-center w-full h-screen flex-wrap">
                     <div>
                         <img src={logo} width={500} className="mb-4" />
