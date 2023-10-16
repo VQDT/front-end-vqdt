@@ -52,7 +52,7 @@ function Header({ window }: Props) {
             className="
               h-16 w-full pl-3
               text-Blue text-xl font-semibold uppercase
-               hover:bg-Light
+              hover:bg-Light
               flex items-center"
           >
             {item.name}
@@ -71,7 +71,7 @@ function Header({ window }: Props) {
           to={item.to}
           className="
           h-full py-0 px-5 
-          border-l border-White rounded-none text-lg 
+          rounded-none text-lg 
           text-White hover:text-LightTextSecondary font-semibold
           flex justify-center items-center gap-1"
         >
@@ -86,7 +86,7 @@ function Header({ window }: Props) {
           to={item.to}
           className="
             h-full py-0 px-5 
-            border-l border-White rounded-none text-lg 
+            border-r border-White rounded-none text-lg 
             text-White hover:text-LightTextSecondary uppercase font-semibold
             flex justify-center items-center gap-1"
         >
@@ -110,9 +110,9 @@ function Header({ window }: Props) {
 
   return (
     <div className="h-16 flex">
-      <AppBar component="nav" className="bg-Blue shadow-sm h-16" sx={{boxShadow: "none"}}>
+      <AppBar component="nav" className="shadow-sm h-16" sx={{boxShadow: "none"}}>
         <Toolbar
-          className="w-full flex items-center justify-between"
+          className="w-full bg-Blue flex items-center justify-between"
           sx={{ padding: { xs: "0", sm: "0", sx: "0" } }}
         >
           <div className="h-full">

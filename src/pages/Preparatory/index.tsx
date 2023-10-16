@@ -1,6 +1,8 @@
+import SubjectCard from "../../components/SubjectCard";
+
 function Preparatory() {
   return(
-    <h1>Preparatório</h1>
+    <SubjectCard subject="Matemática" total="10" rest="3"/>
   );
 }
 
