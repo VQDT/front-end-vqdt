@@ -1,42 +1,94 @@
 import Button from "../../components/Button";
-import { useEffect, useState } from "react";
-import instance from "../../axios";
-import { Link } from "react-router-dom";
 import Input from "../../components/Input";
 import logo from "../../assets/logo.png";
+//import hooks from "../../hooks";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { Link } from "react-router-dom";
 
+
+type BodyType = {
+    cpf: string;
+    password: string;
+}
 
 function Login() {
-    const id = "014f79e8-b891-4329-85a5-bb54ba5692ea"
-    const [email, setEmail] = useState<string>('');
-    const [pass, setPass] = useState<string>('');
+
+    //const { user, login } = hooks.useAuthContext();
+
+    const [body, setBody] = useState<BodyType>({
+        cpf: "",
+        password: "",
+    });
+
+    const handleCpfChange = (cpf: string) => {
+        const inputCpf = cpf;
+        const formattedCpf = inputCpf
+          .replace(/\D/g, '') // Remove todos os caracteres não numéricos
+          .slice(0, 11); // Limita a 11 dígitos
     
-    useEffect(() => {
-      return () => {
-        instance.get(`/users/${id}/tests`)
-        .then(console.log)
-        .catch(console.log)
-      }
-    }, [id])
-    
+        const cpfWithMask = formattedCpf
+          .replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+
+        return cpfWithMask;
+    };
+
+    function handleChangeLogin(event: ChangeEvent<HTMLInputElement>) {
+        const value = event.target.id === 'cpf' ? handleCpfChange(event.target.value) : event.target.value;
+        setBody((prev) => ({
+            ...prev,
+            [event.target.id]: value
+        }));
+    }
+
+    function handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+        body.cpf = body.cpf.replace(/[^0-9]/g, '');
+        console.log(body)
+        //login(body.cpf, body.password);
+        /*if(user) {
+          console.log(user);
+        }*/
+    }
+
     return (
         <>
             <div className="bg-Blue w-full h-screen p-3">
-               <div className="flex justify-center content-center w-full h-screen flex-wrap">
+                <div className="flex justify-center content-center w-full h-screen flex-wrap">
                     <div>
-                        <img src={logo} width={500} className="mb-4"/>
-                        <div className="bg-white w-full rounded-xl p-8 justify-center content-center">
+                        <img src={logo} width={500} className="mb-4" />
+                        <form
+                            onSubmit={handleSubmit}
+                            className="bg-white w-full rounded-xl p-8 justify-center content-center"
+                        >
                             <div className="mb-2">
-                                <Input placeholder="Email" type='email' onChange={(ev) => setEmail(ev.target.value)} value={email}/>
-                                <Input placeholder="Senha" type='password' onChange={(ev)=> setPass(ev.target.value)} value={pass}/>
+                                <Input
+                                    placeholder="CPF"
+                                    type="text"
+                                    id="cpf"
+                                    value={body.cpf}
+                                    minLength={11}
+                                    maxLength={14}
+                                    onChange={handleChangeLogin}
+                                    required
+                                />
+                                <Input
+                                    placeholder="Senha"
+                                    type="password"
+                                    id="password"
+                                    value={body.password}
+                                    onChange={handleChangeLogin}
+                                    required
+                                />
                             </div>
-                            <Link className="text-xs text-slate-500" to={"#"}>Esqueceu a senha?</Link>
+                            <Link className="text-xs text-slate-500" to={"#"}>
+                                Esqueceu a senha?
+                            </Link>
                             <div className="mt-3">
-                                <Button size="w-full">Entrar</Button>
+                                <Button size="w-full" type="submit">Entrar</Button>
                             </div>
-                        </div>
+                        </form>
                     </div>
-               </div>
+                </div>
             </div>
         </>
     );
