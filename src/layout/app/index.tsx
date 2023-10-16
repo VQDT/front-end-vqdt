@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
-import HeaderOpt from "../../components/HeaderOpt";
+import Header from "../../components/Header";
 
 function Layout() {
     return(
         <>
-            <HeaderOpt/>
+            <Header/>
             <main className="w-full max-w-[1200px] m-auto py-8">
                 <Outlet></Outlet>
             </main>
