@@ -24,9 +24,9 @@ const router = createBrowserRouter([
         element: <Test />,
       },
       {
-        path: "/sobre-prova",
+        path: "/provas/:id",
         element: <AboutTest />,
-      },
+      }
     ],
   },
   {

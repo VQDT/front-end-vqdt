@@ -16,12 +16,17 @@ import Container from "./Container";
 import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
+import { useParams } from "react-router-dom";
  
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
 
 function AboutTest({ variant = "default" }: AboutTest) {
+
+  const {id} = useParams()
+  console.log(id)
+
   return (
     <>
       <Container>
