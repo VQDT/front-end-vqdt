@@ -16,7 +16,7 @@ import Container from "./Container";
 import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
  
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
@@ -24,8 +24,7 @@ interface AboutTest {
 
 function AboutTest({ variant = "default" }: AboutTest) {
 
-  const {id} = useParams()
-  console.log(id)
+  const navigate = useNavigate();
 
   return (
     <>
@@ -67,7 +66,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
         </ContainerLocalContent>
         <div className="flex gap-4 justify-between flex-wrap">
           <Button variant="outline" color="alert">CANCELAR AGENDAMENTO</Button>
-          <Button>REALIZAR PROVA</Button>
+          <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
         </div>
       </Container>
       <div className="mt-6 flex justify-center">

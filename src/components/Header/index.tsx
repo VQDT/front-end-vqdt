@@ -12,7 +12,7 @@ import logo from "../../assets/logo.png";
 import { useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import hooks from "../../hooks";
+import useAuth from "../../context/auth/useAuth";
 
 interface Props {
   window?: () => Window;
@@ -26,11 +26,7 @@ const navItems = [
   },
   {
     name: "Provas",
-    to: "/provas",
-  },
-  {
-    name: "Dados Pessoais",
-    to: "/dados-pessoais",
+    to: "/painel-provas",
   },
   {
     name: "Sair",
@@ -41,15 +37,15 @@ const navItems = [
 function Header({ window }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { loggout } = hooks.useAuthContext();
-  
+  const { loggout } = useAuth();
+
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
   const linkListDrawer = navItems.map((item) => {
     return (
-      <>
+      <div key={item.name}>
         <Divider />
-        <ListItem key={item.name} disablePadding>
+        <ListItem disablePadding>
           <Link
             to={item.to}
             className="
@@ -62,7 +58,7 @@ function Header({ window }: Props) {
           </Link>
         </ListItem>
         <Divider />
-      </>
+      </div>
     );
   });
 
@@ -114,7 +110,11 @@ function Header({ window }: Props) {
 
   return (
     <div className="h-16 flex">
-      <AppBar component="nav" className="shadow-sm h-16" sx={{boxShadow: "none"}}>
+      <AppBar
+        component="nav"
+        className="shadow-sm h-16"
+        sx={{ boxShadow: "none" }}
+      >
         <Toolbar
           className="w-full bg-Blue flex items-center justify-between"
           sx={{ padding: { xs: "0", sm: "0", sx: "0" } }}
@@ -134,9 +134,7 @@ function Header({ window }: Props) {
             <MenuIcon />
           </IconButton>
 
-          <Box className="h-full hidden sm:flex">
-            {linkList}
-          </Box>
+          <Box className="h-full hidden sm:flex">{linkList}</Box>
         </Toolbar>
       </AppBar>
 

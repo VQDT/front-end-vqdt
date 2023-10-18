@@ -12,3 +12,19 @@ export type User = {
   idAddress: string;
   password?: string;
 }
+
+export type Test =  {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: Date;
+  dateStart: Date;
+  timeStart: Date;
+  timeEnd: Date;
+  written: boolean;
+  numberQuestion: number;
+  idApplicator: string;
+  idCreator: string;
+  idClassroom: string;
+  questionId: string | null;
+}

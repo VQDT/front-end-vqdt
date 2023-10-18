@@ -1,55 +1,39 @@
-import { useNavigate } from "react-router";
-import ListCard from "../../components/ListCard";
-import TestCard from "../../components/TestCard";
-import {
-  AiOutlineCalendar,
-  AiOutlineCheckCircle,
-  AiOutlineCloseCircle,
-} from "react-icons/ai";
-
+import SubjectCard from "../../components/SubjectCard";
+import logo from "../../assets/logo.png";
+import Button from "../../components/Button";
+import Card from "../../components/Card";
 
 function Test() {
-  const navigate = useNavigate();
-
-  return (  
-    <>
-      <div className="px-6">
-        <h2 className="text-Blue text-lg font-bold uppercase">
-          PROVAS AGENDADAS
-        </h2>
-        <ListCard>
-          <TestCard
-            handleClick={console.log}
-            icon={AiOutlineCalendar}
-            title="Supletivo"
-            subText="12/10/1993"
-            description="Exame de aprovação do candidato no programa Vem Que Dá Tempo. Exame de aprovação do candidato no programa Vem Que Dá Tempo."
-          />
-        </ListCard>
-        <h2 className="text-Blue text-lg font-bold uppercase">
-          Provas Realizadas
-        </h2>
-        <ListCard>
-          <TestCard
-            variant="confirm"
-            handleClick={() => navigate("/sobre-prova")}
-            icon={AiOutlineCheckCircle}
-            title="Supletivo"
-            subText="12/10/1993"
-            description="Exame de aprovação do candidato no programa Vem Que Dá Tempo. Exame de aprovação do candidato no programa Vem Que Dá Tempo."
-          />
-
-          <TestCard
-            variant="alert"
-            handleClick={console.log}
-            icon={AiOutlineCloseCircle}
-            title="Supletivo"
-            subText="12/10/1993"
-            description="Exame de aprovação do candidato no programa Vem Que Dá Tempo."
-          />
-        </ListCard>
+  return(
+    <div className="w-full min-h-screen p-3 bg-Blue flex gap-3 box-border">
+      <div className="w-fit flex flex-col gap-3">
+        <Card.Container>
+          <img src={logo} alt="" className="max-w-full"/>
+        </Card.Container>
+        <Card.Container>
+          <Card.Title text="Tempo Restante"/>
+          <p className="text-Midnight text-4xl text-right">1:00:00</p>
+        </Card.Container>
+        <h3 className="text-White text-center text-2xl font-semibold uppercase">Progresso</h3>
+        <ul className="flex flex-col gap-3">
+          <SubjectCard done="5" total="10" subject="LINGUAGENS"/>
+          <SubjectCard done="5" total="10" subject="MATEMÁTICA"/>
+          <SubjectCard done="5" total="10" subject="HUMANAS"/>
+          <SubjectCard done="5" total="10" subject="NATUREZA"/>
+        </ul>
+        <Card.Container direction="col">
+          <Card.Title text="QUESTÕES FEITAS" />
+          <p className="max-w-fit m-auto p-3 text-Secondary text-4xl border-b border-Secondary">
+            <span className="text-Midnight text-6xl font-bold">20</span> de 40
+          </p>
+          <p className="mt-3 text-Secondary text-center text-base font-semibold">Restam 40 questões</p>
+        </Card.Container>
+        <Button color="warning" size="w-full">
+          ENCERRAR PROVA
+        </Button>
       </div>
-    </>
+      <div className="w-full max-h-screen bg-White rounded-xl"></div>
+    </div>
   );
 }
 
