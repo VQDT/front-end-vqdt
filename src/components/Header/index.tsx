@@ -12,7 +12,7 @@ import logo from "../../assets/logo.png";
 import { useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import hooks from "../../hooks";
+import useAuthContext from "../../context/auth/useAuthContext";
 
 interface Props {
   window?: () => Window;
@@ -29,25 +29,22 @@ const navItems = [
     to: "/provas",
   },
   {
-    name: "Dados Pessoais",
-    to: "/dados-pessoais",
-  },
-  {
     name: "Sair",
     to: "/login",
   },
 ];
 
 function Header({ window }: Props) {
+
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { loggout } = hooks.useAuthContext();
+  const { loggout } = useAuthContext();
   
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
   const linkListDrawer = navItems.map((item) => {
     return (
-      <>
+      <div key={item.name}>
         <Divider />
         <ListItem key={item.name} disablePadding>
           <Link
@@ -62,7 +59,7 @@ function Header({ window }: Props) {
           </Link>
         </ListItem>
         <Divider />
-      </>
+      </div>
     );
   });
 

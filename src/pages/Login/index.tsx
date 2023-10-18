@@ -1,10 +1,10 @@
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import logo from "../../assets/logo.png";
-import hooks from "../../hooks";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useAuthContext from "../../context/auth/useAuthContext";
 
 type BodyType = {
     cpf: string;
@@ -14,7 +14,7 @@ type BodyType = {
 function Login() {
 
     const navigate = useNavigate();
-    const { user, login } = hooks.useAuthContext();
+    const { user, login } = useAuthContext();
 
     const [body, setBody] = useState<BodyType>({
         cpf: "",
@@ -43,12 +43,12 @@ function Login() {
 
     function handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        body.cpf = body.cpf.replace(/[^0-9]/g, '');
-        login(body.cpf, body.password);
-        if(user && sessionStorage.getItem('token')) {
-          console.log(user)
-          navigate('/provas')
-        }
+        login(body.cpf.replace(/[^0-9]/g, ''), body.password);
+    }
+    
+    if(user && sessionStorage.getItem('token')) {
+        console.log(user)
+        navigate('/provas')
     }
 
     return (
