@@ -21,6 +21,7 @@ function TestProvider({ children }: TestProviderProps) {
         const response = await instance.get(`users/${id}/tests`);
         if(response.status === 200) {
           const data = await response.data;
+          console.log(data);
           setTests(data);
         }
     }

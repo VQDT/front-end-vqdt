@@ -12,7 +12,12 @@ export type Test = {
   idCreator: string;
   idClassroom: string;
   questionId: string | null;
-  score: number;
+  testAttendances: TestAttendance[]
+}
+
+type TestAttendance = {
+  approved: boolean,
+  score: number
 }
 
 export type User = {

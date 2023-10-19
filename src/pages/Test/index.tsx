@@ -27,7 +27,6 @@ function TestPainel() {
       }
   },[])
 
-  console.log(tests)
   const olds = tests?.filter(test => filterTests(test) === true)
   const nexts = tests?.filter(test => filterTests(test) === false)
 
@@ -46,12 +45,14 @@ function TestPainel() {
         <ListCard>
           {
             nexts ? nexts.map(test => (
-               <TestCard
+              <TestCard
+                key={test.id}
                 handleClick={console.log}
                 icon={AiOutlineCalendar}
                 title={test.name}
                 subText={new Date(test.dateStart).toLocaleDateString()}
                 description={test.description} />
+               
             )) : <div> Nenhuma prova sobrando </div>
           }
         </ListCard>
@@ -62,22 +63,15 @@ function TestPainel() {
           {
             olds ? olds.map(test => (
                <TestCard
-                variant={test.score < 20 ? 'alert' : 'confirm'}
+                key={test.id}
+                variant={test.testAttendances[0].approved === false ? 'alert' : 'confirm'}
                 handleClick={console.log}
-                icon={test.score < 20 ? AiOutlineCloseCircle: AiOutlineCheckCircle}
+                icon={test.testAttendances[0].approved === false ? AiOutlineCloseCircle : AiOutlineCheckCircle}
                 title={test.name}
                 subText={new Date(test.dateStart).toLocaleDateString()}
                 description={test.description} />
             )): <div> Nenhuma prova sobrando </div>
           }
-          <TestCard
-            variant="alert"
-            handleClick={console.log}
-            icon={AiOutlineCloseCircle}
-            title="Supletivo"
-            subText="12/10/1993"
-            description="Exame de aprovação do candidato no programa Vem Que Dá Tempo."
-          />
         </ListCard>
       </div>
     </>
