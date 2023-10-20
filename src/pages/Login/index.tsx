@@ -48,7 +48,7 @@ function Login() {
     
     if(user && sessionStorage.getItem('token')) {
         console.log(user)
-        navigate('/provas')
+        navigate('/')
     }
 
     return (

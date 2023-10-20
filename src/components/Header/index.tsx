@@ -26,7 +26,7 @@ const navItems = [
   },
   {
     name: "Provas",
-    to: "/provas",
+    to: "/",
   },
   {
     name: "Sair",

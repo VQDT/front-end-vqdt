@@ -27,8 +27,8 @@ function TestPainel() {
       }
   },[])
 
-  const olds = tests?.filter(test => filterTests(test) === true)
-  const nexts = tests?.filter(test => filterTests(test) === false)
+  const olds = tests?.filter(test => filterTests(test) === true) as Test[]
+  const nexts = tests?.filter(test => filterTests(test) === false) as Test[]
 
   function filterTests(test:Test) {
       const now = Date.now();
@@ -44,7 +44,7 @@ function TestPainel() {
         </h2>
         <ListCard>
           {
-            nexts ? nexts.map(test => (
+            nexts?.length > 0 ? nexts.map(test => (
               <TestCard
                 key={test.id}
                 handleClick={console.log}
@@ -61,7 +61,7 @@ function TestPainel() {
         </h2>
         <ListCard>
           {
-            olds ? olds.map(test => (
+            olds.length > 0 ? olds.map(test => (
                <TestCard
                 key={test.id}
                 variant={test.testAttendances[0].approved === false ? 'alert' : 'confirm'}
