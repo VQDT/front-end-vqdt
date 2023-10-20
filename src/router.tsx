@@ -6,6 +6,7 @@ import TestPainel from "./pages/Test";
 import PersonalData from "./pages/PersonalData";
 import Preparatory from "./pages/Preparatory";
 import LayoutProtect from "./layout/LayoutProtext";
+import RecoverPassword from "./pages/RecoverPassword";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/recuperar-senha",
+    element: <RecoverPassword />, 
   },
 ]);
 
