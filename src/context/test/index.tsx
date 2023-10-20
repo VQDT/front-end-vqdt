@@ -8,7 +8,9 @@ interface TestProviderProps {
 
 interface TestContextProps {
   tests: Test[] | undefined;
+  ActualTest: Test | undefined;
   loadTests: (id: string) => Promise<void>;
+  loadActualTest: (id: string) => Promise<void>;
 }
 
 const TestContext = createContext<TestContextProps>({} as TestContextProps);
@@ -16,6 +18,7 @@ const TestContext = createContext<TestContextProps>({} as TestContextProps);
 function TestProvider({ children }: TestProviderProps) {
 
     const [ tests, setTests ] = useState<Test[] | undefined>(undefined);
+    const [ ActualTest, setActualTest ] = useState<Test | undefined>(undefined);
 
     async function loadTests(id: string){
         const response = await instance.get(`users/${id}/tests`);
@@ -26,8 +29,17 @@ function TestProvider({ children }: TestProviderProps) {
         }
     }
 
+    async function loadActualTest(id: string | undefined){
+        const response = await instance.get(`tests/${id}`)
+        if(response.status === 200) {
+          const data = await response.data;
+          console.log(data)
+          setActualTest(data)
+        }
+    }
+
     return(
-        <TestContext.Provider value={{ tests, loadTests }}>
+        <TestContext.Provider value={{ tests, loadTests, ActualTest, loadActualTest }}>
           { children }
         </TestContext.Provider>
     );

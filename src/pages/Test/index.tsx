@@ -47,7 +47,7 @@ function TestPainel() {
             nexts?.length > 0 ? nexts.map(test => (
               <TestCard
                 key={test.id}
-                handleClick={console.log}
+                handleClick={() => navigate('/provas/'+ test.id)}
                 icon={AiOutlineCalendar}
                 title={test.name}
                 subText={new Date(test.dateStart).toLocaleDateString()}
@@ -61,11 +61,11 @@ function TestPainel() {
         </h2>
         <ListCard>
           {
-            olds.length > 0 ? olds.map(test => (
+            olds?.length > 0 ? olds.map(test => (
                <TestCard
                 key={test.id}
                 variant={test.testAttendances[0].approved === false ? 'alert' : 'confirm'}
-                handleClick={console.log}
+                handleClick={() => navigate('/provas/'+ test.id)}
                 icon={test.testAttendances[0].approved === false ? AiOutlineCloseCircle : AiOutlineCheckCircle}
                 title={test.name}
                 subText={new Date(test.dateStart).toLocaleDateString()}
