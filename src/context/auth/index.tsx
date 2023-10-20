@@ -1,6 +1,7 @@
 import instance from "../../axios";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { User } from "../../types";
+import { deleteTokenSessinStorage, deleteUserSessionStorage, getUserSessionStorage, saveTokenSessinStorage, saveUserSessionStorage } from "./utils";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -12,24 +13,32 @@ interface AuthContextProps {
   loggout: () => void;
 }
 
-
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps) {
 
   const [ user, setUser ] = useState<User | undefined>(undefined);
 
+  useEffect(() => {
+    const existUser = getUserSessionStorage();
+    if(existUser) {
+      setUser(JSON.parse(existUser));
+    }
+  }, [])
+
   async function login(cpf: string, password: string){
     const response = await instance.post("users/auth/login", {cpf, password});
     if(response.status === 200) {
       const data = await response.data;
       setUser(data.user);
-      sessionStorage.setItem("token", data.token);
+      saveTokenSessinStorage(data.token);
+      saveUserSessionStorage(data.user);
     }
   }
 
   function loggout(){
-    sessionStorage.removeItem("token");
+    deleteTokenSessinStorage();
+    deleteUserSessionStorage();
     setUser(undefined);
   }
 

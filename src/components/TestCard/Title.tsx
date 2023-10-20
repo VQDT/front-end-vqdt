@@ -6,8 +6,10 @@ interface TitleProps {
 
 function Title({ children }: TitleProps) {
   return (
-    <p className="min-w-max h-fit p-4 bg-Blue rounded-sm rounded-br-xl text-White text-lg font-semibold uppercase flex-1 flex items-center justify-center flex-shrink-0">
-      {children}
+    <p className="w-full max-w-[165px] h-screen px-3 max-h-[50px] bg-Blue rounded-sm rounded-br-xl text-White text-lg font-semibold whitespace-nowrap uppercase flex items-center justify-center overflow-hidden">
+      <span className="max-w-full overflow-hidden text-ellipsis">
+        {children}
+      </span>
     </p>
   );
 }

@@ -2,15 +2,20 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/app";
 import Login from "./pages/Login";
 import AboutTest from "./pages/AboutTest";
-import Test from "./pages/Test";
+import TestPainel from "./pages/Test";
 import PersonalData from "./pages/PersonalData";
 import Preparatory from "./pages/Preparatory";
+import LayoutProtect from "./layout/LayoutProtext";
 import RecoverPassword from "./pages/RecoverPassword";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
+    element:(
+      <LayoutProtect>
+        <Layout />
+      </LayoutProtect>
+    ),
     children: [
       {
         path: "/preparatorio",
@@ -21,8 +26,8 @@ const router = createBrowserRouter([
         element: <PersonalData />,
       },
       {
-        path: "/provas",
-        element: <Test />,
+        path: "/",
+        element: <TestPainel />,
       },
       {
         path: "/provas/:id",

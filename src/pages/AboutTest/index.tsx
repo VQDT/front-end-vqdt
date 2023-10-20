@@ -16,7 +16,9 @@ import Container from "./Container";
 import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import useTestContext from "../../context/test/useTestContext";
  
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
@@ -24,8 +26,17 @@ interface AboutTest {
 
 function AboutTest({ variant = "default" }: AboutTest) {
 
-  const {id} = useParams()
-  console.log(id)
+  const { id } = useParams()
+  const { ActualTest, loadActualTest } = useTestContext()
+  const navigate = useNavigate();
+  
+  useEffect(()=>{
+    if(id){
+      loadActualTest(id);
+    }
+  },[])
+
+  console.log(ActualTest)
 
   return (
     <>
@@ -71,7 +82,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
         </div>
       </Container>
       <div className="mt-6 flex justify-center">
-        <Button variant="outline">
+        <Button variant="outline" handleClick={()=> {navigate("/")}}>
           <AiOutlineArrowLeft />
           VOLTAR
         </Button>
