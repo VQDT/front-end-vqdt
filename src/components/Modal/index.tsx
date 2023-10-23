@@ -11,7 +11,7 @@ interface ModalProps {
   text: string;
   variant?: "alert" | "default" | "confirm" | "warning"; 
   buttons: ReactNode[] | ReactNode,
-  inputs: ReactNode[] | ReactNode
+  inputs?: ReactNode
 }
 
 function Modal({ title, text, variant = "default", buttons, inputs }: ModalProps) {

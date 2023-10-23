@@ -29,6 +29,7 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   async function login(cpf: string, password: string){
     const response = await instance.post("users/auth/login", {cpf, password});
+    console.log(response)
     if(response.status === 200) {
       const data = await response.data;
       setUser(data.user);

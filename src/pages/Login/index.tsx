@@ -48,8 +48,6 @@ function Login() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     body.cpf = body.cpf.replace(/[^0-9]/g, "");
-    console.log(body.cpf);
-    console.log(body.password);
     login(body.cpf, body.password);
   }
 
