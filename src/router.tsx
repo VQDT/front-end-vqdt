@@ -2,15 +2,16 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/app";
 import Login from "./pages/Login";
 import AboutTest from "./pages/AboutTest";
-import PainelTest from "./pages/PainelTests";
+import TestPainel from "./pages/Test";
 import Preparatory from "./pages/Preparatory";
-import Test from "./pages/Test";
 import LayoutProtect from "./layout/LayoutProtext";
+import RecoverPassword from "./pages/RecoverPassword";
+import Test from "./pages/Test";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
+    element:(
       <LayoutProtect>
         <Layout />
       </LayoutProtect>
@@ -22,10 +23,14 @@ const router = createBrowserRouter([
       },
       {
         path: "/painel-provas",
-        element: <PainelTest />,
+        element: <TestPainel />,
       },
       {
-        path: "/sobre-prova",
+        path: "/",
+        element: <TestPainel />,
+      },
+      {
+        path: "/provas/:id",
         element: <AboutTest />,
       }
     ],
@@ -37,7 +42,11 @@ const router = createBrowserRouter([
   {
     path: "/prova",
     element: <Test />,
-  }
+  },
+  {
+    path: "/recuperar-senha",
+    element: <RecoverPassword />, 
+  },
 ]);
 
 export default router;
