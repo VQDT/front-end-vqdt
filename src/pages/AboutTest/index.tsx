@@ -67,7 +67,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
           <LocalContent>
             <AboutTitle text="Local de aplicação da prova"/>
             <LocalTitle text={ActualTest?.classroom.schools.name as string}/>
-            <LocalLink href="#" text={ActualTest?.classroom.schools.address.city +" - "+ActualTest?.classroom.schools.address.state+" , "+ActualTest?.classroom.schools.address.neighbour} />
+            <LocalLink href="#" text={ActualTest?.classroom.schools.address.city +" - "+ActualTest?.classroom.schools.address.state+", "+ActualTest?.classroom.schools.address.neighbour+", "+ActualTest?.classroom.schools.address.street+", "+ActualTest?.classroom.schools.address.zipCode} /> 
           </LocalContent>
           <LocalContent>
             <AboutTitle text="Conteúdo da prova"/>
