@@ -2,11 +2,11 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/app";
 import Login from "./pages/Login";
 import AboutTest from "./pages/AboutTest";
-import TestPainel from "./pages/Test";
-import PersonalData from "./pages/PersonalData";
+import TestPainel from "./pages/PainelTests";
 import Preparatory from "./pages/Preparatory";
 import LayoutProtect from "./layout/LayoutProtext";
 import RecoverPassword from "./pages/RecoverPassword";
+import Test from "./pages/Test";
 
 const router = createBrowserRouter([
   {
@@ -22,10 +22,6 @@ const router = createBrowserRouter([
         element: <Preparatory />,
       },
       {
-        path: "/dados-pessoais",
-        element: <PersonalData />,
-      },
-      {
         path: "/",
         element: <TestPainel />,
       },
@@ -38,6 +34,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/prova",
+    element: <Test />,
   },
   {
     path: "/recuperar-senha",

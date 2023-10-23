@@ -1,5 +1,9 @@
 import { useContext } from "react";
+<<<<<<<< HEAD:src/context/auth/useAuth.tsx
 import { AuthContext } from "./authContext";
+========
+import { AuthContext } from ".";
+>>>>>>>> development:src/context/auth/useAuthContext.tsx
 
 function useAuth() {
 

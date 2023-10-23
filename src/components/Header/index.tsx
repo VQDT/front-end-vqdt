@@ -46,7 +46,7 @@ function Header({ window }: Props) {
     return (
       <div key={item.name}>
         <Divider />
-        <ListItem key={item.name} disablePadding>
+        <ListItem disablePadding>
           <Link
             to={item.to}
             className="
@@ -111,7 +111,11 @@ function Header({ window }: Props) {
 
   return (
     <div className="h-16 flex">
-      <AppBar component="nav" className="shadow-sm h-16" sx={{boxShadow: "none"}}>
+      <AppBar
+        component="nav"
+        className="shadow-sm h-16"
+        sx={{ boxShadow: "none" }}
+      >
         <Toolbar
           className="w-full bg-Blue flex items-center justify-between"
           sx={{ padding: { xs: "0", sm: "0", sx: "0" } }}
@@ -131,9 +135,7 @@ function Header({ window }: Props) {
             <MenuIcon />
           </IconButton>
 
-          <Box className="h-full hidden sm:flex">
-            {linkList}
-          </Box>
+          <Box className="h-full hidden sm:flex">{linkList}</Box>
         </Toolbar>
       </AppBar>
 

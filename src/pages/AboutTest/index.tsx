@@ -81,7 +81,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
         </ContainerLocalContent>
         <div className="flex gap-4 justify-between flex-wrap">
           <Button variant="outline" color="alert">CANCELAR AGENDAMENTO</Button>
-          <Button>REALIZAR PROVA</Button>
+          <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
         </div>
       </Container>
       <div className="mt-6 flex justify-center">
