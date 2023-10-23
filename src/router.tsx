@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "./layout/app";
 import Login from "./pages/Login";
 import AboutTest from "./pages/AboutTest";
-import TestPainel from "./pages/Test";
+import TestPainel from "./pages/PainelTests";
 import Preparatory from "./pages/Preparatory";
 import LayoutProtect from "./layout/LayoutProtext";
 import RecoverPassword from "./pages/RecoverPassword";
@@ -20,10 +20,6 @@ const router = createBrowserRouter([
       {
         path: "/preparatorio",
         element: <Preparatory />,
-      },
-      {
-        path: "/painel-provas",
-        element: <TestPainel />,
       },
       {
         path: "/",

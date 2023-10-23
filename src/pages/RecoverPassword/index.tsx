@@ -2,8 +2,10 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import {AiOutlineArrowLeft} from 'react-icons/ai';
 import { AiOutlineQuestionCircle }  from 'react-icons/ai';
+import { useNavigate } from "react-router-dom";
 
 function RecoverPassword(){
+    const navigate = useNavigate()
     return(
         <div className="bg-[#108ABD] w-full h-screen px-3">
             <div className="flex justify-center content-center w-full h-screen flex-wrap">
@@ -11,7 +13,7 @@ function RecoverPassword(){
                     <form className="bg-white w-full rounded-xl p-10 justify-center content-center">
                         <div className="flex items-center">
                             <div className="mr-10">
-                                <button><AiOutlineArrowLeft size="2em" color="#666666"/></button>
+                                <button onClick={() => navigate("/login")}><AiOutlineArrowLeft size="2em" color="#666666"/></button>
                             </div>
                             <div className="mr-10">
                                 <p className="text-4xl font-medium">Recuperar Senha</p>

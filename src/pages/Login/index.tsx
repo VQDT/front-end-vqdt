@@ -75,7 +75,7 @@ function Login() {
                   required
                 />
               </div>
-              <Link className="text-xs text-slate-500" to={"#"}>
+              <Link className="text-xs text-slate-500" to={''} onClick={() => navigate("/recuperar-senha")}>
                 Esqueceu a senha?
               </Link>
               <div className="mt-3">
