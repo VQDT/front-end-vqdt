@@ -11,6 +11,7 @@ export type Test = {
   idApplicator: string;
   idCreator: string;
   idClassroom: string;
+  classroom: classroom;
   questionId: string | null;
   testAttendances: TestAttendance[]
 }
@@ -32,4 +33,28 @@ export type User = {
   occupation: string;
   idAddress: string;
   password?: string;
+}
+
+type classroom = {
+  id: string,
+  name:string,
+  idSchool: string,
+  schools: School
+}
+
+type School = {
+  id: string,
+  name:string,
+  idGee: number,
+  idAddress: string,
+  address: Address
+}
+
+type Address = {
+    id: string,
+    street: string,
+    neighbour: string,
+    city: string,
+    state: string,
+    zipCode: string
 }
