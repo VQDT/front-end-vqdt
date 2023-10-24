@@ -13,13 +13,13 @@ import LocalContent from "./LocalContent";
 import Subjects from "./Subjects";
 import Subject from "./Subject";
 import Container from "./Container";
-import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import useTestContext from "../../context/test/useTestContext";
- 
+
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
@@ -29,13 +29,17 @@ function AboutTest({ variant = "default" }: AboutTest) {
   const { id } = useParams()
   const { ActualTest, loadActualTest } = useTestContext()
   const navigate = useNavigate();
-  
-  useEffect(()=>{
-    if(id){
+
+  useEffect(() => {
+    if (id) {
       loadActualTest(id);
     }
-  },[])
+  }, [])
 
+  if(!ActualTest){
+    navigate("/")
+  }
+  
   console.log(ActualTest)
 
   return (
@@ -45,47 +49,66 @@ function AboutTest({ variant = "default" }: AboutTest) {
           <Title>
             <span className="text-2xl uppercase">{ActualTest?.name}</span>
           </Title>
-          <SubTextContainer>
-            <SubText variant={variant}>
-                <AiOutlineCalendar size={36} className="text-Concrete"/>
-                <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleDateString()}</span>
-            </SubText>
-            <SubText variant={variant}>
-                <AiOutlineClockCircle size={36}  className="text-Concrete"/>
-                <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleTimeString('de', {
-    hour: '2-digit',
-    minute: '2-digit'
-  })}</span>
-            </SubText>
-          </SubTextContainer>
+          {
+            new Date(ActualTest!.dateStart).getTime() < Date.now() ? 
+              <>
+                {
+                  ActualTest?.testAttendances[0].approved ? 
+                  <SubText variant='confirm'>
+                    <AiOutlineCheckCircle/><p className="text-lg p-3">Aprovado</p>
+                  </SubText>:
+                  <SubText variant='alert'>
+                    <AiOutlineCloseCircle/><p className="text-lg p-3">Reprovado</p>
+                  </SubText>
+                }
+              </>
+              :
+              <SubTextContainer>
+                <SubText variant={variant}>
+                  <AiOutlineCalendar size={36} className="text-Concrete" />
+                  <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleDateString()}</span>
+                </SubText>
+                <SubText variant={variant}>
+                  <AiOutlineClockCircle size={36} className="text-Concrete" />
+                  <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleTimeString('de', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</span>
+                </SubText>
+              </SubTextContainer>
+          }
         </Header>
         <About>
-          <AboutTitle text="Sobre a prova"/>
-          <AboutContent text={ActualTest?.description as string}/>
-        </About>      
+          <AboutTitle text="Sobre a prova" />
+          <AboutContent text={ActualTest?.description as string} />
+        </About>
         <ContainerLocalContent>
           <LocalContent>
-            <AboutTitle text="Local de aplicação da prova"/>
-            <LocalTitle text={ActualTest?.classroom.schools.name as string}/>
-            <LocalLink href="#" text={ActualTest?.classroom.schools.address.city +" - "+ActualTest?.classroom.schools.address.state+", "+ActualTest?.classroom.schools.address.neighbour+", "+ActualTest?.classroom.schools.address.street+", "+ActualTest?.classroom.schools.address.zipCode} /> 
+            <AboutTitle text="Local de aplicação da prova" />
+            <LocalTitle text={ActualTest?.classroom.schools.name as string} />
+            <LocalLink href="#" text={ActualTest?.classroom.schools.address.city + " - " + ActualTest?.classroom.schools.address.state + ", " + ActualTest?.classroom.schools.address.neighbour + ", " + ActualTest?.classroom.schools.address.street + ", " + ActualTest?.classroom.schools.address.zipCode} />
           </LocalContent>
           <LocalContent>
-            <AboutTitle text="Conteúdo da prova"/>
-              <Subjects>
-                <Subject text="Matemática" icon={BiMath}/>
-                <Subject text="Ciências da Natureza" icon={MdOutlineScience}/>
-                <Subject text="Ciências Humanas" icon={MdOutlinePsychology}/>
-                <Subject text="Linguagens" icon={BiBookOpen}/>
-              </Subjects>
+            <AboutTitle text="Conteúdo da prova" />
+            <Subjects>
+              <Subject text="Matemática" icon={BiMath} />
+              <Subject text="Ciências da Natureza" icon={MdOutlineScience} />
+              <Subject text="Ciências Humanas" icon={MdOutlinePsychology} />
+              <Subject text="Linguagens" icon={BiBookOpen} />
+            </Subjects>
           </LocalContent>
         </ContainerLocalContent>
         <div className="flex gap-4 justify-between flex-wrap">
           <Button variant="outline" color="alert">CANCELAR AGENDAMENTO</Button>
-          <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
+          {
+            new Date(ActualTest?.dateStart as Date).getTime() < Date.now() ?
+            null
+             : <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
+          }
         </div>
       </Container>
       <div className="mt-6 flex justify-center">
-        <Button variant="outline" handleClick={()=> {navigate("/")}}>
+        <Button variant="outline" handleClick={() => { navigate("/") }}>
           <AiOutlineArrowLeft />
           VOLTAR
         </Button>

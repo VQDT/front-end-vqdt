@@ -33,6 +33,7 @@ export type User = {
   occupation: string;
   idAddress: string;
   password?: string;
+  roles: string[];
 }
 
 type classroom = {

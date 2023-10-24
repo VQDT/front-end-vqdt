@@ -65,7 +65,8 @@ function TestPainel() {
               <TestCard
                 key={test.id}
                 variant={test.testAttendances[0].approved === false ? 'alert' : 'confirm'}
-                handleClick={() => navigate('/provas/' + test.id)}
+                handleClick={() => navigate('/provas/' + test.id
+                )}
                 icon={test.testAttendances[0].approved === false ? AiOutlineCloseCircle : AiOutlineCheckCircle}
                 title={test.name}
                 subText={new Date(test.dateStart).toLocaleDateString()}

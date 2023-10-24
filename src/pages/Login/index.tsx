@@ -43,8 +43,13 @@ function Login() {
   
   if(user && sessionStorage.getItem('token')) {
       console.log(user)
-      navigate('/')
+      if (user.roles[0] === "Candidato") {
+        navigate('/')
+      } else {
+        //navigate('/gerente')
+      }
   }
+
   return (
     <>
       <div className="bg-Blue w-full h-screen px-3">
