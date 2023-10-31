@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
-import useAuth from "../../context/auth/useAuth";
 import Login from "../../pages/Login";
+import useAuthContext from "../../context/auth/useAuthContext";
 
 interface LayoutProtectProps {
   children: ReactNode;
@@ -8,7 +8,7 @@ interface LayoutProtectProps {
 
 function LayoutProtect({ children }: LayoutProtectProps) {
   
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   if(user) {
     return children;

@@ -16,7 +16,7 @@ interface TestCardProps {
 
 function TestCard({ title, subText, description, variant = "default", icon: Icon, handleClick }: TestCardProps) {
   return(
-    <Container handleClick={handleClick}>
+    <Container handleClick={handleClick} >
       <Header>
         <Title>{ title }</Title>
         <SubText variant={variant}>

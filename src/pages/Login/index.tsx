@@ -1,10 +1,10 @@
 import Button from "../../components/Button";
 import Input from "../../components/Input";
 import logo from "../../assets/logo.png";
-import useAuth from "../../context/auth/useAuth";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import useAuthContext from "../../context/auth/useAuthContext";
 
 type BodyType = {
   cpf: string;
@@ -14,7 +14,7 @@ type BodyType = {
 function Login() {
   const navigate = useNavigate();
 
-  const { user, login } = useAuth();
+  const { user, login } = useAuthContext();
 
   const [body, setBody] = useState<BodyType>({
     cpf: "",
@@ -24,35 +24,30 @@ function Login() {
   const handleCpfChange = (cpf: string) => {
     const inputCpf = cpf;
     const formattedCpf = inputCpf.replace(/\D/g, "").slice(0, 11);
-
-    const cpfWithMask = formattedCpf.replace(
-      /(\d{3})(\d{3})(\d{3})(\d{2})/,
-      "$1.$2.$3-$4"
-    );
-
+    const cpfWithMask = formattedCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,"$1.$2.$3-$4")
     return cpfWithMask;
   };
 
   function handleChangeLogin(event: ChangeEvent<HTMLInputElement>) {
-    const value =
-      event.target.id === "cpf"
-        ? handleCpfChange(event.target.value)
-        : event.target.value;
-
+    const value = event.target.id === 'cpf' ? handleCpfChange(event.target.value) : event.target.value;
     setBody((prev) => ({
-      ...prev,
-      [event.target.id]: value,
+        ...prev,
+        [event.target.id]: value
     }));
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    body.cpf = body.cpf.replace(/[^0-9]/g, "");
-    login(body.cpf, body.password);
+    login(body.cpf.replace(/[^0-9]/g, ''), body.password);
   }
-
-  if (user && sessionStorage.getItem("token")) {
-    navigate("/painel-provas");
+  
+  if(user && sessionStorage.getItem('token')) {
+      console.log(user)
+      if (user.roles[0] === "Candidato") {
+        navigate('/')
+      } else {
+        //navigate('/gerente')
+      }
   }
 
   return (
@@ -85,7 +80,7 @@ function Login() {
                   required
                 />
               </div>
-              <Link className="text-xs text-slate-500" to={"#"}>
+              <Link className="text-xs text-slate-500" to={''} onClick={() => navigate("/recuperar-senha")}>
                 Esqueceu a senha?
               </Link>
               <div className="mt-3">

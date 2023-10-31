@@ -13,7 +13,6 @@ interface AuthContextProps {
   loggout: () => void;
 }
 
-
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps) {

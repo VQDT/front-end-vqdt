@@ -13,64 +13,102 @@ import LocalContent from "./LocalContent";
 import Subjects from "./Subjects";
 import Subject from "./Subject";
 import Container from "./Container";
-import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineCalendar, AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
- 
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import useTestContext from "../../context/test/useTestContext";
+
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
 
 function AboutTest({ variant = "default" }: AboutTest) {
 
+  const { id } = useParams()
+  const { ActualTest, loadActualTest } = useTestContext()
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      loadActualTest(id);
+    }
+  }, [])
+
+  if(!ActualTest){
+    navigate("/")
+  }
+  
+  console.log(ActualTest)
 
   return (
     <>
       <Container>
         <Header>
           <Title>
-            <span className="text-2xl uppercase">Exame Supletivo</span>
+            <span className="text-2xl uppercase">{ActualTest?.name}</span>
           </Title>
-          <SubTextContainer>
-            <SubText variant={variant}>
-                <AiOutlineCalendar size={36} className="text-Concrete"/>
-                <span className="text-lg font-bold uppercase">12/10/2023</span>
-            </SubText>
-            <SubText variant={variant}>
-                <AiOutlineClockCircle size={36}  className="text-Concrete"/>
-                <span className="text-lg font-bold uppercase">08:00</span>
-            </SubText>
-          </SubTextContainer>
+          {
+            new Date(ActualTest!.dateStart).getTime() < Date.now() ? 
+              <>
+                {
+                  ActualTest?.testAttendances[0].approved ? 
+                  <SubText variant='confirm'>
+                    <AiOutlineCheckCircle/><p className="text-lg p-3">Aprovado</p>
+                  </SubText>:
+                  <SubText variant='alert'>
+                    <AiOutlineCloseCircle/><p className="text-lg p-3">Reprovado</p>
+                  </SubText>
+                }
+              </>
+              :
+              <SubTextContainer>
+                <SubText variant={variant}>
+                  <AiOutlineCalendar size={36} className="text-Concrete" />
+                  <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleDateString()}</span>
+                </SubText>
+                <SubText variant={variant}>
+                  <AiOutlineClockCircle size={36} className="text-Concrete" />
+                  <span className="text-lg font-bold uppercase">{new Date(ActualTest?.dateStart as Date).toLocaleTimeString('de', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}</span>
+                </SubText>
+              </SubTextContainer>
+          }
         </Header>
         <About>
-          <AboutTitle text="Sobre a prova"/>
-          <AboutContent text="Duis ultricies in ex ut dignissim. Etiam viverra porta lectus quis blandit. Nam gravida arcu sit amet urna auctor fringilla. Ut urna massa, semper vel nisl quis, ornare consequat ipsum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc ornare, dolor sit amet tempor auctor, massa nunc dictum justo, vitae pellentesque lacus nisi sit amet mauris. Nunc aliquam pharetra condimentum. Quisque venenatis orci eu neque ultrices, non auctor augue viverra. Donec faucibus odio vel magna tincidunt, ut porttitor dolor accumsan. Aliquam tincidunt molestie nisl, at auctor velit."/>
-        </About>      
+          <AboutTitle text="Sobre a prova" />
+          <AboutContent text={ActualTest?.description as string} />
+        </About>
         <ContainerLocalContent>
           <LocalContent>
-            <AboutTitle text="Local de aplicação da prova"/>
-            <LocalTitle text="ESCOLA ESTADUAL ALFREDO GASPAR DE MENDONCA"/>
-            <LocalLink href="#" text="Eustáquio Gomes, Ao lado da antiga Telasa, R. K Um, S/N - Cidade Universitária, Maceió - AL, 57072-000" />
+            <AboutTitle text="Local de aplicação da prova" />
+            <LocalTitle text={ActualTest?.classroom.schools.name as string} />
+            <LocalLink href="#" text={ActualTest?.classroom.schools.address.city + " - " + ActualTest?.classroom.schools.address.state + ", " + ActualTest?.classroom.schools.address.neighbour + ", " + ActualTest?.classroom.schools.address.street + ", " + ActualTest?.classroom.schools.address.zipCode} />
           </LocalContent>
           <LocalContent>
-            <AboutTitle text="Conteúdo da prova"/>
-              <Subjects>
-                <Subject text="Matemática" icon={BiMath}/>
-                <Subject text="Ciências da Natureza" icon={MdOutlineScience}/>
-                <Subject text="Ciências Humanas" icon={MdOutlinePsychology}/>
-                <Subject text="Linguagens" icon={BiBookOpen}/>
-              </Subjects>
+            <AboutTitle text="Conteúdo da prova" />
+            <Subjects>
+              <Subject text="Matemática" icon={BiMath} />
+              <Subject text="Ciências da Natureza" icon={MdOutlineScience} />
+              <Subject text="Ciências Humanas" icon={MdOutlinePsychology} />
+              <Subject text="Linguagens" icon={BiBookOpen} />
+            </Subjects>
           </LocalContent>
         </ContainerLocalContent>
         <div className="flex gap-4 justify-between flex-wrap">
           <Button variant="outline" color="alert">CANCELAR AGENDAMENTO</Button>
-          <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
+          {
+            new Date(ActualTest?.dateStart as Date).getTime() < Date.now() ?
+            null
+             : <Button handleClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
+          }
         </div>
       </Container>
       <div className="mt-6 flex justify-center">
-        <Button variant="outline">
+        <Button variant="outline" handleClick={() => { navigate("/") }}>
           <AiOutlineArrowLeft />
           VOLTAR
         </Button>
