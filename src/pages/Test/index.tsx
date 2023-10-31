@@ -2,7 +2,7 @@ import SubjectCard from "../../components/SubjectCard";
 import logo from "../../assets/logo.png";
 import Button from "../../components/Button";
 import Card from "../../components/Card";
-import Question from "../../components/question";
+import Question from "../../components/Question";
 import { useState } from "react";
 import Modal from "../../components/Modal";
 import { AiOutlineArrowLeft } from "react-icons/ai";
