@@ -6,6 +6,7 @@ import TestPainel from "./pages/PainelTests";
 import Preparatory from "./pages/Preparatory";
 import LayoutProtect from "./layout/LayoutProtext";
 import RecoverPassword from "./pages/RecoverPassword";
+import CandidateResult from "./pages/CandidateResult/CandidateResult";
 import Test from "./pages/Test";
 
 const router = createBrowserRouter([
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
     path: "/recuperar-senha",
     element: <RecoverPassword />, 
   },
+  {
+    path:"/comprovante-de-participacao",
+    element: <CandidateResult />,
+  }
 ]);
 
 export default router;
