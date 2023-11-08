@@ -6,7 +6,7 @@ interface ModalProps {
 
 function Container({ children }: ModalProps) {
   return(
-    <div className="w-full max-w-[1100px] mx-auto p-9 border border-Silver rounded-xl flex flex-col gap-9">
+    <div className="w-full max-w-[1100px] mt-14 mx-auto p-9 border border-Silver rounded-xl flex flex-col gap-9">
       { children }
     </div>
   );

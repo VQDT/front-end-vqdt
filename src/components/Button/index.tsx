@@ -1,22 +1,18 @@
-import { ReactNode, MouseEvent } from "react";
+import { ButtonHTMLAttributes } from "react";
 
-interface ButtonProps {
-  children: ReactNode | ReactNode[];
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "solid" | "outline";
   color?: "default" | "confirm" | "alert" | "warning" | "disable";
   size?: 'w-full' | 'w-4'
-  type?: "button" | "submit" | "reset";
-  handleClick?: (event: MouseEvent) => void;
 }
 
-function Button({variant = "solid", color = "default", children, handleClick, type = "button", size}: ButtonProps) {
+function Button({variant = "solid", color = "default", size, ...props}: ButtonProps) {
   return(
     <button 
       className={`button ${variant} ${color} ${size}`}
-      type={type}
-      onClick={handleClick}
+      {...props}
     >
-      { children }
+      { props.children }
     </button>
   );
 }

@@ -1,4 +1,5 @@
 //import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import Main from "../../components/Main";
 import Table from "../../components/Table"
 function Preparatory() {
 
@@ -18,9 +19,9 @@ function Preparatory() {
   ]  
 
   return (
-    <div>
+    <Main>
       <Table registros={tableRegisters}/>
-    </div>
+    </Main>
   );
 }
 

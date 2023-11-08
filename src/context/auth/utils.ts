@@ -1,4 +1,4 @@
-import { User } from "../../types";
+import { User } from "../../models";
 
 export function saveUserSessionStorage(user: User) {
   sessionStorage.setItem("u", JSON.stringify(user));
@@ -6,6 +6,10 @@ export function saveUserSessionStorage(user: User) {
 
 export function getUserSessionStorage() {
   return sessionStorage.getItem("u");
+}
+
+export function getTokenSessionStorage() {
+  return sessionStorage.getItem("token");
 }
 
 export function deleteUserSessionStorage() {
