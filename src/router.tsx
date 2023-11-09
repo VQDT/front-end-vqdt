@@ -4,6 +4,9 @@ import LoginLayout from "./layout/Login.Layout";
 import Login from "./pages/Login.page";
 import TestPainel from "./pages/TestPainel.page";
 import Preparatory from "./pages/Preparatory";
+import LayoutProtect from "./layout/LayoutProtext";
+import RecoverPassword from "./pages/RecoverPassword";
+import CandidateResult from "./pages/CandidateResult/CandidateResult";
 import AppLayout from "./layout/App.Layout";
 import AboutTest from "./pages/AboutTest";
 import Test from "./pages/Test.page";
@@ -50,6 +53,14 @@ export const Router = createBrowserRouter([
         element: <Test />,
       },
     ]
+  },
+  {
+    path: "/recuperar-senha",
+    element: <RecoverPassword />, 
+  },
+  {
+    path:"/comprovante-de-participacao",
+    element: <CandidateResult />,
   },
   {
     path: "/auth",
