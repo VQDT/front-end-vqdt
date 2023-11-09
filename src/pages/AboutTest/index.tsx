@@ -41,6 +41,8 @@ function AboutTest({ variant = "default" }: AboutTest) {
     }
   }, []);
 
+  console.log(id)
+
   function isFuture(date: string | null | undefined) {
     if (!date) return false;
     const today = new Date();
@@ -137,9 +139,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
               CANCELAR AGENDAMENTO
             </Button>
             {!isFuture(test.dateStart.toString()) ? null : (
-              <Button onClick={() => navigate("/prova")}>
-                REALIZAR PROVA
-              </Button>
+              <Button onClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
             )}
           </div>
         </Container>

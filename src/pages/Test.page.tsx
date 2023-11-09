@@ -9,9 +9,11 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import Input from "../components/Input";
 import useAuth from "../context/auth/useAuth";
 import instance from "../axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Test() {
+  
+  const { id } = useParams();
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
@@ -26,6 +28,8 @@ function Test() {
     openEncerramento && setOpenEncerramento(false);
     setopenPassword((prev) => !prev);
   }
+
+  console.log(id)
 
   async function handleSubmit() {
     try {
