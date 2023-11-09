@@ -72,10 +72,10 @@ function LoginPage() {
           Entrar
         </button>
       </form>
-      <div className="h-28 mt-5 flex justify-center gap-5">
-        <div className="w-fit h-full flex flex-col justify-end items-end">
-          <p className="w-fit text-White text-2xl font-bold">SEDUC</p>
-          <p className="w-fit text-White text-right font-normal">Secretária de Estado da Educação de Alagoas</p>
+      <div className="h-28 mt-5 flex justify-between gap-5">
+        <div className="w-[175px] h-full flex flex-col justify-end items-end">
+          <p className="text-White text-2xl font-bold">SEDUC</p>
+          <p className="text-White text-right font-normal">Secretária de Estado da Educação de Alagoas</p>
         </div>
         <img src={GOV} className="max-h-full mx-auto" />
       </div>
