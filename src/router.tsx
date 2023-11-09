@@ -7,6 +7,8 @@ import Preparatory from "./pages/Preparatory";
 import AppLayout from "./layout/App.Layout";
 import AboutTest from "./pages/AboutTest";
 import Test from "./pages/Test.page";
+import IntroductionTestPage from "./pages/IntroductionTest.page";
+import TestLayout from "./layout/Test.Layoyt";
 
 export const Router = createBrowserRouter([
   {
@@ -35,9 +37,19 @@ export const Router = createBrowserRouter([
     path: "/prova",
     element: (
       <ProtectLayout>
-        <Test />
+        <TestLayout />
       </ProtectLayout>
     ),
+    children: [
+      {
+        path: "/prova/",
+        element: <IntroductionTestPage />,
+      },
+      {
+        path: "/prova/:id",
+        element: <Test />,
+      },
+    ]
   },
   {
     path: "/auth",
