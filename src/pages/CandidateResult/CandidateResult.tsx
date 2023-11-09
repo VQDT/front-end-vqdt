@@ -1,6 +1,7 @@
 import Header from "../../components/Header";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Result from "../../components/Result";
+import CandidateApproved from "../../components/CandidateApproved";
+//import CandidateFailed from "../../components/CandidateFailed"
 
 function CandidateResult(){
     const handleClick = () => {
@@ -14,7 +15,7 @@ function CandidateResult(){
 
             <div className="">
                 {/* componente de resultado */}
-                <Result />
+                <CandidateApproved />
             </div>
 
             <div className="card w-4/5 border border-[#C5C5C5] rounded-md m-auto p-3">
