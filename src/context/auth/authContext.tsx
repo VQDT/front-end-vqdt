@@ -1,7 +1,7 @@
 import instance from "../../axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { User } from "../../types";
-import { deleteTokenSessinStorage, deleteUserSessionStorage, getUserSessionStorage, saveTokenSessinStorage, saveUserSessionStorage } from "./utils";
+import { User } from "../../models";
+import { deleteTokenSessinStorage, deleteUserSessionStorage, getTokenSessionStorage, getUserSessionStorage, saveTokenSessinStorage, saveUserSessionStorage } from "./utils";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -21,14 +21,14 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
-    if(existUser) {
+    const existToken = getTokenSessionStorage();
+    if(existUser && existToken) {
       setUser(JSON.parse(existUser));
     }
   }, [])
 
   async function login(cpf: string, password: string){
     const response = await instance.post("users/auth/login", {cpf, password});
-    console.log(response)
     if(response.status === 200) {
       const data = await response.data;
       setUser(data.user);

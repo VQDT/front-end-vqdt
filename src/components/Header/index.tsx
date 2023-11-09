@@ -12,7 +12,7 @@ import logo from "../../assets/logo.png";
 import { useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import useAuthContext from "../../context/auth/useAuthContext";
+import useAuth from "../../context/auth/useAuth";
 
 interface Props {
   window?: () => Window;
@@ -21,16 +21,12 @@ interface Props {
 const drawerWidth = 240;
 const navItems = [
   {
-    name: "Preparatório",
-    to: "/preparatorio",
-  },
-  {
     name: "Provas",
     to: "/",
   },
   {
     name: "Sair",
-    to: "/login",
+    to: "/auth",
   },
 ];
 
@@ -38,7 +34,7 @@ function Header({ window }: Props) {
 
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  const { loggout } = useAuthContext();
+  const { loggout } = useAuth();
   
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
