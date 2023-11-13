@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { TestContext } from "./testContext";
 
-function useTestContext() {
+function useTest() {
 
   const testContext = useContext(TestContext);
   if(!testContext) {
@@ -10,4 +10,4 @@ function useTestContext() {
   return testContext;
 }
 
-export default useTestContext;
+export default useTest;

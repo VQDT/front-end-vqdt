@@ -3,22 +3,28 @@ import logo from "../assets/logo.png";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import Question from "../components/question";
-import { useState } from "react";
 import Modal from "../components/Modal";
-import { AiOutlineArrowLeft } from "react-icons/ai";
 import Input from "../components/Input";
 import useAuth from "../context/auth/useAuth";
+import useTest from "../context/test/useTest";
 import instance from "../axios";
+import { useEffect, useState } from "react";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
+import Stopwatch from "../components/Stopwatch";
 
 function Test() {
-  
-  const { id } = useParams();
+
+  const { user } = useAuth();
+  const { test, getTest } = useTest();
+    
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
-  const { user } = useAuth();
+
+  const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
+
 
   function changeOpenEncerramento() {
     setOpenEncerramento((prev) => !prev);
@@ -28,9 +34,7 @@ function Test() {
     openEncerramento && setOpenEncerramento(false);
     setopenPassword((prev) => !prev);
   }
-
-  console.log(id)
-
+  
   async function handleSubmit() {
     try {
       const auth = await instance.post("users/auth/login", {
@@ -43,8 +47,11 @@ function Test() {
     } catch(error) {
       alert("Senha incorreta");
     }
-
   }
+
+  useEffect(() => { 
+    id && getTest(id);
+  }, [id, getTest])
 
   return (
     <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
@@ -52,10 +59,9 @@ function Test() {
         <Card.Container>
           <img src={logo} alt="" className="max-w-full" />
         </Card.Container>
-        <Card.Container>
-          <Card.Title text="Tempo Restante" />
-          <p className="text-Midnight text-4xl text-right">1:00:00</p>
-        </Card.Container>
+        {
+          test && <Stopwatch milliseconds={ new Date(test.timeEnd).getTime() - new Date(test.timeStart).getTime()}/>
+        }
         <h3 className="text-White text-center text-2xl font-semibold uppercase">
           Progresso
         </h3>
