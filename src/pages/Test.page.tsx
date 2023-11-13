@@ -51,8 +51,10 @@ function Test() {
 
   useEffect(() => { 
     id && getTest(id);
-  }, [id, getTest])
+  }, [id])
 
+  console.log("pagina recarregada")
+  
   return (
     <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
       <div className="w-fit flex flex-col gap-3">

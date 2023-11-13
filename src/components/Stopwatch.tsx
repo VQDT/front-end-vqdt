@@ -31,12 +31,14 @@ function Stopwatch({ milliseconds }: StopWatchProps) {
   
       return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
+
+    console.log("componente renderizado")
   
     return(
       <Card.Container>
           <Card.Title text="Tempo Restante" />
           <p className="text-Midnight text-4xl text-right">
-            { formatTime(time)}
+            {formatTime(time)}
           </p>
       </Card.Container>
     );
