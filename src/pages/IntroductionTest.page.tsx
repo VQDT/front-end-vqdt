@@ -2,10 +2,13 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import Button from "../components/Button";
 import Main from "../components/Main";
 import useTestContext from "../context/test/useTest";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function IntroductionTestPage() {
+
+  const { id } = useParams();
   const { test } = useTestContext();
+
   const navigation = useNavigate();
 
   function NormalizeDate(date: string) {
@@ -13,7 +16,7 @@ function IntroductionTestPage() {
   }
 
   console.log(test);
-
+  
   return (
     <Main>
       <div className="my-8 py-7 px-8 bg-Blue rounded-xl">
@@ -85,7 +88,7 @@ function IntroductionTestPage() {
           <AiOutlineArrowLeft />
           Voltar
         </Button>
-        <Button onClick={() => navigation("/prova/" + test?.id)}>
+        <Button onClick={() => navigation("/prova/" + id)}>
           INICIAR PROVA
         </Button>
       </div>

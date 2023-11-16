@@ -62,7 +62,7 @@ function Test() {
           <img src={logo} alt="" className="max-w-full" />
         </Card.Container>
         {
-          test && <Stopwatch milliseconds={ new Date(test.timeEnd).getTime() - new Date(test.timeStart).getTime()}/>
+          test && <Stopwatch milliseconds={test.miliseconds}/>
         }
         <h3 className="text-White text-center text-2xl font-semibold uppercase">
           Progresso

@@ -4,7 +4,7 @@ import LoginLayout from "./layout/Login.Layout";
 import Login from "./pages/Login.page";
 import TestPainel from "./pages/TestPainel.page";
 import Preparatory from "./pages/Preparatory";
-import LayoutProtect from "./layout/LayoutProtext";
+//import LayoutProtect from "./layout/LayoutProtext";
 import RecoverPassword from "./pages/RecoverPassword";
 import CandidateResult from "./pages/CandidateResult/CandidateResult";
 import AppLayout from "./layout/App.Layout";
@@ -45,7 +45,7 @@ export const Router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/prova/",
+        path: "/prova/introduction/:id",
         element: <IntroductionTestPage />,
       },
       {

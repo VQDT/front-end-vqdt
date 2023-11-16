@@ -1,14 +1,14 @@
 import { TestAttendance } from "./TestAttendance";
-import { classroom } from "./classroom";
+import { classroom } from "./Classroom";
 
 export interface Test {
   id: string;
   name: string;
   description: string;
   createdAt: Date;
-  dateStart: Date;
-  timeStart: Date;
-  timeEnd: Date;
+  dateStart: string;
+  timeStart: string;
+  timeEnd: string;
   written: boolean;
   numberQuestion: number;
   idApplicator: string;
@@ -16,5 +16,6 @@ export interface Test {
   idClassroom: string;
   classroom: classroom;
   questionId: string | null;
+  miliseconds: number;
   testAttendances: TestAttendance[]
 }

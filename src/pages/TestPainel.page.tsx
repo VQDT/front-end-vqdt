@@ -14,10 +14,11 @@ function NormalizeDate(date: string) {
 }
 
 function isFuture(date: string) {
+  console.log(date)
   const today = new Date();
-  const testDate = new Date(date);
-  return testDate > today;
-}
+  const testDay = new Date(date);
+  return testDay >= today;
+} 
 
 function TestPainel() {
   
@@ -29,14 +30,14 @@ function TestPainel() {
   }
 
   const listFutureTests = tests
-    .filter((test) => isFuture(test.dateStart.toString()))
+    .filter((test) => isFuture(test.dateStart))
     .map((test) => {
       return (
         <TestCard
           key={test.id}
           title={test.name}
           description={test.description}
-          subText={NormalizeDate(test.dateStart.toString())}
+          subText={NormalizeDate(test.dateStart)}
           icon={AiOutlineCalendar}
           handleClick={() => navigateTest(test.id)}
         />
@@ -45,9 +46,9 @@ function TestPainel() {
 
 
   const listPastTests = tests
-    .filter((test) => !isFuture(test.dateStart.toString()))
+    .filter((test) => !isFuture(test.dateStart))
     .map((test) => {
-      return (
+      return (  
         <TestCard
           key={test.id}
           title={test.name}
@@ -60,18 +61,16 @@ function TestPainel() {
       );
     });
 
-  
-
   return (
     <Main>
       <h2 className="text-Blue text-lg font-bold uppercase">
         PROVAS AGENDADAS
       </h2>
-      <ListCard>{listFutureTests}</ListCard>
+      <ListCard>{listFutureTests.length > 0 ? listFutureTests : " Nenhuma Prova pendente "}</ListCard>
       <h2 className="text-Blue text-lg font-bold uppercase">
         PROVAS REALIZADAS
       </h2>
-      <ListCard>{listPastTests}</ListCard>
+      <ListCard>{listPastTests.length > 0 ? listPastTests : " Nenhuma Prova finalizada "}</ListCard>
     </Main>
   );
 }
