@@ -13,13 +13,6 @@ function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
 }
 
-function isFuture(date: string) {
-  console.log(date)
-  const today = new Date();
-  const testDay = new Date(date);
-  return testDay >= today;
-} 
-
 function TestPainel() {
   
   const { tests } = useTest();
@@ -30,7 +23,7 @@ function TestPainel() {
   }
 
   const listFutureTests = tests
-    .filter((test) => isFuture(test.dateStart))
+    .filter((test) => test.notFinished)
     .map((test) => {
       return (
         <TestCard
@@ -46,7 +39,7 @@ function TestPainel() {
 
 
   const listPastTests = tests
-    .filter((test) => !isFuture(test.dateStart))
+    .filter((test) => !test.notFinished)
     .map((test) => {
       return (  
         <TestCard

@@ -43,18 +43,14 @@ function AboutTest({ variant = "default" }: AboutTest) {
 
   console.log(id)
 
-  function isFuture(date: string) {
-    const today = new Date().getTime();
-    const testDay = new Date(date).getTime();
-    return testDay >= today;
-  } 
-
   if (test) {
     const {
       name,
       dateStart,
       testAttendances,
       timeEnd,
+      testPeriod,
+      notFinished,
       description,
       classroom: {
         schools: {
@@ -71,7 +67,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Title>
               <span className="text-2xl uppercase">{name}</span>
             </Title>
-            {isFuture(dateStart) ? (
+            {!notFinished ? (
               <SubTextContainer>
                 <SubText variant={variant}>
                   <AiOutlineCalendar size={36} className="text-Concrete" />
@@ -130,7 +126,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Button variant="outline" color="alert">
               CANCELAR AGENDAMENTO
             </Button>
-            {!isFuture(test.dateStart) ? null : (
+            {!testPeriod ? null : (
               <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
             )}
           </div>
