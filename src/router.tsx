@@ -44,7 +44,7 @@ export const Router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/prova/",
+        path: "/prova/introduction/:id",
         element: <IntroductionTestPage />,
       },
       {

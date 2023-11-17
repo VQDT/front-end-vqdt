@@ -25,7 +25,7 @@ import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import useTest from "../../context/test/useTest";
 import { useEffect } from "react";
-
+import { format } from 'date-fns-tz';
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
@@ -43,27 +43,17 @@ function AboutTest({ variant = "default" }: AboutTest) {
 
   console.log(id)
 
-  function isFuture(date: string | null | undefined) {
-    if (!date) return false;
-    const today = new Date();
-    const testDate = new Date(date);
-    return testDate > today;
-  }
-
-  function NormalizeDate(date: string) {
-    return date.split("T")[0].split("-").reverse().join("/");
-  }
-
-  function normalizeTime(data: string) {
-    return data.split("T")[1].split(".")[0];
-  }
+  function isFuture(date: string) {
+    const today = new Date().getTime();
+    const testDay = new Date(date).getTime();
+    return testDay >= today;
+  } 
 
   if (test) {
     const {
       name,
       dateStart,
       testAttendances,
-      timeStart,
       timeEnd,
       description,
       classroom: {
@@ -81,19 +71,21 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Title>
               <span className="text-2xl uppercase">{name}</span>
             </Title>
-            {isFuture(dateStart.toString()) ? (
+            {isFuture(dateStart) ? (
               <SubTextContainer>
                 <SubText variant={variant}>
                   <AiOutlineCalendar size={36} className="text-Concrete" />
                   <span className="text-lg font-bold uppercase">
-                    {NormalizeDate(dateStart.toString())}
+                    {format(new Date(dateStart), "dd/MM/yyyy")}
                   </span>
                 </SubText>
                 <SubText variant={variant}>
                   <AiOutlineClockCircle size={36} className="text-Concrete" />
-                  <span className="text-lg font-bold uppercase">{`${normalizeTime(
-                    timeStart.toString()
-                  )} - ${normalizeTime(timeEnd.toString())}`}</span>
+                  <span className="text-lg font-bold uppercase">{`${format(
+                    new Date(dateStart), "HH:mm"
+                  )} - ${format(
+                    new Date(timeEnd), "HH:mm"
+                  )}`}</span>
                 </SubText>
               </SubTextContainer>
             ) : (
@@ -138,8 +130,8 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Button variant="outline" color="alert">
               CANCELAR AGENDAMENTO
             </Button>
-            {!isFuture(test.dateStart.toString()) ? null : (
-              <Button onClick={() => navigate("/prova")}>REALIZAR PROVA</Button>
+            {!isFuture(test.dateStart) ? null : (
+              <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
             )}
           </div>
         </Container>
