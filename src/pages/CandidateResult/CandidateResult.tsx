@@ -4,7 +4,6 @@ import CandidateApproved from "../../components/CandidateApproved";
 
 function CandidateResult(){
     const handleClick = () => {
-        console.log("apertou"); 
     };
 
     return(

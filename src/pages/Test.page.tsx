@@ -53,7 +53,6 @@ function Test() {
     id && getTest(id);
   }, [id])
 
-  console.log("pagina recarregada")
   
   return (
     <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
@@ -62,7 +61,7 @@ function Test() {
           <img src={logo} alt="" className="max-w-full" />
         </Card.Container>
         {
-          test && <Stopwatch milliseconds={test.miliseconds}/>
+          test && <Stopwatch milliseconds={test.milliseconds}/>
         }
         <h3 className="text-White text-center text-2xl font-semibold uppercase">
           Progresso

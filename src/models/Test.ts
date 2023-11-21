@@ -16,7 +16,7 @@ export interface Test {
   idClassroom: string;
   classroom: classroom;
   questionId: string | null;
-  miliseconds: number;
+  milliseconds: number;
   testPeriod: boolean;
   testAttendances: TestAttendance[]
 }

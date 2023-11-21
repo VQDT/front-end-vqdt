@@ -31,8 +31,6 @@ function Stopwatch({ milliseconds }: StopWatchProps) {
   
       return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
-
-    console.log("componente renderizado")
   
     return(
       <Card.Container>
