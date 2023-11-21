@@ -42,7 +42,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
     }
   }, []);
 
-  console.log(id)
 
   function removeAttendance() {
     if(id){

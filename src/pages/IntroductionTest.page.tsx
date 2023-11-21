@@ -15,7 +15,6 @@ function IntroductionTestPage() {
     return date.split("T")[0].split("-").reverse().join("/");
   }
 
-  console.log(test);
   
   return (
     <Main>
