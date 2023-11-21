@@ -24,7 +24,7 @@ import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import useTest from "../../context/test/useTest";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { format } from 'date-fns-tz';
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
@@ -34,6 +34,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
   const { id } = useParams();
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
+  const [removed, setRemoved] = useState<boolean>(false);
 
   useEffect(() => {
     if (id) {
@@ -44,8 +45,14 @@ function AboutTest({ variant = "default" }: AboutTest) {
   console.log(id)
 
   function removeAttendance() {
-    removeTestAttendance()
-    navigate("/")  
+    if(id){
+      removeTestAttendance(id)
+      setRemoved(true)
+    }
+  }
+
+  if(removed){
+    navigate("/")
   }
 
   if (test) {

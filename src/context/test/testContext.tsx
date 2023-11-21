@@ -11,7 +11,7 @@ interface TestContextProps {
   tests: Test[];
   test: Test | null;
   getTest: (id: string) => void;
-  removeTestAttendance: () => void;
+  removeTestAttendance: (id :string) => Promise<boolean>;
 }
 
 const TestContext = createContext<TestContextProps>({} as TestContextProps);
@@ -34,10 +34,13 @@ function TestProvider({ children }: TestProviderProps) {
     setTest(response.data);
   }
 
-  async function removeTestAttendance() {
-    const url = `/tests/` + user?.id;
+  async function removeTestAttendance(id: string) {
+    const url = `/testAttendance/` + id;
     const response = await instance.delete(url);
-    console.log(response);
+    if (response.status === 200){
+      return true;
+    }
+    return false;
   }
 
   useEffect(() => {
