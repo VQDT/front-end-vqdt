@@ -16,15 +16,16 @@ import Stopwatch from "../components/Stopwatch";
 function Test() {
 
   const { user } = useAuth();
-  const { test, getTest } = useTest();
-    
+  const { test, getTest, getQuestions, questions } = useTest();
+  
+  
+
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
-
 
   function changeOpenEncerramento() {
     setOpenEncerramento((prev) => !prev);
@@ -50,10 +51,14 @@ function Test() {
   }
 
   useEffect(() => { 
-    id && getTest(id);
+    if(id){
+      getTest(id),
+      getQuestions(id)
+    }
   }, [id])
 
-  
+  console.log(questions)  
+
   return (
     <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
       <div className="w-fit flex flex-col gap-3">
@@ -87,105 +92,43 @@ function Test() {
       </div>
       <div className="w-full max-h-screen py-8 bg-White rounded-xl box-border">
         <ul className="max-h-full px-8 flex flex-col gap-9 overflow-auto">
-          <Question.Root>
-            <Question.Title text="Questão - 1" />
-            <Question.Text
-              title="O que é música? "
-              text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
-            />
-            <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
-            <Question.Alternative
-              label="enumerações para sustentar o ponto de vista apresentado."
-              id="1"
-              name="question1"
-            />
-            <Question.Alternative
-              label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
-              id="2"
-              name="question1"
-            />
-            <Question.Alternative
-              label="generalizações para sintetizar as diversas percepções sobre o que é a música."
-              id="3"
-              name="question1"
-            />
-            <Question.Alternative
-              label="adjetivações para descrever os tipos de música."
-              id="4"
-              name="question1"
-            />
-            <Question.Alternative
-              label="sinonímias para retomar as características das obras musicais."
-              id="5"
-              name="question1"
-            />
-          </Question.Root>
-          <Question.Root>
-            <Question.Title text="Questão - 1" />
-            <Question.Text
-              title="O que é música? "
-              text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
-            />
-            <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
-            <Question.Alternative
-              label="enumerações para sustentar o ponto de vista apresentado."
-              id="1"
-              name="question2"
-            />
-            <Question.Alternative
-              label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
-              id="2"
-              name="question2"
-            />
-            <Question.Alternative
-              label="generalizações para sintetizar as diversas percepções sobre o que é a música."
-              id="3"
-              name="question2"
-            />
-            <Question.Alternative
-              label="adjetivações para descrever os tipos de música."
-              id="4"
-              name="question2"
-            />
-            <Question.Alternative
-              label="sinonímias para retomar as características das obras musicais."
-              id="5"
-              name="question2"
-            />
-          </Question.Root>
-          <Question.Root>
-            <Question.Title text="Questão - 1" />
-            <Question.Text
-              title="O que é música? "
-              text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
-            />
-            <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
-            <Question.Alternative
-              label="enumerações para sustentar o ponto de vista apresentado."
-              id="1"
-              name="question3"
-            />
-            <Question.Alternative
-              label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
-              id="2"
-              name="question3"
-            />
-            <Question.Alternative
-              label="generalizações para sintetizar as diversas percepções sobre o que é a música."
-              id="3"
-              name="question3"
-            />
-            <Question.Alternative
-              label="adjetivações para descrever os tipos de música."
-              id="4"
-              name="question3"
-            />
-            <Question.Alternative
-              label="sinonímias para retomar as características das obras musicais."
-              id="5"
-              name="question3"
-            />
-          </Question.Root>
+          {
+            questions.map (question => (
+                <Question.Root>
+                <Question.Title text={question.asking} />
+                <Question.Text
+                  title="O que é música?"
+                  text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
+                />
+                <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
+                <Question.Alternative
+                  label="enumerações para sustentar o ponto de vista apresentado."
+                  id="1"
+                  name="question1"
+                />
+                <Question.Alternative
+                  label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
+                  id="2"
+                  name="question1"
+                />
+                <Question.Alternative
+                  label="generalizações para sintetizar as diversas percepções sobre o que é a música."
+                  id="3"
+                  name="question1"
+                />
+                <Question.Alternative
+                  label="adjetivações para descrever os tipos de música."
+                  id="4"
+                  name="question1"
+                />
+                <Question.Alternative
+                  label="sinonímias para retomar as características das obras musicais."
+                  id="5"
+                  name="question1"
+                />
+              </Question.Root>
+            ))
+          }
         </ul>
       </div>
       {openEncerramento && (

@@ -2,6 +2,7 @@ import { createContext, ReactNode , useEffect, useState } from "react";
 import useAuth from "../auth/useAuth";
 import { Test } from "../../models/Test";
 import instance from "../../axios";
+import { Question } from "../../models/Question";
 
 interface TestProviderProps {
   children: ReactNode;
@@ -10,7 +11,9 @@ interface TestProviderProps {
 interface TestContextProps {
   tests: Test[];
   test: Test | null;
+  questions: Question[];
   getTest: (id: string) => void;
+  getQuestions: (id: string) => void;
   removeTestAttendance: (id :string) => Promise<boolean>;
 }
 
@@ -21,6 +24,7 @@ function TestProvider({ children }: TestProviderProps) {
   const { user } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
+  const [ questions, setQuestions] = useState<Question[]>([]);
 
   async function getTests() {
     const url = `/tests/`;
@@ -43,6 +47,12 @@ function TestProvider({ children }: TestProviderProps) {
     return false;
   }
 
+  async function getQuestions(id : string) {
+    const url = `/questions/test/` + id;
+    const response = await instance.get(url);
+    setQuestions(response.data);
+  }
+
   useEffect(() => {
     if(user) {
       getTests();
@@ -50,12 +60,11 @@ function TestProvider({ children }: TestProviderProps) {
   }, [ user ]);
 
   return(
-      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance }}>
+      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions }}>
         { children }
       </TestContext.Provider>
   );
 }
-
 
 export {
     TestContext,
