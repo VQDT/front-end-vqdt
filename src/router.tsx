@@ -34,8 +34,9 @@ export const Router = createBrowserRouter([
         element: <AboutTest />,
       },
       {
-        
-      }
+        path:"/comprovante-de-participacao/:id",
+        element: <CandidateResult />,
+      },
     ],
   },
   {
@@ -59,10 +60,6 @@ export const Router = createBrowserRouter([
   {
     path: "/recuperar-senha",
     element: <RecoverPassword />, 
-  },
-  {
-    path:"/comprovante-de-participacao",
-    element: <CandidateResult />,
   },
   {
     path: "/auth",

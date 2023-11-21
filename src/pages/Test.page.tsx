@@ -42,8 +42,8 @@ function Test() {
         password: password,
       });
       if (auth.status === 200) {
-        navigation("/");
-      } 
+        navigation("/comprovante-de-participacao/"+ user?.id);
+      }
     } catch(error) {
       alert("Senha incorreta");
     }
