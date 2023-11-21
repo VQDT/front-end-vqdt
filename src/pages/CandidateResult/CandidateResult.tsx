@@ -1,4 +1,3 @@
-import Header from "../../components/Header";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CandidateApproved from "../../components/CandidateApproved";
 //import CandidateFailed from "../../components/CandidateFailed"
@@ -11,8 +10,6 @@ function CandidateResult(){
     return(
         <div className="">
             {/* TROCAR HEADER!! */}
-            <Header />
-
             <div className="">
                 {/* componente de resultado */}
                 <CandidateApproved />

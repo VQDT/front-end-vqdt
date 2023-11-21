@@ -42,8 +42,8 @@ function Test() {
         password: password,
       });
       if (auth.status === 200) {
-        navigation("/");
-      } 
+        navigation("/comprovante-de-participacao/"+ user?.id);
+      }
     } catch(error) {
       alert("Senha incorreta");
     }
@@ -98,27 +98,27 @@ function Test() {
             <Question.Alternative
               label="enumerações para sustentar o ponto de vista apresentado."
               id="1"
-              name="question"
+              name="question1"
             />
             <Question.Alternative
               label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
               id="2"
-              name="question"
+              name="question1"
             />
             <Question.Alternative
               label="generalizações para sintetizar as diversas percepções sobre o que é a música."
               id="3"
-              name="question"
+              name="question1"
             />
             <Question.Alternative
               label="adjetivações para descrever os tipos de música."
               id="4"
-              name="question"
+              name="question1"
             />
             <Question.Alternative
               label="sinonímias para retomar as características das obras musicais."
               id="5"
-              name="question"
+              name="question1"
             />
           </Question.Root>
           <Question.Root>
@@ -131,27 +131,27 @@ function Test() {
             <Question.Alternative
               label="enumerações para sustentar o ponto de vista apresentado."
               id="1"
-              name="question"
+              name="question2"
             />
             <Question.Alternative
               label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
               id="2"
-              name="question"
+              name="question2"
             />
             <Question.Alternative
               label="generalizações para sintetizar as diversas percepções sobre o que é a música."
               id="3"
-              name="question"
+              name="question2"
             />
             <Question.Alternative
               label="adjetivações para descrever os tipos de música."
               id="4"
-              name="question"
+              name="question2"
             />
             <Question.Alternative
               label="sinonímias para retomar as características das obras musicais."
               id="5"
-              name="question"
+              name="question2"
             />
           </Question.Root>
           <Question.Root>
@@ -164,27 +164,27 @@ function Test() {
             <Question.Alternative
               label="enumerações para sustentar o ponto de vista apresentado."
               id="1"
-              name="question"
+              name="question3"
             />
             <Question.Alternative
               label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
               id="2"
-              name="question"
+              name="question3"
             />
             <Question.Alternative
               label="generalizações para sintetizar as diversas percepções sobre o que é a música."
               id="3"
-              name="question"
+              name="question3"
             />
             <Question.Alternative
               label="adjetivações para descrever os tipos de música."
               id="4"
-              name="question"
+              name="question3"
             />
             <Question.Alternative
               label="sinonímias para retomar as características das obras musicais."
               id="5"
-              name="question"
+              name="question3"
             />
           </Question.Root>
         </ul>

@@ -10,7 +10,7 @@ import AppLayout from "./layout/App.Layout";
 import AboutTest from "./pages/AboutTest";
 import Test from "./pages/Test.page";
 import IntroductionTestPage from "./pages/IntroductionTest.page";
-import TestLayout from "./layout/Test.Layoyt";
+import TestLayout from "./layout/Test.Layout";
 
 export const Router = createBrowserRouter([
   {
@@ -32,7 +32,11 @@ export const Router = createBrowserRouter([
       {
         path: "/provas/:id",
         element: <AboutTest />,
-      }
+      },
+      {
+        path:"/comprovante-de-participacao/:id",
+        element: <CandidateResult />,
+      },
     ],
   },
   {
@@ -56,10 +60,6 @@ export const Router = createBrowserRouter([
   {
     path: "/recuperar-senha",
     element: <RecoverPassword />, 
-  },
-  {
-    path:"/comprovante-de-participacao",
-    element: <CandidateResult />,
   },
   {
     path: "/auth",
