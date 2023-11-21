@@ -1,4 +1,5 @@
 export interface TestAttendance {
   approved: boolean,
-  score: number
+  score: number,
+  testFinished: boolean
 }

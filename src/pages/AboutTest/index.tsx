@@ -32,7 +32,7 @@ interface AboutTest {
 
 function AboutTest({ variant = "default" }: AboutTest) {
   const { id } = useParams();
-  const { test, getTest } = useTest();
+  const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +43,11 @@ function AboutTest({ variant = "default" }: AboutTest) {
 
   console.log(id)
 
+  function removeAttendance() {
+    removeTestAttendance()
+    navigate("/")  
+  }
+
   if (test) {
     const {
       name,
@@ -50,7 +55,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
       testAttendances,
       timeEnd,
       testPeriod,
-      notFinished,
       description,
       classroom: {
         schools: {
@@ -67,7 +71,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Title>
               <span className="text-2xl uppercase">{name}</span>
             </Title>
-            {!notFinished ? (
+            {!testAttendances[0].testFinished ? (
               <SubTextContainer>
                 <SubText variant={variant}>
                   <AiOutlineCalendar size={36} className="text-Concrete" />
@@ -123,7 +127,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
             </LocalContent>
           </ContainerLocalContent>
           <div className="flex gap-4 justify-between flex-wrap">
-            <Button variant="outline" color="alert">
+            <Button variant="outline" color="alert" onClick={() => removeAttendance()}>
               CANCELAR AGENDAMENTO
             </Button>
             {!testPeriod ? null : (

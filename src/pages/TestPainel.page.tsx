@@ -23,7 +23,7 @@ function TestPainel() {
   }
 
   const listFutureTests = tests
-    .filter((test) => test.notFinished)
+    .filter((test) => !test.testAttendances[0].testFinished)
     .map((test) => {
       return (
         <TestCard
@@ -39,7 +39,7 @@ function TestPainel() {
 
 
   const listPastTests = tests
-    .filter((test) => !test.notFinished)
+    .filter((test) => test.testAttendances[0].testFinished)
     .map((test) => {
       return (  
         <TestCard
