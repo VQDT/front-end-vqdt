@@ -8,6 +8,7 @@ import {
   AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import useAuth from "../context/auth/useAuth";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -16,11 +17,14 @@ function NormalizeDate(date: string) {
 function TestPainel() {
   
   const { tests } = useTest();
+  const { user } = useAuth();
   const navigation = useNavigate();
   
   function navigateTest(id: string) {
     navigation("/provas/" + id);
   }
+
+  console.log(user)
 
   const listFutureTests = tests
     .filter((test) => !test.testAttendances[0].testFinished)

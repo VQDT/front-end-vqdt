@@ -101,31 +101,15 @@ function Test() {
                   text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
                 />
                 <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
-                <Question.Alternative
-                  label="enumerações para sustentar o ponto de vista apresentado."
-                  id="1"
-                  name="question1"
-                />
-                <Question.Alternative
-                  label="exemplificações para ilustrar a distinção entre a música e outros sons cotidianos."
-                  id="2"
-                  name="question1"
-                />
-                <Question.Alternative
-                  label="generalizações para sintetizar as diversas percepções sobre o que é a música."
-                  id="3"
-                  name="question1"
-                />
-                <Question.Alternative
-                  label="adjetivações para descrever os tipos de música."
-                  id="4"
-                  name="question1"
-                />
-                <Question.Alternative
-                  label="sinonímias para retomar as características das obras musicais."
-                  id="5"
-                  name="question1"
-                />
+                {
+                  question.alternatives.map(alternative => (
+                    <Question.Alternative
+                      label={alternative.content}
+                      id={alternative.id}
+                      name={question.id}
+                    />
+                  ))
+                }
               </Question.Root>
             ))
           }

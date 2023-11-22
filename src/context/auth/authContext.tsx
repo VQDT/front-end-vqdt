@@ -1,6 +1,6 @@
 import instance from "../../axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { User } from "../../models";
+import { sessionUser, User } from "../../models";
 import { deleteTokenSessinStorage, deleteUserSessionStorage, getTokenSessionStorage, getUserSessionStorage, saveTokenSessinStorage, saveUserSessionStorage } from "./utils";
 
 interface AuthProviderProps {
@@ -21,9 +21,14 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
+    const userRoles = getUserRoles();
     const existToken = getTokenSessionStorage();
     if(existUser && existToken) {
-      setUser(JSON.parse(existUser));
+      const userWithRoles = {
+        ...JSON.parse(existUser),
+        roles: userRoles
+      }
+      setUser(userWithRoles);
     }
   }, [])
 
@@ -32,8 +37,18 @@ function AuthProvider({ children }: AuthProviderProps) {
     if(response.status === 200) {
       const data = await response.data;
       setUser(data.user);
+      const { cpf, email, firstName, gender, id, idAddress, lastName, occupation, phone, race }: sessionUser = data.user
+      const sessionUser:sessionUser = { cpf, email, firstName, gender, id, idAddress, lastName, occupation, phone, race }
       saveTokenSessinStorage(data.token);
-      saveUserSessionStorage(data.user);
+      saveUserSessionStorage(sessionUser);
+    }
+  }
+
+  async function getUserRoles(){
+    const response = await instance.get("users/user/roles");
+    if(response.status === 200) {
+      const data = await response.data;
+      return data.roles;
     }
   }
 

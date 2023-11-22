@@ -11,4 +11,12 @@ export interface Question {
     review: string;
     idCreator: string;
     idReviewer: string;
+    alternatives: alternative[]
+}
+
+export type alternative = {
+    id: string;
+    content: string;
+    correct: boolean;
+    idQuestion: string;
 }

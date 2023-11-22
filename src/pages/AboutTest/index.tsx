@@ -42,7 +42,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
     }
   }, []);
 
-
   function removeAttendance() {
     if(id){
       removeTestAttendance(id)
@@ -70,6 +69,8 @@ function AboutTest({ variant = "default" }: AboutTest) {
       },
     } = test;
 
+    console.log(testAttendances)
+    
     return (
       <>
         <Container>
