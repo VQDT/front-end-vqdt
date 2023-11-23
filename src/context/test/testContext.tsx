@@ -2,6 +2,7 @@ import { createContext, ReactNode , useEffect, useState } from "react";
 import useAuth from "../auth/useAuth";
 import { Test } from "../../models/Test";
 import instance from "../../axios";
+import { Question } from "../../models/Question";
 
 interface TestProviderProps {
   children: ReactNode;
@@ -10,8 +11,10 @@ interface TestProviderProps {
 interface TestContextProps {
   tests: Test[];
   test: Test | null;
+  questions: Question[];
   getTest: (id: string) => void;
-  removeTestAttendance: () => void;
+  getQuestions: (id: string) => void;
+  removeTestAttendance: (id :string) => Promise<boolean>;
 }
 
 const TestContext = createContext<TestContextProps>({} as TestContextProps);
@@ -21,6 +24,7 @@ function TestProvider({ children }: TestProviderProps) {
   const { user } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
+  const [ questions, setQuestions] = useState<Question[]>([]);
 
   async function getTests() {
     const url = `/tests/`;
@@ -34,10 +38,19 @@ function TestProvider({ children }: TestProviderProps) {
     setTest(response.data);
   }
 
-  async function removeTestAttendance() {
-    const url = `/tests/` + user?.id;
+  async function removeTestAttendance(id: string) {
+    const url = `/testAttendance/` + id;
     const response = await instance.delete(url);
-    console.log(response);
+    if (response.status === 200){
+      return true;
+    }
+    return false;
+  }
+
+  async function getQuestions(id : string) {
+    const url = `/questions/test/` + id;
+    const response = await instance.get(url);
+    setQuestions(response.data);
   }
 
   useEffect(() => {
@@ -47,12 +60,11 @@ function TestProvider({ children }: TestProviderProps) {
   }, [ user ]);
 
   return(
-      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance }}>
+      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions }}>
         { children }
       </TestContext.Provider>
   );
 }
-
 
 export {
     TestContext,

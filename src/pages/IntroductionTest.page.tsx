@@ -83,7 +83,7 @@ function IntroductionTestPage() {
         </div>
       </div>
       <div className="py-3 my-8 flex justify-center items-center gap-11">
-        <Button variant="outline" onClick={() => navigation("/")}>
+        <Button variant="outline" onClick={() => navigation("/provas/"+id)}>
           <AiOutlineArrowLeft />
           Voltar
         </Button>

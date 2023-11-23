@@ -1,6 +1,6 @@
-import { User } from "../../models";
+import { sessionUser } from "../../models";
 
-export function saveUserSessionStorage(user: User) {
+export function saveUserSessionStorage(user: sessionUser) {
   sessionStorage.setItem("u", JSON.stringify(user));
 }
 
