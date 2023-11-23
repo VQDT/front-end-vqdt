@@ -8,6 +8,7 @@ import {
   AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
+import isFuture from "../utils/isFuture";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -22,10 +23,9 @@ function TestPainel() {
     navigation("/provas/" + id);
   }
 
-  const listFutureTests = tests
-    .filter((test) => !test.testAttendances[0].testFinished)
+  const listTestFuture = tests.filter((test) => !isFuture(test.timeEnd))
     .map((test) => {
-      return (
+      return(
         <TestCard
           key={test.id}
           title={test.name}
@@ -35,11 +35,11 @@ function TestPainel() {
           handleClick={() => navigateTest(test.id)}
         />
       );
-    });
+    })
 
 
   const listPastTests = tests
-    .filter((test) => test.testAttendances[0].testFinished)
+    .filter((test) => isFuture(test.timeEnd))
     .map((test) => {
       return (  
         <TestCard
@@ -59,7 +59,17 @@ function TestPainel() {
       <h2 className="text-Blue text-lg font-bold uppercase">
         PROVAS AGENDADAS
       </h2>
-      <ListCard>{listFutureTests.length > 0 ? listFutureTests : " Nenhuma Prova pendente "}</ListCard>
+      <ListCard>
+        { 
+          listTestFuture.length > 0 
+            ? listTestFuture
+            : (
+              <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+                Não há provas agendadas
+              </div>
+            )
+        }
+      </ListCard>  
       <h2 className="text-Blue text-lg font-bold uppercase">
         PROVAS REALIZADAS
       </h2>

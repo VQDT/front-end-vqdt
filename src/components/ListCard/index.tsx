@@ -7,9 +7,9 @@ interface ListCardProps {
 function ListCard({ children }: ListCardProps) {
   return(
     <div className="w-full max-w-7xl p-4 mx-auto mt-3 mb-16 bg-White border border-Silver rounded-xl">
-      <ul className="xs:w-full flex gap-5 xs:flex-wrap">
+      <div className="xs:w-full flex gap-5 xs:flex-wrap">
         { children }
-      </ul>
+      </div>
     </div>
   );
 }
