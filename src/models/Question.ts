@@ -20,3 +20,8 @@ export type alternative = {
     correct: boolean;
     idQuestion: string;
 }
+
+export type answer = {
+    idQuestion: string;
+    idAlternatives: string;
+}

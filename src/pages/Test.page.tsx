@@ -8,21 +8,23 @@ import Input from "../components/Input";
 import useAuth from "../context/auth/useAuth";
 import useTest from "../context/test/useTest";
 import instance from "../axios";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import Stopwatch from "../components/Stopwatch";
+import { answer } from "../models/Question";
 
 function Test() {
 
   const { user } = useAuth();
-  const { test, getTest, getQuestions, questions } = useTest();
+  const { test, getTest, getQuestions, questions, setScoreAndStatus } = useTest();
   
   
 
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
+  const [list, setList] = useState<answer[]>([]);
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
@@ -37,17 +39,48 @@ function Test() {
   }
   
   async function handleSubmit() {
-    try {
-      const auth = await instance.post("users/auth/login", {
-        cpf: user?.cpf,
-        password: password,
-      });
-      if (auth.status === 200) {
-        navigation("/comprovante-de-participacao/"+ user?.id);
+    if (user && test){
+      try {
+        const auth = await instance.post("users/auth/login", {
+          cpf: user.cpf,
+          password: password,
+        });
+        if (auth.status === 200) {
+          let score = 0;
+          let status = false;
+          list.map(item => {
+            questions.find(q => q.id === item.idQuestion)?.alternatives.find(a => a.id === item.idAlternatives)?.correct === true && score ++ 
+          })
+          if (score >= 20) {
+            status = true;
+          }
+          setScoreAndStatus(test.id, score, status)
+          navigation("/comprovante-de-participacao/"+ user?.id);
+        }
+      } catch(error) {
+        alert("Senha incorreta");
       }
-    } catch(error) {
-      alert("Senha incorreta");
     }
+  }
+
+  function handleAlternative(e : ChangeEvent<HTMLInputElement>){
+    const { id, name } = e.target;
+    const questionExists = list.find(item => item.idQuestion === name);
+
+    if(questionExists) {
+      const newList = list.map((item) => {
+        if(item.idQuestion === name) return { ...item, idAlternatives: id }
+        return item;
+      })
+      setList(newList);
+    } else {
+      setList((previous) => [
+        ...previous,
+        { idQuestion: name, idAlternatives: id }
+      ]);
+    }
+
+    
   }
 
   useEffect(() => { 
@@ -55,9 +88,7 @@ function Test() {
       getTest(id),
       getQuestions(id)
     }
-  }, [id])
-
-  console.log(questions)  
+  }, [])
 
   return (
     <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
@@ -107,6 +138,7 @@ function Test() {
                       label={alternative.content}
                       id={alternative.id}
                       name={question.id}
+                      onChange={handleAlternative}
                     />
                   ))
                 }
