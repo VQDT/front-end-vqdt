@@ -15,6 +15,7 @@ interface TestContextProps {
   getTest: (id: string) => void;
   getQuestions: (id: string) => void;
   removeTestAttendance: (id :string) => Promise<boolean>;
+  setScoreAndStatus : (id :string, score: number , status: boolean) => void;
 }
 
 const TestContext = createContext<TestContextProps>({} as TestContextProps);
@@ -53,6 +54,12 @@ function TestProvider({ children }: TestProviderProps) {
     setQuestions(response.data);
   }
 
+  async function setScoreAndStatus(testId: string, score : number, status : boolean){
+    const url = `/testAttendance/result/`;
+    const response = await instance.put(url, { testId, score, status });
+    console.log(response.data);
+  }
+
   useEffect(() => {
     if(user) {
       getTests();
@@ -60,7 +67,7 @@ function TestProvider({ children }: TestProviderProps) {
   }, [ user ]);
 
   return(
-      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions }}>
+      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus }}>
         { children }
       </TestContext.Provider>
   );
