@@ -60,7 +60,7 @@ function Test() {
   console.log(questions)  
 
   return (
-    <div className="w-full max-h-screen p-3 bg-Blue flex gap-3 box-border">
+    <div className="w-full min-h-screen p-3 bg-Blue flex gap-3 box-border">
       <div className="w-fit flex flex-col gap-3">
         <Card.Container>
           <img src={logo} alt="" className="max-w-full" />
