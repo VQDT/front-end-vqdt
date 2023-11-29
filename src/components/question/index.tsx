@@ -1,15 +1,19 @@
-import Title from "./Title";
+import QuestionNumber from "./QuestionNumber";
 import Alternative from "./Alternative";
 import Text from "./Text";
-import Asking from "./asking";
-import Root from "./root";
+import Asking from "./Asking";
+import Root from "./Root";
+import Title from "./Title";
+import Ref from "./Ref";
 
 const Question = {
-  Title,
+  QuestionNumber,
   Root,
   Text,
   Asking,
-  Alternative
+  Alternative,
+  Title,
+  Ref
 }
 
 export default Question;

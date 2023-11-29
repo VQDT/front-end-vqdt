@@ -1,10 +1,6 @@
-interface TitleProps {
-  text: string;
-}
-
-function Title({ text }: TitleProps) {
+function Title({ text }: { text: string }) {
   return(
-    <h3 className="text-Midnight text-base font-medium uppercase">{ text }</h3>
+    <h3 className="mb-3 text-Midnight text-base font-bold">{ text }</h3>
   );
 }
 

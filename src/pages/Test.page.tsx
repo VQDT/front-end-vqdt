@@ -2,32 +2,36 @@ import SubjectCard from "../components/SubjectCard";
 import logo from "../assets/logo.png";
 import Button from "../components/Button";
 import Card from "../components/Card";
-import Question from "../components/question";
 import Modal from "../components/Modal";
 import Input from "../components/Input";
 import useAuth from "../context/auth/useAuth";
 import useTest from "../context/test/useTest";
 import instance from "../axios";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useNavigate, useParams } from "react-router-dom";
 import Stopwatch from "../components/Stopwatch";
-import { answer } from "../models/Question";
+import { ContentAux } from "../models/ContentAux";
+import { Alternative } from "../models/Alternative";
+import Question from "../components/Question";
 
 function Test() {
 
   const { user } = useAuth();
-  const { test, getTest, getQuestions, questions, setScoreAndStatus } = useTest();
-  
-  
-
+  const { test, getTest, getQuestions, questions } = useTest();
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
-  const [list, setList] = useState<answer[]>([]);
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
+
+  useEffect(() => { 
+    if(id){
+      getTest(id),
+      getQuestions(id)
+    }
+  }, [])
 
   function changeOpenEncerramento() {
     setOpenEncerramento((prev) => !prev);
@@ -37,58 +41,98 @@ function Test() {
     openEncerramento && setOpenEncerramento(false);
     setopenPassword((prev) => !prev);
   }
+
   
   async function handleSubmit() {
-    if (user && test){
-      try {
-        const auth = await instance.post("users/auth/login", {
-          cpf: user.cpf,
-          password: password,
-        });
-        if (auth.status === 200) {
-          let score = 0;
-          let status = false;
-          list.map(item => {
-            questions.find(q => q.id === item.idQuestion)?.alternatives.find(a => a.id === item.idAlternatives)?.correct === true && score ++ 
-          })
-          if (score >= 20) {
-            status = true;
-          }
-          setScoreAndStatus(test.id, score, status)
-          navigation("/comprovante-de-participacao/"+ user?.id);
-        }
-      } catch(error) {
-        alert("Senha incorreta");
+    try {
+      const auth = await instance.post("users/auth/login", {
+        cpf: user?.cpf,
+        password: password,
+      });
+      if (auth.status === 200) {
+        navigation("/comprovante-de-participacao/"+ user?.id);
       }
+    } catch(error) {
+      alert("Senha incorreta");
     }
   }
 
-  function handleAlternative(e : ChangeEvent<HTMLInputElement>){
-    const { id, name } = e.target;
-    const questionExists = list.find(item => item.idQuestion === name);
+  function switchContent(contentList: ContentAux[]) {
+    return contentList?.map(({ id, type, content }) => {
+      switch (type) {
+        case "title":
+          return (
+            <Question.Title key={id} text={content} />
+          )
 
-    if(questionExists) {
-      const newList = list.map((item) => {
-        if(item.idQuestion === name) return { ...item, idAlternatives: id }
-        return item;
-      })
-      setList(newList);
-    } else {
-      setList((previous) => [
-        ...previous,
-        { idQuestion: name, idAlternatives: id }
-      ]);
-    }
+        case "text":
+          return (
+            <Question.Text key={id} text={content}/>
+          );
 
-    
+        case "ref":
+          return (
+            <Question.Ref key={id} text={content} />
+          );
+
+        case "asking":
+          return (
+            <Question.Asking key={id} text={content} />
+          );
+        
+        default:
+          return <div key={id}></div>;
+      }
+    });
   }
 
-  useEffect(() => { 
-    if(id){
-      getTest(id),
-      getQuestions(id)
-    }
-  }, [])
+
+  function alternativeList(alternativeList: Alternative[]) {
+    return alternativeList?.map(({ id, idQuestion, content }) => {
+      return(
+        <Question.Alternative key={id} id={id} name={idQuestion} label={content}  />
+      )
+    });
+  }
+
+  const questionList = questions?.map (({ 
+    id, 
+    type, 
+    knowledgeArea,
+    alternatives,
+    ContentAux 
+  }, index) => {
+    return(
+      <Question.Root key={id}>
+        <div className="mb-5 flex justify-between">
+          <Question.QuestionNumber text={`Questão ${index + 1}`} />
+          <span className="text-Secondary font-light uppercase">#{knowledgeArea}</span>
+        </div>
+        <div>{ switchContent(ContentAux) }</div>
+        {
+          type === "multiple-choice" 
+            ? (
+              <div className="flex flex-col gap-3">
+                {alternativeList(alternatives)}
+              </div>
+            )
+            : (
+              <div className="flex flex-col gap-3">
+                <label key={id} htmlFor="true" className="flex gap-2 items-center">
+                  <input type="radio" id="true" name={id} className="w-6 aspect-square"/>
+                  <span className="text-Midnight text-sm">Verdadeiro</span>
+                </label>
+                <label key={id} htmlFor="false" className="flex gap-2 items-center">
+                  <input type="radio" id="false" name={id} className="w-6 aspect-square"/>
+                  <span className="text-Midnight text-sm">Falso</span>
+                </label>
+              </div>
+            )
+        }
+      </Question.Root>
+    );
+
+  });
 
   return (
     <div className="w-full min-h-screen p-3 bg-Blue flex gap-3 box-border">
@@ -124,26 +168,7 @@ function Test() {
       <div className="w-full max-h-screen py-8 bg-White rounded-xl box-border">
         <ul className="max-h-full px-8 flex flex-col gap-9 overflow-auto">
           {
-            questions.map (question => (
-                <Question.Root>
-                <Question.Title text={question.asking} />
-                <Question.Text
-                  title="O que é música?"
-                  text="A pergunta “o que é música” tem sido alvo de discussão há décadas. Alguns autores defendem que música é a combinação de sons e silêncios de uma maneira organizada. Vamos explicar: um ruído de rádio emite sons, mas não de uma forma organizada, por isso não é classificado como música. Essa definição parece simples e completa, mas definir música não é algo tão óbvio assim. Podemos classificar um alarme de carro como música? Ele emite sons e silêncios de uma maneira organizada, mas garanto que a maioria das pessoas não chamaria esse som de música."
-                />
-                <Question.Asking text="O fragmento define o que é a música de forma simplificada. Como estratégia de construção do texto, o autor faz uso recorrente de:" />
-                {
-                  question.alternatives.map(alternative => (
-                    <Question.Alternative
-                      label={alternative.content}
-                      id={alternative.id}
-                      name={question.id}
-                      onChange={handleAlternative}
-                    />
-                  ))
-                }
-              </Question.Root>
-            ))
+            questionList
           }
         </ul>
       </div>

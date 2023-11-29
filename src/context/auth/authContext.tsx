@@ -21,12 +21,12 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
-    const userRoles = getUserRoles();
+    //const userRoles = getUserRoles();
     const existToken = getTokenSessionStorage();
     if(existUser && existToken) {
       const userWithRoles = {
         ...JSON.parse(existUser),
-        roles: userRoles
+        roles: []
       }
       setUser(userWithRoles);
     }
@@ -44,13 +44,19 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  async function getUserRoles(){
-    const response = await instance.get("users/user/roles");
-    if(response.status === 200) {
-      const data = await response.data;
-      return data.roles;
-    }
-  }
+  // async function getUserRoles() {
+  //   try {
+  //     const response = await instance.get("users/user/roles");
+  //     if(response.status === 200) {
+  //       const data = await response.data;
+  //       return data.roles;
+  //     }
+  //   } catch (error) {
+  //     if(error instanceof Error) console.log(error.message);
+  //     console.log("erro ao requisitar roles");
+  //     return [];
+  //   }
+  // }
 
   function loggout(){
     deleteTokenSessinStorage();

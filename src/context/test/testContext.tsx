@@ -18,7 +18,7 @@ interface TestContextProps {
   setScoreAndStatus : (id :string, score: number , status: boolean) => void;
 }
 
-const TestContext = createContext<TestContextProps>({} as TestContextProps);
+const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
 
@@ -50,8 +50,18 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function getQuestions(id : string) {
     const url = `/questions/test/` + id;
-    const response = await instance.get(url);
-    setQuestions(response.data);
+    
+    try {
+      const response = await instance.get(url);
+      if(response.status === 200){
+        const data = await response.data;
+        setQuestions(data);
+      }
+
+    } catch(error) {
+      if( error instanceof Error) console.log(error.message); 
+      console.log("Erro desconhecido");
+    }
   }
 
   async function setScoreAndStatus(testId: string, score : number, status : boolean){
