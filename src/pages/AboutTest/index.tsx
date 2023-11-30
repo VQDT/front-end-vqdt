@@ -25,14 +25,13 @@ import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import useTest from "../../context/test/useTest";
 import { useEffect, useState } from "react";
-import { format } from "date-fns-tz";
+import { format } from 'date-fns-tz';
 import isFuture from "../../utils/isFuture";
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
 
 function AboutTest({ variant = "default" }: AboutTest) {
-
   const { id } = useParams();
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
@@ -44,17 +43,15 @@ function AboutTest({ variant = "default" }: AboutTest) {
     }
   }, []);
 
-
   function removeAttendance() {
-    if (id) {
-      removeTestAttendance(id);
-      setRemoved(true);
+    if(id){
+      removeTestAttendance(id)
+      setRemoved(true)
     }
   }
 
-
-  if (removed) {
-    navigate("/");
+  if(removed){
+    navigate("/")
   }
 
   if (test) {
@@ -73,6 +70,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
       },
     } = test;
 
+    console.log(testAttendances)
     return (
       <>
         <Container>
@@ -80,31 +78,37 @@ function AboutTest({ variant = "default" }: AboutTest) {
             <Title>
               <span className="text-2xl uppercase">{name}</span>
             </Title>
-            {isFuture(timeEnd) ? (
-              <SubText
-                variant={testAttendances[0].approved ? "confirm" : "alert"}
-              >
-                {testAttendances[0].approved ? <AiOutlineCheckCircle size={36} /> : <AiOutlineCloseCircle size={36} />}
-                <p className="text-lg p-3">
-                  {testAttendances[0].approved ? "Aprovado" : "reprovado"}
-                </p>
-              </SubText>
-            ) : (
-              <SubTextContainer>
-                <SubText variant={variant}>
-                  <AiOutlineCalendar size={36} className="text-Concrete" />
-                  <span className="text-lg font-bold uppercase">
-                    {format(new Date(dateStart), "dd/MM/yyyy")}
-                  </span>
+            { 
+              isFuture(timeEnd) || testAttendances[0].testFinished
+                ?<SubText
+                  variant={testAttendances[0].approved ? "confirm" : "alert"}
+                >
+                  {testAttendances[0].approved ? (
+                    <AiOutlineCheckCircle size={36} />
+                  ) : (
+                    <AiOutlineCloseCircle size={36} />
+                  )}
+                  <p className="text-lg p-3">
+                    {testAttendances[0].approved ? "Aprovado" : "reprovado"}
+                  </p>
                 </SubText>
-                <SubText variant={variant}>
-                  <AiOutlineClockCircle size={36} className="text-Concrete" />
-                  <span className="text-lg font-bold uppercase">
-                    {`${format(new Date(dateStart), "HH:mm")} - ${format(new Date(timeEnd), "HH:mm")}`}
-                  </span>
-                </SubText>
-              </SubTextContainer>
-            )}
+                :<SubTextContainer>
+                  <SubText variant={variant}>
+                    <AiOutlineCalendar size={36} className="text-Concrete" />
+                    <span className="text-lg font-bold uppercase">
+                      {format(new Date(dateStart), "dd/MM/yyyy")}
+                    </span>
+                  </SubText>
+                  <SubText variant={variant}>
+                    <AiOutlineClockCircle size={36} className="text-Concrete" />
+                    <span className="text-lg font-bold uppercase">{`${format(
+                      new Date(dateStart), "HH:mm"
+                    )} - ${format(
+                      new Date(timeEnd), "HH:mm"
+                    )}`}</span>
+                  </SubText>
+                </SubTextContainer>                
+            }
           </Header>
           <About>
             <AboutTitle text="Sobre a prova" />
@@ -130,18 +134,17 @@ function AboutTest({ variant = "default" }: AboutTest) {
             </LocalContent>
           </ContainerLocalContent>
           <div className="flex gap-4 justify-between flex-wrap">
-            <Button
-              variant="outline"
-              color="alert"
-              onClick={() => removeAttendance()}
-            >
-              CANCELAR AGENDAMENTO
-            </Button>
-            {testPeriod && (
-              <Button onClick={() => navigate("/prova/introduction/" + id)}>
-                REALIZAR PROVA
+            {
+              testAttendances[0].testFinished ? null :
+              <Button variant="outline" color="alert" onClick={() => removeAttendance()}>
+                CANCELAR AGENDAMENTO
               </Button>
-            )}
+            }
+            {
+              !testPeriod || testAttendances[0].testFinished ? null : (
+                <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
+              )
+            }
           </div>
         </Container>
         <div className="mt-6 flex justify-center">

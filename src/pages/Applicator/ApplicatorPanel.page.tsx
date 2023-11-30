@@ -1,14 +1,14 @@
-import ListCard from "../components/ListCard";
-import TestCard from "../components/TestCard";
-import Main from "../components/Main";
-import useTest from "../context/test/useTest";
+import ListCard from "../../components/ListCard";
+import TestCard from "../../components/TestCard";
+import Main from "../../components/Main";
+import useTest from "../../context/test/useTest";
 import {
   AiOutlineCalendar,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import isFuture from "../utils/isFuture";
+import isFuture from "../../utils/isFuture";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -18,15 +18,13 @@ function TestPainel() {
   
   const { tests } = useTest();
   const navigation = useNavigate();
-
+  
   function navigateTest(id: string) {
     navigation("/provas/" + id);
   }
 
-  
-  const listTestFuture = tests.filter((test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished)
+  const listTestFuture = tests.filter((test) => !isFuture(test.timeEnd) || !test.testAttendances[0].testFinished)
     .map((test) => {
-      console.log(test.testAttendances)
       return(
         <TestCard
           key={test.id}
@@ -40,7 +38,8 @@ function TestPainel() {
     })
 
 
-  const listPastTests = tests.filter((test) => isFuture(test.timeEnd) || test.testAttendances[0].testFinished)
+  const listPastTests = tests
+    .filter((test) => isFuture(test.timeEnd))
     .map((test) => {
       return (  
         <TestCard
@@ -76,11 +75,9 @@ function TestPainel() {
       </h2>
       <ListCard>
         {
-          listPastTests.length > 0 
-            ? listPastTests 
-            : (
+          listPastTests.length > 0 ? listPastTests :(
               <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
-                Não há provas concluídas
+                Não há provas realizadas
               </div>
             )
         }

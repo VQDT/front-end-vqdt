@@ -3,6 +3,7 @@ import useAuth from "../auth/useAuth";
 import { Test } from "../../models/Test";
 import instance from "../../axios";
 import { Question } from "../../models/Question";
+import { TestAttendance } from "../../models/TestAttendance";
 
 interface TestProviderProps {
   children: ReactNode;
@@ -12,9 +13,11 @@ interface TestContextProps {
   tests: Test[];
   test: Test | null;
   questions: Question[];
+  testAttendance: TestAttendance | null
   getTest: (id: string) => void;
   getQuestions: (id: string) => void;
   removeTestAttendance: (id :string) => Promise<boolean>;
+  getTestAttendance: (id: string) => void;
   setScoreAndStatus : (id :string, score: number , status: boolean) => void;
 }
 
@@ -26,6 +29,7 @@ function TestProvider({ children }: TestProviderProps) {
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
   const [ questions, setQuestions] = useState<Question[]>([]);
+  const [ testAttendance, setTestAttendance] = useState<TestAttendance | null>(null)
 
   async function getTests() {
     const url = `/tests/`;
@@ -64,6 +68,14 @@ function TestProvider({ children }: TestProviderProps) {
     }
   }
 
+  async function getTestAttendance(id : string) {
+    const url = `/testAttendance/` + id;
+    const response = await instance.get(url);
+    if (response.status === 200) {
+      setTestAttendance(response.data);
+    }
+  }
+
   async function setScoreAndStatus(testId: string, score : number, status : boolean){
     const url = `/testAttendance/result/`;
     const response = await instance.put(url, { testId, score, status });
@@ -77,7 +89,7 @@ function TestProvider({ children }: TestProviderProps) {
   }, [ user ]);
 
   return(
-      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus }}>
+      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus, testAttendance, getTestAttendance }}>
         { children }
       </TestContext.Provider>
   );

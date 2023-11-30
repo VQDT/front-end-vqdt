@@ -16,3 +16,8 @@ export interface Question {
     alternatives: Alternative[]
     ContentAux: ContentAux[];
 }
+
+export type Answer = {
+    idQuestion: string;
+    idAlternatives: string;
+}
