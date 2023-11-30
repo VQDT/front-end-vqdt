@@ -9,6 +9,7 @@ import {
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import isFuture from "../utils/isFuture";
+import useAuth from "../context/auth/useAuth";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -16,6 +17,7 @@ function NormalizeDate(date: string) {
 
 function TestPainel() {
   
+  const { user } = useAuth();
   const { tests } = useTest();
   const navigation = useNavigate();
 
@@ -23,7 +25,6 @@ function TestPainel() {
     navigation("/provas/" + id);
   }
 
-  
   const listTestFuture = tests.filter((test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished)
     .map((test) => {
       console.log(test.testAttendances)
@@ -55,10 +56,30 @@ function TestPainel() {
       );
     });
 
+  function header1(){
+    if(user?.roles[0].name === "candidate"){
+      return "PROVAS AGENDADAS"
+    }
+    else if(user?.roles[0].name === "applicador"){
+      return "APLICAÇÕES AGENDADAS"
+    }
+  }
+
+  function header2(){
+    if(user?.roles[0].name === "candidate"){
+      return "PROVAS REALIZADAS"
+    }
+    else if(user?.roles[0].name === "applicador"){
+      return "APLICAÇÕES REALIZADAS"
+    }
+  }
+
   return (
     <Main>
       <h2 className="text-Blue text-lg font-bold uppercase">
-        PROVAS AGENDADAS
+        {
+          header1()
+        }
       </h2>
       <ListCard>
         { 
@@ -72,7 +93,9 @@ function TestPainel() {
         }
       </ListCard>  
       <h2 className="text-Blue text-lg font-bold uppercase">
-        PROVAS REALIZADAS
+        {
+          header2()
+        }
       </h2>
       <ListCard>
         {

@@ -33,6 +33,12 @@ export type User = {
   occupation: string;
   idAddress: string;
   password?: string;
+  roles: Role[];
+}
+
+export type Role = {
+  id: number;
+  name: string
 }
 
 export type sessionUser = {

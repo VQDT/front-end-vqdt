@@ -21,17 +21,19 @@ function AuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
-    //const userRoles = getUserRoles();
+    const userRoles = getUserRoles();
     const existToken = getTokenSessionStorage();
     if(existUser && existToken) {
       const userWithRoles = {
         ...JSON.parse(existUser),
-        roles: []
+        roles: userRoles
       }
       setUser(userWithRoles);
     }
   }, [])
 
+  console.log(user)
+  
   async function login(cpf: string, password: string){
     const response = await instance.post("users/auth/login", {cpf, password});
     if(response.status === 200) {
@@ -44,19 +46,19 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  // async function getUserRoles() {
-  //   try {
-  //     const response = await instance.get("users/user/roles");
-  //     if(response.status === 200) {
-  //       const data = await response.data;
-  //       return data.roles;
-  //     }
-  //   } catch (error) {
-  //     if(error instanceof Error) console.log(error.message);
-  //     console.log("erro ao requisitar roles");
-  //     return [];
-  //   }
-  // }
+  async function getUserRoles() {
+     try {
+       const response = await instance.get("users/user/roles");
+       if(response.status === 200) {
+         const data = await response.data;
+         return data.roles;
+       }
+     } catch (error) {
+       if(error instanceof Error) console.log(error.message);
+       console.log("erro ao requisitar roles");
+       return [];
+     }
+  }
 
   function loggout(){
     deleteTokenSessinStorage();
