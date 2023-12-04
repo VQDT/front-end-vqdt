@@ -25,16 +25,23 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
 
-  const { user } = useAuth();
+  const { user, roles } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
   const [ questions, setQuestions] = useState<Question[]>([]);
   const [ testAttendance, setTestAttendance] = useState<TestAttendance | null>(null)
 
   async function getTests() {
-    const url = `/tests/`;
-    const response = await instance.get(url);
-    setTests(response.data);
+    if (roles){
+      let url = `/tests/`;
+
+      if (roles[0].name === "applicator"){
+        url = `/tests/applicator`;
+      }
+
+      const response = await instance.get(url);
+      setTests(response.data);
+    }
   }
 
   async function getTest(id: string) {
@@ -83,10 +90,10 @@ function TestProvider({ children }: TestProviderProps) {
   }
 
   useEffect(() => {
-    if(user) {
+    if(user && roles) {
       getTests();
     }
-  }, [ user ]);
+  }, [ user,roles ]);
 
   return(
       <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus, testAttendance, getTestAttendance }}>
