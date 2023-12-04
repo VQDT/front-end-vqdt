@@ -16,7 +16,6 @@ function NormalizeDate(date: string) {
 }
 
 function TestPainel() {
-  
   const { user } = useAuth();
   const { tests } = useTest();
   const navigation = useNavigate();
@@ -25,10 +24,15 @@ function TestPainel() {
     navigation("/provas/" + id);
   }
 
-  const listTestFuture = tests.filter((test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished)
+
+  console.log(tests)
+
+  const listTestFuture = tests
+    .filter(
+      (test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished
+    )
     .map((test) => {
-      console.log(test.testAttendances)
-      return(
+      return (
         <TestCard
           key={test.id}
           title={test.name}
@@ -38,75 +42,73 @@ function TestPainel() {
           handleClick={() => navigateTest(test.id)}
         />
       );
-    })
+    });
 
-
-  const listPastTests = tests.filter((test) => isFuture(test.timeEnd) || test.testAttendances[0].testFinished)
+  const listPastTests = tests
+    .filter(
+      (test) => isFuture(test.timeEnd) || test.testAttendances[0].testFinished
+    )
     .map((test) => {
-      return (  
+      return (
         <TestCard
           key={test.id}
           title={test.name}
           description={test.description}
           subText={test.testAttendances[0].approved ? "Aprovado" : "Reprovado"}
-          icon={test.testAttendances[0].approved ? AiOutlineCheckCircle : AiOutlineCloseCircle}
+          icon={
+            test.testAttendances[0].approved
+              ? AiOutlineCheckCircle
+              : AiOutlineCloseCircle
+          }
           variant={test.testAttendances[0].approved ? "confirm" : "alert"}
           handleClick={() => navigateTest(test.id)}
         />
       );
     });
 
-  function header1(){
-    if(user?.roles[0].name === "candidate"){
-      return "PROVAS AGENDADAS"
-    }
-    else if(user?.roles[0].name === "applicador"){
-      return "APLICAÇÕES AGENDADAS"
+  function header1() {
+    const role = user?.roles;
+    if (role && role.length > 0) {
+      if (role[0].name === "candidate") {
+        return "PROVAS AGENDADAS";
+      } else if (role[0].name === "applicador") {
+        return "APLICAÇÕES AGENDADAS";
+      }
     }
   }
 
-  function header2(){
-    if(user?.roles[0].name === "candidate"){
-      return "PROVAS REALIZADAS"
-    }
-    else if(user?.roles[0].name === "applicador"){
-      return "APLICAÇÕES REALIZADAS"
+  function header2() {
+    const role = user?.roles;
+    if (role && role.length > 0) {
+      if (role[0].name === "candidate") {
+        return "PROVAS REALIZADAS";
+      } else if (role[0].name === "applicador") {
+        return "APLICAÇÕES AGENDADAS";
+      }
     }
   }
 
   return (
     <Main>
-      <h2 className="text-Blue text-lg font-bold uppercase">
-        {
-          header1()
-        }
-      </h2>
+      <h2 className="text-Blue text-lg font-bold uppercase">{header1()}</h2>
       <ListCard>
-        { 
-          listTestFuture.length > 0 
-            ? listTestFuture
-            : (
-              <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
-                Não há provas agendadas
-              </div>
-            )
-        }
-      </ListCard>  
-      <h2 className="text-Blue text-lg font-bold uppercase">
-        {
-          header2()
-        }
-      </h2>
+        {listTestFuture.length > 0 ? (
+          listTestFuture
+        ) : (
+          <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+            Não há provas agendadas
+          </div>
+        )}
+      </ListCard>
+      <h2 className="text-Blue text-lg font-bold uppercase">{header2()}</h2>
       <ListCard>
-        {
-          listPastTests.length > 0 
-            ? listPastTests 
-            : (
-              <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
-                Não há provas concluídas
-              </div>
-            )
-        }
+        {listPastTests.length > 0 ? (
+          listPastTests
+        ) : (
+          <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+            Não há provas concluídas
+          </div>
+        )}
       </ListCard>
     </Main>
   );

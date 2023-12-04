@@ -70,7 +70,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
       },
     } = test;
 
-    console.log(testAttendances)
     return (
       <>
         <Container>
