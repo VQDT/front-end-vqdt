@@ -95,32 +95,39 @@ function Test() {
   }
 
   function switchContent(contentList: ContentAux[]) {
-    return contentList?.map(({ id, type, content }) => {
-      switch (type) {
-        case "title":
-          return (
-            <Question.Title key={id} text={content} />
-          )
+    return contentList
+      ?.sort((a, b) => a.order - b.order)
+      ?.map(({ id, type, content }) => {
+        switch (type) {
+          case "title":
+            return (
+              <Question.Title key={id} text={content} />
+            )
 
-        case "text":
-          return (
-            <Question.Text key={id} text={content}/>
-          );
+          case "text":
+            return (
+              <Question.Text key={id} text={content}/>
+            );
 
-        case "ref":
-          return (
-            <Question.Ref key={id} text={content} />
-          );
+          case "image":
+            return (
+              <Question.Image key={id} src={content}/>
+            );
+    
+          case "ref":
+            return (
+              <Question.Ref key={id} text={content} />
+            );
 
-        case "asking":
-          return (
-            <Question.Asking key={id} text={content} />
-          );
-        
-        default:
-          return <div key={id}></div>;
-      }
-    });
+          case "asking":
+            return (
+              <Question.Asking key={id} text={content} />
+            );
+          
+          default:
+            return <div key={id}></div>;
+        }
+      });
   }
 
   function alternativeList(alternativeList: Alternative[]) {
