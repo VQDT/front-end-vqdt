@@ -17,6 +17,7 @@ interface AuthProviderProps {
 interface AuthContextProps {
   user: User | undefined;
   roles: Role[] | undefined;
+  setCurrentRole: (value: string) => void;
   login: (cpf: string, password: string) => Promise<void>;
   loggout: () => void;
 }
@@ -83,6 +84,21 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  function setCurrentRole(value: string){
+    if (roles){
+      let currentRole:Role = {id:0, name:''};
+      roles.map(role => {
+        if(role.name === value){
+          currentRole = role;
+          roles.splice(roles.indexOf(role), 1)
+        }
+      })
+      roles.unshift(currentRole)
+      console.log(roles)
+      setRoles(roles)
+    }
+  }
+  
   function loggout() {
     deleteTokenSessinStorage();
     deleteUserSessionStorage();
@@ -90,7 +106,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, loggout, roles }}>
+    <AuthContext.Provider value={{ user, login, loggout, roles, setCurrentRole }}>
       {children}
     </AuthContext.Provider>
   );

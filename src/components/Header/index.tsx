@@ -13,6 +13,7 @@ import { useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import useAuth from "../../context/auth/useAuth";
+import { MenuItem, Select, InputLabel, FormControl, SelectChangeEvent } from "@mui/material";
 
 interface Props {
   window?: () => Window;
@@ -25,16 +26,27 @@ const navItems = [
     to: "/",
   },
   {
+    name: "changeRole",
+    to: ""
+  },
+  {
     name: "Sair",
     to: "/auth",
   },
+  
 ];
 
 function Header({ window }: Props) {
 
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [currentRoleinList, setCurrentRoleinList] = useState<''| HTMLSelectElement | undefined>()
 
-  const { loggout } = useAuth();
+  const { loggout, setCurrentRole, roles } = useAuth();
+
+  const handleChange = (event: SelectChangeEvent<HTMLSelectElement>) => {
+    setCurrentRole(event.target.value as string);
+    setCurrentRoleinList(event.target.value as HTMLSelectElement);
+  };
   
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
@@ -76,7 +88,27 @@ function Header({ window }: Props) {
           {item.name}
         </Link>
       );
-    } else {
+    }
+    else if (item.name === "changeRole") {
+      return(
+        <Select
+          value={currentRoleinList}
+          onChange={handleChange}
+          className="border-2 border-white m-2"
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
+        >
+          {
+            roles && roles.map(
+              role => (
+                <MenuItem className="text-white" value={role.name} id={role.id.toString()}>{role.name}</MenuItem>
+              )
+            )
+          }
+        </Select>
+      )
+    }
+    else {
       return (
         <Link
           key={item.name}
@@ -94,12 +126,29 @@ function Header({ window }: Props) {
   });
 
   const drawer = (
-    <Box onClick={handleDrawerToggle}>
-      <div className="w-full">
-        <Image src={logo} />
-      </div>
-      <List className="flex-nowrap">{linkListDrawer}</List>
-    </Box>
+    <>
+      <Box onClick={handleDrawerToggle}>
+        <div className="w-full">
+          <Image src={logo} />
+        </div>
+        <List className="flex-nowrap">
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={'age'}
+              label="Age"
+            >
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+          {linkListDrawer}
+        </List>
+      </Box>
+    </>
   );
 
   const container =
@@ -136,6 +185,7 @@ function Header({ window }: Props) {
       </AppBar>
 
       <nav>
+
         <Drawer
           container={container}
           variant="temporary"
