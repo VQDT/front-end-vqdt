@@ -9,11 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Image from "./Image";
 import logo from "../../assets/logo.png";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import useAuth from "../../context/auth/useAuth";
-import { MenuItem, Select, InputLabel, FormControl, SelectChangeEvent } from "@mui/material";
+import Select from "../Select/index"
 
 interface Props {
   window?: () => Window;
@@ -39,15 +39,20 @@ const navItems = [
 function Header({ window }: Props) {
 
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [currentRoleinList, setCurrentRoleinList] = useState<''| HTMLSelectElement | undefined>()
+  
+  const { loggout, getRole, roles, currentRole } = useAuth();
+  const [currentRoleSelected, setCurrentRoleSelected] = useState<string | undefined | ''>(currentRole?.toString());
 
-  const { loggout, setCurrentRole, roles } = useAuth();
-
-  const handleChange = (event: SelectChangeEvent<HTMLSelectElement>) => {
-    setCurrentRole(event.target.value as string);
-    setCurrentRoleinList(event.target.value as HTMLSelectElement);
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value }  = event.target
+    if (typeof value === "string") {
+      getRole(value);
+    }
+    setCurrentRoleSelected(event.target.value as string)
   };
   
+  console.log(currentRole)
+
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
   const linkListDrawer = navItems.map((item) => {
@@ -92,20 +97,12 @@ function Header({ window }: Props) {
     else if (item.name === "changeRole") {
       return(
         <Select
-          value={currentRoleinList}
+          value={currentRoleSelected}
           onChange={handleChange}
-          className="border-2 border-white m-2"
-          displayEmpty
-          inputProps={{ 'aria-label': 'Without label' }}
-        >
-          {
-            roles && roles.map(
-              role => (
-                <MenuItem className="text-white" value={role.name} id={role.id.toString()}>{role.name}</MenuItem>
-              )
-            )
-          }
-        </Select>
+          className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+          options={roles}
+          
+        />
       )
     }
     else {
@@ -125,6 +122,8 @@ function Header({ window }: Props) {
     }
   });
 
+  console.log(roles)
+
   const drawer = (
     <>
       <Box onClick={handleDrawerToggle}>
@@ -132,19 +131,13 @@ function Header({ window }: Props) {
           <Image src={logo} />
         </div>
         <List className="flex-nowrap">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Age</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={'age'}
-              label="Age"
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
+          <Select
+            value={currentRoleSelected}
+            onChange={handleChange}
+            className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+            options={roles}
+            
+          />
           {linkListDrawer}
         </List>
       </Box>

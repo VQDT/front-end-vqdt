@@ -17,7 +17,8 @@ interface AuthProviderProps {
 interface AuthContextProps {
   user: User | undefined;
   roles: Role[] | undefined;
-  setCurrentRole: (value: string) => void;
+  currentRole: Role | undefined;
+  getRole: (value: string) => void;
   login: (cpf: string, password: string) => Promise<void>;
   loggout: () => void;
 }
@@ -25,8 +26,10 @@ interface AuthContextProps {
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps) {
+
   const [user, setUser] = useState<User | undefined>(undefined);
   const [roles, setRoles] = useState<Role[] | undefined>(undefined);
+  const [currentRole, setCurrentRole] = useState<Role | undefined>(undefined);
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
@@ -76,6 +79,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       await instance.get("users/user/roles").then(
         response => {
           setRoles(response.data.roles)
+          setCurrentRole(response.data.roles[0])
         }
       );
     } catch (error) {
@@ -84,18 +88,10 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  function setCurrentRole(value: string){
-    if (roles){
-      let currentRole:Role = {id:0, name:''};
-      roles.map(role => {
-        if(role.name === value){
-          currentRole = role;
-          roles.splice(roles.indexOf(role), 1)
-        }
-      })
-      roles.unshift(currentRole)
-      console.log(roles)
-      setRoles(roles)
+  function getRole(id: string){
+    if(roles){
+      const newCurrentRole = roles.find(role => role.id === parseInt(id))
+      setCurrentRole(newCurrentRole);
     }
   }
   
@@ -106,7 +102,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, loggout, roles, setCurrentRole }}>
+    <AuthContext.Provider value={{ user, login, loggout, roles, getRole, currentRole }}>
       {children}
     </AuthContext.Provider>
   );

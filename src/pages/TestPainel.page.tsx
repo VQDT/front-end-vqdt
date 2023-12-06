@@ -18,10 +18,11 @@ function NormalizeDate(date: string) {
 
 function TestPainel() {
 
-  const { roles } = useAuth();
+  const { roles, currentRole } = useAuth();
   const { tests } = useTest();
   const navigation = useNavigate();
 
+  
   function navigateTest(id: string) {
     navigation("/provas/" + id);
   }
@@ -33,12 +34,12 @@ function TestPainel() {
   let listFutureTests: ReactElement[] = [];
   let listPastTests: ReactElement[] = [];
 
-  if(roles){
-    console.log(roles[0])
-    if (roles[0].name === "candidate"){
+  console.log(tests)
+  if(roles && currentRole){
+    if (currentRole.name === "Candidato"){
       listFutureTests = tests
       .filter(
-        (test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished
+        (test) => !isFuture(test.timeEnd) && !test.testAttendances?.[0].testFinished
       )
       .map((test) => {
         return (
@@ -55,7 +56,7 @@ function TestPainel() {
 
       listPastTests = tests
       .filter(
-        (test) => isFuture(test.timeEnd) || test.testAttendances[0].testFinished
+        (test) => isFuture(test.timeEnd) || test.testAttendances?.[0].testFinished
       )
       .map((test) => {
         return (
@@ -63,19 +64,19 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={test.testAttendances[0].approved ? "Aprovado" : "Reprovado"}
+            subText={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
             icon={
-              test.testAttendances[0].approved
+              test.testAttendances?.[0].approved
                 ? AiOutlineCheckCircle
                 : AiOutlineCloseCircle
             }
-            variant={test.testAttendances[0].approved ? "confirm" : "alert"}
+            variant={test.testAttendances?.[0].approved ? "confirm" : "alert"}
             handleClick={() => navigateTest(test.id)}
           />
         );
       });
     }
-    else if (roles[0].name === "applicator"){
+    else if (currentRole.name === "Aplicador"){
       listFutureTests = tests
       .filter(
         (test) => !isFuture(test.timeEnd)
@@ -114,21 +115,21 @@ function TestPainel() {
   
   //FOR APPLICATOR ROLE
   function header1() {
-    if (roles && roles.length > 0) {
-      if (roles[0].name === "candidate") {
+    if (roles && currentRole && roles.length > 0) {
+      if (currentRole.name === "Candidato") {
         return "PROVAS AGENDADAS";
-      } else if (roles[0].name === "applicator") {
+      } else if (currentRole.name === "Aplicador") {
         return "APLICAÇÕES AGENDADAS";
       }
     }
   }
 
   function header2() {
-    if (roles && roles.length > 0) {
-      if (roles[0].name === "candidate") {
+    if (roles && currentRole && roles.length > 0) {
+      if (currentRole.name === "Candidato") {
         return "PROVAS REALIZADAS";
-      } else if (roles[0].name === "applicator") {
-        return "APLICAÇÕES AGENDADAS";
+      } else if (currentRole.name === "Aplicador") {
+        return "APLICAÇÕES REALIZADAS";
       }
     }
   }

@@ -25,21 +25,22 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
 
-  const { user, roles } = useAuth();
+  const { user, roles, currentRole } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
   const [ questions, setQuestions] = useState<Question[]>([]);
   const [ testAttendance, setTestAttendance] = useState<TestAttendance | null>(null)
 
   async function getTests() {
-    if (roles){
-      let url = `/tests/`;
+    if (roles && currentRole){
+      let url = `/tests`;
 
-      if (roles[0].name === "applicator"){
+      if (currentRole.name === "Aplicador"){
         url = `/tests/applicator`;
       }
 
       const response = await instance.get(url);
+      
       setTests(response.data);
     }
   }
@@ -93,7 +94,7 @@ function TestProvider({ children }: TestProviderProps) {
     if(user && roles) {
       getTests();
     }
-  }, [user,roles]);
+  }, [user, currentRole]);
 
   return(
       <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus, testAttendance, getTestAttendance }}>
