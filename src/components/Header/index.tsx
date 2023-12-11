@@ -96,6 +96,7 @@ function Header({ window }: Props) {
     }
     else if (item.name === "changeRole") {
       return(
+        roles && roles.length > 1 &&
         <Select
           value={currentRoleSelected}
           onChange={handleChange}
@@ -131,13 +132,15 @@ function Header({ window }: Props) {
           <Image src={logo} />
         </div>
         <List className="flex-nowrap">
-          <Select
-            value={currentRoleSelected}
-            onChange={handleChange}
-            className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
-            options={roles}
-            
-          />
+          {
+            roles && roles.length > 1 &&
+              <Select
+                value={currentRoleSelected}
+                onChange={handleChange}
+                className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+                options={roles}
+              />
+          }
           {linkListDrawer}
         </List>
       </Box>

@@ -11,7 +11,6 @@ import AboutTest from "./pages/AboutTest";
 import Test from "./pages/Test.page";
 import IntroductionTestPage from "./pages/IntroductionTest.page";
 import TestLayout from "./layout/Test.Layout";
-import SelectioField from "./components/SelectField";
 
 export const Router = createBrowserRouter([
   {
