@@ -9,10 +9,11 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Image from "./Image";
 import logo from "../../assets/logo.png";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import useAuth from "../../context/auth/useAuth";
+import Select from "../Select/index"
 
 interface Props {
   window?: () => Window;
@@ -25,17 +26,33 @@ const navItems = [
     to: "/",
   },
   {
+    name: "changeRole",
+    to: ""
+  },
+  {
     name: "Sair",
     to: "/auth",
   },
+  
 ];
 
 function Header({ window }: Props) {
 
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  const { loggout } = useAuth();
+  const [mobileOpen, setMobileOpen] = useState(false)
   
+  const { loggout, getRole, roles, currentRole } = useAuth();
+  const [currentRoleSelected, setCurrentRoleSelected] = useState<string | undefined | ''>(currentRole?.toString());
+
+  const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value }  = event.target
+    if (typeof value === "string") {
+      getRole(value);
+    }
+    setCurrentRoleSelected(event.target.value as string)
+  };
+  
+  console.log(currentRole)
+
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
   const linkListDrawer = navItems.map((item) => {
@@ -76,7 +93,20 @@ function Header({ window }: Props) {
           {item.name}
         </Link>
       );
-    } else {
+    }
+    else if (item.name === "changeRole") {
+      return(
+        roles && roles.length > 1 &&
+        <Select
+          value={currentRoleSelected}
+          onChange={handleChange}
+          className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+          options={roles}
+          
+        />
+      )
+    }
+    else {
       return (
         <Link
           key={item.name}
@@ -93,13 +123,28 @@ function Header({ window }: Props) {
     }
   });
 
+  console.log(roles)
+
   const drawer = (
-    <Box onClick={handleDrawerToggle}>
-      <div className="w-full">
-        <Image src={logo} />
-      </div>
-      <List className="flex-nowrap">{linkListDrawer}</List>
-    </Box>
+    <>
+      <Box onClick={handleDrawerToggle}>
+        <div className="w-full">
+          <Image src={logo} />
+        </div>
+        <List className="flex-nowrap">
+          {
+            roles && roles.length > 1 &&
+              <Select
+                value={currentRoleSelected}
+                onChange={handleChange}
+                className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+                options={roles}
+              />
+          }
+          {linkListDrawer}
+        </List>
+      </Box>
+    </>
   );
 
   const container =
@@ -136,6 +181,7 @@ function Header({ window }: Props) {
       </AppBar>
 
       <nav>
+
         <Drawer
           container={container}
           variant="temporary"

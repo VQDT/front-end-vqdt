@@ -18,5 +18,5 @@ export interface Test {
   questionId: string | null;
   milliseconds: number;
   testPeriod: boolean;
-  testAttendances: TestAttendance[]
+  testAttendances?: TestAttendance[]
 }

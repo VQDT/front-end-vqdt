@@ -33,7 +33,6 @@ export type User = {
   occupation: string;
   idAddress: string;
   password?: string;
-  roles: Role[];
 }
 
 export type Role = {

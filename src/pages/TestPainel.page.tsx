@@ -10,80 +10,126 @@ import {
 import { useNavigate } from "react-router-dom";
 import isFuture from "../utils/isFuture";
 import useAuth from "../context/auth/useAuth";
+import { ReactElement } from "react";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
 }
 
 function TestPainel() {
-  const { user } = useAuth();
+
+  const { roles, currentRole } = useAuth();
   const { tests } = useTest();
   const navigation = useNavigate();
 
+  
   function navigateTest(id: string) {
     navigation("/provas/" + id);
   }
 
+  function navigateApplicatorTest(id: string) {
+    navigation("/provas/application/" + id);
+  }
+
+  let listFutureTests: ReactElement[] = [];
+  let listPastTests: ReactElement[] = [];
 
   console.log(tests)
+  if(roles && currentRole){
+    if (currentRole.name === "Candidato"){
+      listFutureTests = tests
+      .filter(
+        (test) => !isFuture(test.timeEnd) && !test.testAttendances?.[0].testFinished
+      )
+      .map((test) => {
+        return (
+          <TestCard
+            key={test.id}
+            title={test.name}
+            description={test.description}
+            subText={NormalizeDate(test.dateStart)}
+            icon={AiOutlineCalendar}
+            handleClick={() => navigateTest(test.id)}
+          />
+        );
+      });
 
-  const listTestFuture = tests
-    .filter(
-      (test) => !isFuture(test.timeEnd) && !test.testAttendances[0].testFinished
-    )
-    .map((test) => {
-      return (
-        <TestCard
-          key={test.id}
-          title={test.name}
-          description={test.description}
-          subText={NormalizeDate(test.dateStart)}
-          icon={AiOutlineCalendar}
-          handleClick={() => navigateTest(test.id)}
-        />
-      );
-    });
-
-  const listPastTests = tests
-    .filter(
-      (test) => isFuture(test.timeEnd) || test.testAttendances[0].testFinished
-    )
-    .map((test) => {
-      return (
-        <TestCard
-          key={test.id}
-          title={test.name}
-          description={test.description}
-          subText={test.testAttendances[0].approved ? "Aprovado" : "Reprovado"}
-          icon={
-            test.testAttendances[0].approved
-              ? AiOutlineCheckCircle
-              : AiOutlineCloseCircle
-          }
-          variant={test.testAttendances[0].approved ? "confirm" : "alert"}
-          handleClick={() => navigateTest(test.id)}
-        />
-      );
-    });
-
+      listPastTests = tests
+      .filter(
+        (test) => isFuture(test.timeEnd) || test.testAttendances?.[0].testFinished
+      )
+      .map((test) => {
+        return (
+          <TestCard
+            key={test.id}
+            title={test.name}
+            description={test.description}
+            subText={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
+            icon={
+              test.testAttendances?.[0].approved
+                ? AiOutlineCheckCircle
+                : AiOutlineCloseCircle
+            }
+            variant={test.testAttendances?.[0].approved ? "confirm" : "alert"}
+            handleClick={() => navigateTest(test.id)}
+          />
+        );
+      });
+    }
+    else if (currentRole.name === "Aplicador"){
+      listFutureTests = tests
+      .filter(
+        (test) => !isFuture(test.timeEnd)
+      )
+      .map((test) => {
+        return (
+          <TestCard
+            key={test.id}
+            title={test.name}
+            description={test.description}
+            subText={NormalizeDate(test.dateStart)}
+            icon={AiOutlineCalendar}
+            handleClick={() => navigateApplicatorTest(test.id)}
+          />
+        )
+      })
+  
+      listPastTests = tests
+      .filter(
+        (test) => isFuture(test.timeEnd)
+      )
+      .map((test) => {
+        return (
+          <TestCard
+            key={test.id}
+            title={test.name}
+            description={test.description}
+            subText={NormalizeDate(test.dateStart)}
+            icon={AiOutlineCalendar}
+            handleClick={() => navigateApplicatorTest(test.id)}
+          />
+        )
+      })
+    }
+  }
+  
+  //FOR APPLICATOR ROLE
   function header1() {
-    const role = user?.roles;
-    if (role && role.length > 0) {
-      if (role[0].name === "candidate") {
+    if (roles && currentRole && roles.length > 0) {
+      if (currentRole.name === "Candidato") {
         return "PROVAS AGENDADAS";
-      } else if (role[0].name === "applicador") {
+      } else if (currentRole.name === "Aplicador") {
         return "APLICAÇÕES AGENDADAS";
       }
     }
   }
 
   function header2() {
-    const role = user?.roles;
-    if (role && role.length > 0) {
-      if (role[0].name === "candidate") {
+    if (roles && currentRole && roles.length > 0) {
+      if (currentRole.name === "Candidato") {
         return "PROVAS REALIZADAS";
-      } else if (role[0].name === "applicador") {
-        return "APLICAÇÕES AGENDADAS";
+      } else if (currentRole.name === "Aplicador") {
+        return "APLICAÇÕES REALIZADAS";
       }
     }
   }
@@ -92,23 +138,27 @@ function TestPainel() {
     <Main>
       <h2 className="text-Blue text-lg font-bold uppercase">{header1()}</h2>
       <ListCard>
-        {listTestFuture.length > 0 ? (
-          listTestFuture
-        ) : (
-          <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
-            Não há provas agendadas
-          </div>
-        )}
+        {
+          listFutureTests.length > 0 ? (
+            listFutureTests
+          ) : (
+            <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+              Não há provas agendadas
+            </div>
+          )
+        }
       </ListCard>
       <h2 className="text-Blue text-lg font-bold uppercase">{header2()}</h2>
       <ListCard>
-        {listPastTests.length > 0 ? (
-          listPastTests
-        ) : (
-          <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
-            Não há provas concluídas
-          </div>
-        )}
+        {
+          listPastTests.length > 0 ? (
+            listPastTests
+          ) : (
+            <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+              Não há provas finalizadas
+            </div>
+          )
+        }
       </ListCard>
     </Main>
   );

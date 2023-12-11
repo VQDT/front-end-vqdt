@@ -4,7 +4,7 @@ import Card from "../components/Card";
 import Modal from "../components/Modal";
 import Input from "../components/Input";
 import Stopwatch from "../components/Stopwatch";
-import Question from "../components/Question";
+import Question from "../components/question";
 import { ContentAux } from "../models/ContentAux";
 import { Alternative } from "../models/Alternative";
 import { Answer } from "../models/Question";

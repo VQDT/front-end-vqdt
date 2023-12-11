@@ -4,6 +4,7 @@ import { Test } from "../../models/Test";
 import instance from "../../axios";
 import { Question } from "../../models/Question";
 import { TestAttendance } from "../../models/TestAttendance";
+import { User } from "../../models";
 
 interface TestProviderProps {
   children: ReactNode;
@@ -14,10 +15,12 @@ interface TestContextProps {
   test: Test | null;
   questions: Question[];
   testAttendance: TestAttendance | null
+  candidates: User[] | undefined;
   getTest: (id: string) => void;
   getQuestions: (id: string) => void;
   removeTestAttendance: (id :string) => Promise<boolean>;
   getTestAttendance: (id: string) => void;
+  getCandidates: (id: string) => void;
   setScoreAndStatus : (id :string, score: number , status: boolean) => void;
 }
 
@@ -25,16 +28,25 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
 
-  const { user } = useAuth();
+  const { user, roles, currentRole } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
-  const [ questions, setQuestions] = useState<Question[]>([]);
-  const [ testAttendance, setTestAttendance] = useState<TestAttendance | null>(null)
+  const [ questions, setQuestions ] = useState<Question[]>([]);
+  const [ testAttendance, setTestAttendance ] = useState<TestAttendance | null>(null)
+  const [ candidates, setCandidates ] = useState<User[]| undefined>(undefined)
 
   async function getTests() {
-    const url = `/tests/`;
-    const response = await instance.get(url);
-    setTests(response.data);
+    if (roles && currentRole){
+      let url = `/tests`;
+
+      if (currentRole.name === "Aplicador"){
+        url = `/tests/applicator`;
+      }
+
+      const response = await instance.get(url);
+      
+      setTests(response.data);
+    }
   }
 
   async function getTest(id: string) {
@@ -82,14 +94,20 @@ function TestProvider({ children }: TestProviderProps) {
     console.log(response.data);
   }
 
+  async function getCandidates(id : string) {
+    const url = `/users/candidates/`+id
+    const response = await instance.get(url);
+    setCandidates(response.data);
+  }
+
   useEffect(() => {
-    if(user) {
+    if(user && roles) {
       getTests();
     }
-  }, [ user ]);
+  }, [user, currentRole]);
 
   return(
-      <TestContext.Provider value={{ tests, test, getTest, removeTestAttendance, getQuestions, questions, setScoreAndStatus, testAttendance, getTestAttendance }}>
+      <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
         { children }
       </TestContext.Provider>
   );
