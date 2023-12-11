@@ -11,6 +11,7 @@ import AboutTest from "./pages/AboutTest";
 import Test from "./pages/Test.page";
 import IntroductionTestPage from "./pages/IntroductionTest.page";
 import TestLayout from "./layout/Test.Layout";
+import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
 
 export const Router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const Router = createBrowserRouter([
         path:"/comprovante-de-participacao/:id",
         element: <CandidateResult />,
       },
+      {
+        path: "/application/:id",
+        element: <ApplicatorTestPage />,
+      },
     ],
   },
   {
@@ -61,6 +66,7 @@ export const Router = createBrowserRouter([
     path: "/recuperar-senha",
     element: <RecoverPassword />, 
   },
+  
   {
     path: "/auth",
     element: <LoginLayout />,
