@@ -15,7 +15,7 @@ import Button from "../../components/Button";
 function ApplicatorTestPage() {
   const { id } = useParams()
   const { candidates, getCandidates, getTest, test, updateAttendance } = useTest();
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [isDisabled, setIsDisabled] = useState<boolean | undefined>(undefined);
 
   const [presents, setPresents] = useState<string[]>([])
 
@@ -42,6 +42,7 @@ function ApplicatorTestPage() {
     if (id){
       getTest(id)
       getCandidates(id)
+      
     }
   },[])
   
@@ -77,7 +78,7 @@ function ApplicatorTestPage() {
                   <TableCell align="center">{row.email}</TableCell>
                   <TableCell align="center">{row.firstName}</TableCell>
                   <TableCell align="center">{row.lastName}</TableCell>
-                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} disabled={isDisabled}/></TableCell>
+                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence === true ? true : isDisabled} disabled={row.testAttendances?.[0].presence === true ? true : isDisabled}/></TableCell>
                 </TableRow>
               ))}
             </TableBody>

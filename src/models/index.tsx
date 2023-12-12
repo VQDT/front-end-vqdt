@@ -18,7 +18,8 @@ export type Test = {
 
 type TestAttendance = {
   approved: boolean,
-  score: number
+  score: number,
+  presence: boolean
 }
 
 export type User = {
@@ -33,6 +34,7 @@ export type User = {
   occupation: string;
   idAddress: string;
   password?: string;
+  testAttendances: TestAttendance[]
 }
 
 export type Role = {
