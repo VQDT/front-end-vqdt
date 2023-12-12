@@ -20,7 +20,11 @@ interface Props {
 }
 
 const drawerWidth = 240;
-const navItems = [
+
+
+function Header({ window }: Props) {
+  
+  const navItems = [
   {
     name: "Provas",
     to: "/",
@@ -36,12 +40,19 @@ const navItems = [
   
 ];
 
-function Header({ window }: Props) {
-
   const [mobileOpen, setMobileOpen] = useState(false)
   
   const { loggout, getRole, roles, currentRole } = useAuth();
   const [currentRoleSelected, setCurrentRoleSelected] = useState<string | undefined | ''>(currentRole?.toString());
+
+  //Applicator.id === 2 || Candidate.id === 3
+  
+  if(currentRole?.id === 2){
+    navItems.unshift({
+      name: "Preparatório",
+      to: "/preparatorio",
+    })
+  }
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const { value }  = event.target
