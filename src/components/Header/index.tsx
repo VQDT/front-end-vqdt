@@ -47,7 +47,7 @@ function Header({ window }: Props) {
 
   //Applicator.id === 2 || Candidate.id === 3
   
-  if(currentRole?.id === 2){
+  if(currentRole?.name === "Aplicador"){
     navItems.unshift({
       name: "Preparatório",
       to: "/preparatorio",

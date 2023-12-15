@@ -78,3 +78,30 @@ type Address = {
     state: string,
     zipCode: string
 }
+
+export type Course = {
+  id: string, 
+  numberDays: string,
+  idSchool: string,
+  idApplicator: string,
+  idCreator: string,
+  school: string,
+  applicator: string,
+  title: string,
+  creator: string
+}
+
+export type CourseDay = {
+  id: string, 
+  timeStart: string,
+  timeEnd: string,
+  idCourse: string
+  course: Course
+}
+
+export type CourseAttendance = {
+  id: string,
+  presence: string,
+  idCourseDay: string,
+  idCandidate: string
+}

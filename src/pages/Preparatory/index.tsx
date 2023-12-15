@@ -2,14 +2,14 @@
 import ListCard from "../../components/ListCard";
 import TestCard from "../../components/TestCard";
 import Main from "../../components/Main";
-import useTest from "../../context/test/useTest";
 import {
   AiOutlineCalendar,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import isFuture from "../../utils/isFuture";
 import useAuth from "../../context/auth/useAuth";
-import { ReactElement } from "react";
+import { ReactElement, useEffect } from "react";
+import usePreparatory from "../../context/preparatory/usePreparatory";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -17,9 +17,19 @@ function NormalizeDate(date: string) {
 
 function PreparatoryPainel() {
 
-  const { roles, currentRole } = useAuth();
-  const { tests } = useTest();
+  const { user, roles, currentRole } = useAuth();
+  const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
+
   const navigation = useNavigate();
+
+  useEffect(() => {
+    if (currentRole && currentRole.id !== 1){
+      navigation("/")
+    }
+    else if(user){
+      getPreparatoryCourseDays(user.id)
+    }
+  })
 
   function navigateApplicatorTest(id: string) {
     navigation("/application/" + id);
@@ -27,68 +37,47 @@ function PreparatoryPainel() {
 
   let listFuturePreparatoryDays: ReactElement[] = [];
   let listPastPreparatoryDays: ReactElement[] = [];
-
-  console.log(tests)
-  if(roles && currentRole){
-      listFuturePreparatoryDays = tests
+  
+  if(roles && currentRole && CourseDays){
+      listFuturePreparatoryDays = CourseDays
       .filter(
-        (test) => !isFuture(test.timeEnd)
+        (day) => !isFuture(day.timeEnd)
       )
-      .map((test) => {
+      .map((day) => {
         return (
           <TestCard
-            key={test.id}
-            title={test.name}
-            description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            key={day.id}
+            title={day.course.title+ " - DIA" + day.id }
+            description="descrição"
+            subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateApplicatorTest(test.id)}
+            handleClick={() => navigateApplicatorTest(day.id)}
           />
         )
       })
   
-      listPastPreparatoryDays = tests
+      listPastPreparatoryDays = CourseDays
       .filter(
-        (test) => isFuture(test.timeEnd)
+        (day) => isFuture(day.timeEnd)
       )
-      .map((test) => {
+      .map((day) => {
         return (
           <TestCard
-            key={test.id}
-            title={test.name}
-            description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            key={day.id}
+            title={day.course.title + " - DIA" + day.id }
+            description="descrição"
+            subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateApplicatorTest(test.id)}
+            handleClick={() => navigateApplicatorTest(day.id)}
           />
         )
       })
   }
   
-  //FOR APPLICATOR ROLE
-  function header1() {
-    if (roles && currentRole && roles.length > 0) {
-      if (currentRole.name === "Candidato") {
-        return "PROVAS AGENDADAS";
-      } else if (currentRole.name === "Aplicador") {
-        return "APLICAÇÕES AGENDADAS";
-      }
-    }
-  }
-
-  function header2() {
-    if (roles && currentRole && roles.length > 0) {
-      if (currentRole.name === "Candidato") {
-        return "PROVAS REALIZADAS";
-      } else if (currentRole.name === "Aplicador") {
-        return "APLICAÇÕES REALIZADAS";
-      }
-    }
-  }
 
   return (
     <Main>
-      <h2 className="text-Blue text-lg font-bold uppercase">{header1()}</h2>
+      <h2 className="text-Blue text-lg font-bold uppercase">CURSOS ABERTOS</h2>
       <ListCard>
         {
           listFuturePreparatoryDays.length > 0 ? (
@@ -100,7 +89,7 @@ function PreparatoryPainel() {
           )
         }
       </ListCard>
-      <h2 className="text-Blue text-lg font-bold uppercase">{header2()}</h2>
+      <h2 className="text-Blue text-lg font-bold uppercase">CURSOS FINALIZADOS</h2>
       <ListCard>
         {
           listPastPreparatoryDays.length > 0 ? (
