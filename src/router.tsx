@@ -12,6 +12,7 @@ import Test from "./pages/Test.page";
 import IntroductionTestPage from "./pages/IntroductionTest.page";
 import TestLayout from "./layout/Test.Layout";
 import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
+import CourseAttendancePage from "./pages/Preparatory/courseAttendance.page";
 
 export const Router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const Router = createBrowserRouter([
       {
         path: "/preparatorio",
         element: <Preparatory />,
+      },
+      {
+        path: "/courseDay/:id",
+        element: <CourseAttendancePage />
       },
       {
         path: "/provas/:id",

@@ -31,8 +31,8 @@ function PreparatoryPainel() {
     }
   })
 
-  function navigateApplicatorTest(id: string) {
-    navigation("/application/" + id);
+  function navigateCourseDay(id: string) {
+    navigation("/courseDay/" + id);
   }
 
   let listFuturePreparatoryDays: ReactElement[] = [];
@@ -51,7 +51,7 @@ function PreparatoryPainel() {
             description="descrição"
             subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateApplicatorTest(day.id)}
+            handleClick={() => navigateCourseDay(day.id)}
           />
         )
       })
@@ -68,7 +68,7 @@ function PreparatoryPainel() {
             description="descrição"
             subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateApplicatorTest(day.id)}
+            handleClick={() => navigateCourseDay(day.id)}
           />
         )
       })
