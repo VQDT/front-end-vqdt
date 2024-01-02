@@ -23,7 +23,7 @@ function PreparatoryPainel() {
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (currentRole && currentRole.id !== 1){
+    if (currentRole && currentRole.id !== 2){
       navigation("/")
     }
     else if(user){

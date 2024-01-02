@@ -9,7 +9,7 @@ interface PreparatoryProviderProps {
 
 interface PreparatoryContextProps {
   CourseDays : CourseDay[] | undefined;
-  courseCandidates: User[] | undefined;
+  courseCandidates: {user:User}[] | undefined;
   getPreparatoryCourseDays : (id:string) => void;
   getCourseCandidates: (id:string) => void;
   updateCourseAttendance: (presents : string[], courseId : string) => void;
@@ -21,7 +21,7 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
 
   const { user, roles, currentRole } = useAuth();
   const [ CourseDays, setCouseDays ] = useState<CourseDay[]>([]);
-  const [ courseCandidates, setCourseCandidates ] = useState<User[]| undefined>(undefined);
+  const [ courseCandidates, setCourseCandidates ] = useState<{user:User}[]| undefined>(undefined);
   
   useEffect(() => {
     if(user){
@@ -45,10 +45,10 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
     }
   }
 
-  async function updateCourseAttendance(presents: string[], courseId: string){
-    const url = `/courseAttendance/presence/`;
+  async function updateCourseAttendance(presents: string[], courseDayId: string){
+    const url = `/courseAttendances/presence/`;
     presents.map(async (userId) => {
-      const response = await instance.put(url, { userId, courseId })
+      const response = await instance.put(url, { userId, courseDayId })
       console.log(response.data);
     })
   }

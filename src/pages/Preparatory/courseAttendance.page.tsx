@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
 import usePreparatory from "../../context/preparatory/usePreparatory";
-import { Course, User } from "../../models";
+import { CourseDay, User } from "../../models";
 
 function CourseAttendancePage() {
   const { id } = useParams()
@@ -19,7 +19,7 @@ function CourseAttendancePage() {
   const [isDisabled, setIsDisabled] = useState<boolean | undefined>(undefined);
 
   const [presents, setPresents] = useState<string[]>([])
-  const [currentCourse, setCurrentCourse] = useState<Course | undefined>(undefined)
+  const [currentCourseDay, setCurrentCourseDay] = useState<CourseDay | undefined>(undefined)
 
   function handleCheckbox(id: string){
     if(courseCandidates){
@@ -34,8 +34,8 @@ function CourseAttendancePage() {
   }
 
   function handleSubmit(){
-    if(currentCourse){
-      updateCourseAttendance(presents, currentCourse.id)
+    if(currentCourseDay){
+      updateCourseAttendance(presents, currentCourseDay.id)
     }
     setIsDisabled(true)
   }
@@ -44,15 +44,17 @@ function CourseAttendancePage() {
     if (id && CourseDays){
       const currentDay = CourseDays.filter(day => day.id === id)
       getCourseCandidates(currentDay[0].course.id)
-      setCurrentCourse(currentDay[0].course)
+      setCurrentCourseDay(currentDay[0])
     }
   },[])
+
+  console.log(courseCandidates)
   
   return (
     <Main>
       <header className="bg-Blue text-white p-5 mx-3 w-full rounded-md font-semibold text-2xl">
         {
-          currentCourse && currentCourse?.title
+          currentCourseDay && currentCourseDay?.course.title
         }        
       </header>
       {
@@ -69,18 +71,18 @@ function CourseAttendancePage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courseCandidates.map((row:User) => (
+              {courseCandidates.map(( row: { user: User }) => (
                 <TableRow
-                  key={row.cpf}
+                  key={row.user.cpf}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.cpf}
+                    {row.user.cpf}
                   </TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.firstName}</TableCell>
-                  <TableCell align="center">{row.lastName}</TableCell>
-                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence === true ? true : isDisabled} disabled={row.testAttendances?.[0].presence === true ? true : isDisabled}/></TableCell>
+                  <TableCell align="center">{row.user.email}</TableCell>
+                  <TableCell align="center">{row.user.firstName}</TableCell>
+                  <TableCell align="center">{row.user.lastName}</TableCell>
+                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.user.id)} checked={ row.user.testAttendances?.[0].presence === true ? true : isDisabled} disabled={row.user.testAttendances?.[0].presence === true ? true : isDisabled}/></TableCell>
                 </TableRow>
               ))}
             </TableBody>
