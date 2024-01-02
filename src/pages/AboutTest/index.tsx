@@ -70,6 +70,8 @@ function AboutTest({ variant = "default" }: AboutTest) {
       },
     } = test;
 
+    console.log(testPeriod, testAttendances?.[0].presence, testAttendances?.[0].testFinished)
+
     return (
       <>
         <Container>
@@ -78,17 +80,17 @@ function AboutTest({ variant = "default" }: AboutTest) {
               <span className="text-2xl uppercase">{name}</span>
             </Title>
             { 
-              isFuture(timeEnd) || testAttendances[0].testFinished
+              isFuture(timeEnd) || testAttendances?.[0].testFinished
                 ?<SubText
-                  variant={testAttendances[0].approved ? "confirm" : "alert"}
+                  variant={testAttendances?.[0].approved ? "confirm" : "alert"}
                 >
-                  {testAttendances[0].approved ? (
+                  {testAttendances?.[0].approved ? (
                     <AiOutlineCheckCircle size={36} />
                   ) : (
                     <AiOutlineCloseCircle size={36} />
                   )}
                   <p className="text-lg p-3">
-                    {testAttendances[0].approved ? "Aprovado" : "reprovado"}
+                    {testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
                   </p>
                 </SubText>
                 :<SubTextContainer>
@@ -134,15 +136,14 @@ function AboutTest({ variant = "default" }: AboutTest) {
           </ContainerLocalContent>
           <div className="flex gap-4 justify-between flex-wrap">
             {
-              testAttendances[0].testFinished ? null :
+              testAttendances?.[0].testFinished ? null :
               <Button variant="outline" color="alert" onClick={() => removeAttendance()}>
                 CANCELAR AGENDAMENTO
               </Button>
             }
             {
-              !testPeriod || testAttendances[0].testFinished ? null : (
-                <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
-              )
+              testPeriod && testAttendances?.[0].presence && !testAttendances?.[0].testFinished &&
+              <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
             }
           </div>
         </Container>

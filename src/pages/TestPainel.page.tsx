@@ -28,7 +28,7 @@ function TestPainel() {
   }
 
   function navigateApplicatorTest(id: string) {
-    navigation("/provas/application/" + id);
+    navigation("/application/" + id);
   }
 
   let listFutureTests: ReactElement[] = [];

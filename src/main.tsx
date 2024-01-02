@@ -5,12 +5,15 @@ import "./index.css";
 import router from "./router";
 import { AuthProvider } from "./context/auth/authContext"
 import { TestProvider } from "./context/test/testContext";
+import { PreparatoryProvider } from "./context/preparatory/preparatoryContext";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
       <TestProvider>
-        <RouterProvider router={router} />
+        <PreparatoryProvider>
+          <RouterProvider router={router} />
+        </PreparatoryProvider>
       </TestProvider>
     </AuthProvider>
   </React.StrictMode>,

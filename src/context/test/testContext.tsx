@@ -22,6 +22,7 @@ interface TestContextProps {
   getTestAttendance: (id: string) => void;
   getCandidates: (id: string) => void;
   setScoreAndStatus : (id :string, score: number , status: boolean) => void;
+  updateAttendance : (attendances : string[], testId : string) => void;
 }
 
 const TestContext = createContext<TestContextProps | null>(null);
@@ -100,6 +101,14 @@ function TestProvider({ children }: TestProviderProps) {
     setCandidates(response.data);
   }
 
+  async function updateAttendance(attendances : string[], testId : string){
+    const url = `/testAttendance/presence/`;
+    attendances.map(async (userId) => {
+      const response = await instance.put(url, { userId, testId })
+      console.log(response.data);
+    })
+  }
+
   useEffect(() => {
     if(user && roles) {
       getTests();
@@ -107,7 +116,7 @@ function TestProvider({ children }: TestProviderProps) {
   }, [user, currentRole]);
 
   return(
-      <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
+      <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, updateAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
         { children }
       </TestContext.Provider>
   );

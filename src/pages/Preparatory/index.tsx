@@ -1,28 +1,108 @@
 //import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
+import ListCard from "../../components/ListCard";
+import TestCard from "../../components/TestCard";
 import Main from "../../components/Main";
-import Table from "../../components/Table"
-function Preparatory() {
+import {
+  AiOutlineCalendar,
+} from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
+import isFuture from "../../utils/isFuture";
+import useAuth from "../../context/auth/useAuth";
+import { ReactElement, useEffect } from "react";
+import usePreparatory from "../../context/preparatory/usePreparatory";
 
-  const tableRegisters = [
-    {
-      id: "001",
-      name: "davidson",
-      sobrenome: "aguiar",
-      dataNascimento: "12/10/1993"
-    },
-    {
-      id: "002",
-      name: "agatha",
-      sobrenome: "aguiar",
-      dataNascimento: "22/11/2014"
+function NormalizeDate(date: string) {
+  return date.split("T")[0].split("-").reverse().join("/");
+}
+
+function PreparatoryPainel() {
+
+  const { user, roles, currentRole } = useAuth();
+  const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
+
+  const navigation = useNavigate();
+
+  useEffect(() => {
+    if (currentRole && currentRole.id !== 1){
+      navigation("/")
     }
-  ]  
+    else if(user){
+      getPreparatoryCourseDays(user.id)
+    }
+  })
+
+  function navigateCourseDay(id: string) {
+    navigation("/courseDay/" + id);
+  }
+
+  let listFuturePreparatoryDays: ReactElement[] = [];
+  let listPastPreparatoryDays: ReactElement[] = [];
+  
+  if(roles && currentRole && CourseDays){
+      listFuturePreparatoryDays = CourseDays
+      .filter(
+        (day) => !isFuture(day.timeEnd)
+      )
+      .map((day) => {
+        return (
+          <TestCard
+            key={day.id}
+            title={day.course.title+ " - DIA" + day.id }
+            description="descrição"
+            subText={NormalizeDate(day.timeStart)}
+            icon={AiOutlineCalendar}
+            handleClick={() => navigateCourseDay(day.id)}
+          />
+        )
+      })
+  
+      listPastPreparatoryDays = CourseDays
+      .filter(
+        (day) => isFuture(day.timeEnd)
+      )
+      .map((day) => {
+        return (
+          <TestCard
+            key={day.id}
+            title={day.course.title + " - DIA" + day.id }
+            description="descrição"
+            subText={NormalizeDate(day.timeStart)}
+            icon={AiOutlineCalendar}
+            handleClick={() => navigateCourseDay(day.id)}
+          />
+        )
+      })
+  }
+  
 
   return (
     <Main>
-      <Table registros={tableRegisters}/>
+      <h2 className="text-Blue text-lg font-bold uppercase">CURSOS ABERTOS</h2>
+      <ListCard>
+        {
+          listFuturePreparatoryDays.length > 0 ? (
+            listFuturePreparatoryDays
+          ) : (
+            <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+              Não há provas agendadas
+            </div>
+          )
+        }
+      </ListCard>
+      <h2 className="text-Blue text-lg font-bold uppercase">CURSOS FINALIZADOS</h2>
+      <ListCard>
+        {
+          listPastPreparatoryDays.length > 0 ? (
+            listPastPreparatoryDays
+          ) : (
+            <div className="w-full h-44 text-Concrete text-lg font-medium flex items-center justify-center">
+              Não há provas finalizadas
+            </div>
+          )
+        }
+      </ListCard>
     </Main>
   );
 }
 
-export default Preparatory;
+export default PreparatoryPainel;
