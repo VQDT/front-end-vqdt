@@ -32,11 +32,15 @@ function Test() {
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
 
+
+
   useEffect(() => {
     if (id) {
       getTest(id), getQuestions(id);
     }
   }, []);
+
+  const numberOfQuestions = questions.length;
 
   function changeOpenEncerramento() {
     setOpenEncerramento((prev) => !prev);
@@ -54,8 +58,7 @@ function Test() {
       list.map((item) => {
         questions
           .find((q) => q.id === item.idQuestion)
-          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct ===
-          true && score++;
+          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct === true && score++;
       });
       if (score >= test.numberQuestion / 2) {
         status = true;
@@ -223,10 +226,10 @@ function Test() {
             <span className="text-Midnight text-6xl font-bold">
               {list.length}
             </span>{" "}
-            de {test?.numberQuestion}
+            de {numberOfQuestions}
           </p>
           <p className="mt-3 text-Secondary text-center text-base font-semibold">
-            Restam {test!.numberQuestion - list.length} questões
+            Restam {numberOfQuestions - list.length} questões
           </p>
         </Card.Container>
         <Button color="warning" size="w-full" onClick={changeOpenEncerramento}>
@@ -241,19 +244,19 @@ function Test() {
       {openEncerramento && (
         <Modal
           text={
-            test!.numberQuestion - list.length > 0
+            numberOfQuestions - list.length > 0
               ? `Deseja mesmo encerrar a prova? Ainda há ${
-                  test!.numberQuestion - list.length
+                numberOfQuestions - list.length
                 } questões sem resposta.`
               : `Deseja mesmo encerrar a prova?`
           }
           title="Atenção"
-          variant={test!.numberQuestion - list.length > 0 ? "alert" : "default"}
+          variant={numberOfQuestions - list.length > 0 ? "alert" : "default"}
           inputs
           buttons={[
             <Button
               variant={
-                test!.numberQuestion - list.length > 0 ? undefined : "outline"
+                numberOfQuestions - list.length > 0 ? undefined : "outline"
               }
               onClick={changeOpenEncerramento}
             >
@@ -262,10 +265,10 @@ function Test() {
             </Button>,
             <Button
               variant={
-                test!.numberQuestion - list.length > 0 ? "outline" : undefined
+                numberOfQuestions - list.length > 0 ? "outline" : undefined
               }
               color={
-                test!.numberQuestion - list.length > 0 ? "alert" : "default"
+                numberOfQuestions - list.length > 0 ? "alert" : "default"
               }
               onClick={changeOpenPassword}
             >

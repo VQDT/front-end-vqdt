@@ -22,7 +22,8 @@ interface TestContextProps {
   getTestAttendance: (id: string) => void;
   getCandidates: (id: string) => void;
   setScoreAndStatus : (id :string, score: number , status: boolean) => void;
-  updateAttendance : (attendances : string[], testId : string) => void;
+  updateAttendance : (attendances : User[], test : Test) => void;
+  updateCandidateList: (id : string) => void;
 }
 
 const TestContext = createContext<TestContextProps | null>(null);
@@ -56,15 +57,6 @@ function TestProvider({ children }: TestProviderProps) {
     setTest(response.data);
   }
 
-  async function removeTestAttendance(id: string) {
-    const url = `/testAttendance/` + id;
-    const response = await instance.delete(url);
-    if (response.status === 200){
-      return true;
-    }
-    return false;
-  }
-
   async function getQuestions(id : string) {
     const url = `/questions/test/` + id;
     
@@ -89,34 +81,58 @@ function TestProvider({ children }: TestProviderProps) {
     }
   }
 
+  async function getCandidates(id : string) {
+    const url = `/users/candidates/`+id
+    const response = await instance.get(url);
+    setCandidates(response.data);
+  }
+  
   async function setScoreAndStatus(testId: string, score : number, status : boolean){
     const url = `/testAttendance/result/`;
     const response = await instance.put(url, { testId, score, status });
     console.log(response.data);
   }
 
-  async function getCandidates(id : string) {
-    const url = `/users/candidates/`+id
-    const response = await instance.get(url);
-    setCandidates(response.data);
-  }
-
-  async function updateAttendance(attendances : string[], testId : string){
+  async function updateAttendance(attendances : User[], test: Test){
     const url = `/testAttendance/presence/`;
-    attendances.map(async (userId) => {
-      const response = await instance.put(url, { userId, testId })
+    attendances.map(async (user) => {
+      const userId = user.id;
+      const response = await instance.put(url, { userId, test })
       console.log(response.data);
     })
   }
 
+  function updateCandidateList(id : string){
+    if(candidates){
+      const newList = candidates.map(user => {
+        if(user.id === id) {
+          user.testAttendances[0].presence = !user.testAttendances[0].presence
+        }
+        console.log(user)
+        return user;
+      })
+      setCandidates(newList)
+    }
+    
+  } 
+
+  async function removeTestAttendance(id: string) {
+    const url = `/testAttendance/` + id;
+    const response = await instance.delete(url);
+    if (response.status === 200){
+      return true;
+    }
+    return false;
+  }
+  
   useEffect(() => {
     if(user && roles) {
       getTests();
     }
-  }, [user, currentRole]);
+  }, [user, currentRole, testAttendance?.score]);
 
   return(
-      <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, updateAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
+      <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, updateCandidateList, updateAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
         { children }
       </TestContext.Provider>
   );

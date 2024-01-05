@@ -47,7 +47,7 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title+ " - DIA" + day.id }
+            title={day.course.title + " - DIA " + day.id }
             description="descrição"
             subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
@@ -64,7 +64,7 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title + " - DIA" + day.id }
+            title={day.course.title + " - DIA " + day.id }
             description="descrição"
             subText={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}

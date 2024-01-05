@@ -12,6 +12,7 @@ export type Test = {
   idCreator: string;
   idClassroom: string;
   classroom: classroom;
+  frequencyFinished: boolean;
   questionId: string | null;
   testAttendances: TestAttendance[]
 }
@@ -35,6 +36,7 @@ export type User = {
   idAddress: string;
   password?: string;
   testAttendances: TestAttendance[]
+  courseAttendances: CourseAttendance[]
 }
 
 export type Role = {
@@ -93,15 +95,19 @@ export type Course = {
 
 export type CourseDay = {
   id: string, 
+  title: string,
+  frequencyFinished: boolean,
   timeStart: string,
   timeEnd: string,
   idCourse: string
   course: Course
+  isFinished: boolean
 }
 
 export type CourseAttendance = {
   id: string,
-  presence: string,
+  presence: boolean,
+  user: User,
   idCourseDay: string,
   idCandidate: string
 }

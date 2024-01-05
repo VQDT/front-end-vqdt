@@ -7,7 +7,7 @@ import { AiOutlineArrowLeft } from 'react-icons/ai';
 
 function CandidateResult() {
 
-    const { test, getTest, getTestAttendance, testAttendance } = useTest();
+    const { test, getTest, getTestAttendance, testAttendance, questions } = useTest();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate()
 
@@ -20,7 +20,7 @@ function CandidateResult() {
 
     const approved = (testAttendance && test) && (
         <CandidateApproved
-            maxScore={test.numberQuestion}
+            maxScore={questions.length}
             score={testAttendance.score}
             status={testAttendance.approved}
         />
