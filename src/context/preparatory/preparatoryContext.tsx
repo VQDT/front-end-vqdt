@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 import useAuth from "../auth/useAuth";
 import instance from "../../axios";
-import { CourseAttendance, CourseDay } from "../../models";
+import { CourseAttendance, CourseDay } from "../../models/Course";
 
 interface PreparatoryProviderProps {
   children: ReactNode;

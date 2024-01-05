@@ -4,7 +4,7 @@ import { Test } from "../../models/Test";
 import instance from "../../axios";
 import { Question } from "../../models/Question";
 import { TestAttendance } from "../../models/TestAttendance";
-import { User } from "../../models";
+import { User } from "../../models/User";
 
 interface TestProviderProps {
   children: ReactNode;

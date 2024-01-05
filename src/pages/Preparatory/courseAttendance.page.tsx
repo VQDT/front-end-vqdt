@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
 import usePreparatory from "../../context/preparatory/usePreparatory";
-import { CourseAttendance, CourseDay } from "../../models";
+import { CourseAttendance, CourseDay } from "../../models/Course";
 
 function CourseAttendancePage() {
   const { id } = useParams();

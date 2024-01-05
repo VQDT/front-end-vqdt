@@ -1,6 +1,7 @@
 import instance from "../../axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Role, sessionUser, User } from "../../models";
+import { sessionUser, User } from "../../models/User";
+import { Role } from "../../models/Role";
 import {
   deleteTokenSessinStorage,
   deleteUserSessionStorage,
