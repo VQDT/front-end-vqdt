@@ -34,9 +34,10 @@ function TestPainel() {
   let listFutureTests: ReactElement[] = [];
   let listPastTests: ReactElement[] = [];
 
-  console.log(tests)
+  const isRoleCondidate = currentRole?.name === "Candidato";
+
   if(roles && currentRole){
-    if (currentRole.name === "Candidato"){
+    if (isRoleCondidate){
       listFutureTests = tests
       .filter(
         (test) => !isFuture(test.timeEnd) && !test.testAttendances?.[0].testFinished
@@ -47,7 +48,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateTest(test.id)}
           />
@@ -64,7 +65,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
+            textAux={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
             icon={
               test.testAttendances?.[0].approved
                 ? AiOutlineCheckCircle
@@ -87,7 +88,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateApplicatorTest(test.id)}
           />
@@ -104,7 +105,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateApplicatorTest(test.id)}
           />

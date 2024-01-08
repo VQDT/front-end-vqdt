@@ -10,7 +10,9 @@ function CardContainer({ children, direction = "row" }: CardContainerProps) {
     <div
       className={`
         w-full max-w-[300px] p-3 
-        bg-White rounded-xl shadow-md flex items-center justify-between ${direction === "col" && "flex-col"}`}
+        bg-White rounded-xl shadow-md flex items-center justify-between ${
+          direction === "col" && "flex-col"
+        }`}
     >
       {children}
     </div>
