@@ -1,20 +1,18 @@
 import z from "zod";
-export interface Role {
-  id: number;
-  name: string;
-}
+import { Role } from "./Role";
 
-export interface UserOutput {
+export interface User {
   id: string;
   firstName: string;
   lastName: string;
   cpf: string;
+  email: string;
+  gender: string;
+  race: string;
+  phone: string;
+  occupation: string;
+  idAddress: string;
   roles: Role[];
-}
-
-export interface AuthenticationOutput {
-  user: UserOutput;
-  tkoen: string;
 }
 
 export const LoginInputSchema = z.object({

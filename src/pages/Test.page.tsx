@@ -174,10 +174,6 @@ function Test() {
     }
   }, [checkTimeEnd]);
 
-  interface listaPorAreaDoConhecimento {
-    area: string
-    question: string[]
-  }
 
   const questionList = questions?.map(
     ({ id, type, knowledgeArea, alternatives, ContentAux }, index) => {
