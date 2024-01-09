@@ -113,7 +113,7 @@ function TestProvider({ children }: TestProviderProps) {
     if(user && roles) {
       getTests();
     }
-  }, [user, currentRole]);
+  }, [user, currentRole, testAttendance]);
 
   return(
       <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, updateAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>

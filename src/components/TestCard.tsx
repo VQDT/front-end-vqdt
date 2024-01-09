@@ -32,7 +32,7 @@ function TestCard({
         variant={variant}
         icon={Icon}
       />
-      <div className="h-24 py-1">
+      <div className="h-24 py-1 overflow-hidden">
         <p className="text-Darker text-base">{description}</p>
       </div>
     </div>

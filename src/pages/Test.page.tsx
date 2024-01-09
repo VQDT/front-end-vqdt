@@ -64,8 +64,6 @@ function Test() {
     return acc;
   }, []);
 
-  console.log(areaDoConhecimentoList)
-
   const listAreaDoConhecimento = areaDoConhecimentoList.map((resposta) => {
     const nQuestionResp = list.filter((item) => {
       return resposta.question.includes(item.idQuestion);
@@ -245,10 +243,6 @@ function Test() {
           Progresso
         </h3>
         <ul className="flex flex-col gap-3">
-          {/* <SubjectCard done="5" total="10" subject="LINGUAGENS" />
-          <SubjectCard done="5" total="10" subject="MATEMÁTICA" />
-          <SubjectCard done="5" total="10" subject="HUMANAS" />
-          <SubjectCard done="5" total="10" subject="NATUREZA" /> */}
           { listAreaDoConhecimento }
         </ul>
         <Card.Container direction="col">
