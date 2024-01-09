@@ -22,11 +22,6 @@ function TestPainel() {
   const { tests } = useTest();
   const navigation = useNavigate();
 
-  
-  function navigateTest(id: string) {
-    navigation("/provas/" + id);
-  }
-
   function navigateApplicatorTest(id: string) {
     navigation("/application/" + id);
   }
@@ -34,9 +29,10 @@ function TestPainel() {
   let listFutureTests: ReactElement[] = [];
   let listPastTests: ReactElement[] = [];
 
-  console.log(tests)
+  const isRoleCondidate = currentRole?.name === "Candidato";
+
   if(roles && currentRole){
-    if (currentRole.name === "Candidato"){
+    if (isRoleCondidate){
       listFutureTests = tests
       .filter(
         (test) => !isFuture(test.timeEnd) && !test.testAttendances?.[0].testFinished
@@ -47,9 +43,9 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateTest(test.id)}
+            handleClick={() => navigation("/provas/" + test.id)}
           />
         );
       });
@@ -64,14 +60,14 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
+            textAux={test.testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
             icon={
               test.testAttendances?.[0].approved
                 ? AiOutlineCheckCircle
                 : AiOutlineCloseCircle
             }
             variant={test.testAttendances?.[0].approved ? "confirm" : "alert"}
-            handleClick={() => navigateTest(test.id)}
+            handleClick={() => navigation("/provas/" + test.id)}
           />
         );
       });
@@ -87,7 +83,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateApplicatorTest(test.id)}
           />
@@ -104,7 +100,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateApplicatorTest(test.id)}
           />

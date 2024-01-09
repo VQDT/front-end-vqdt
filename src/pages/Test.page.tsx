@@ -31,6 +31,7 @@ function Test() {
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
+  const totalQuestions = questions.length;
 
 
 
@@ -50,6 +51,36 @@ function Test() {
     openEncerramento && setOpenEncerramento(false);
     setopenPassword((prev) => !prev);
   }
+
+  interface listaPorAreaDoConhecimento {
+    area: string
+    question: string[]
+  }
+
+  const areaDoConhecimentoList = questions?.reduce((acc: listaPorAreaDoConhecimento[], question) => {
+    const { knowledgeArea } = question;
+    const areaExist = acc.findIndex((item) => item.area === knowledgeArea)
+    if(areaExist === -1) {
+      acc.push({ area: knowledgeArea, question: [question.id] })
+    } else {
+      acc[areaExist].question.push(question.id)
+    }
+    return acc;
+  }, []);
+
+  const listAreaDoConhecimento = areaDoConhecimentoList.map((resposta) => {
+    const nQuestionResp = list.filter((item) => {
+      return resposta.question.includes(item.idQuestion);
+    })
+
+    return (
+      <SubjectCard 
+        done={nQuestionResp.length.toString()}
+        total={resposta.question.length.toString()} 
+        subject={resposta.area} 
+      />
+    );
+  })
 
   function calculateResult() {
     if (test) {
@@ -215,10 +246,7 @@ function Test() {
           Progresso
         </h3>
         <ul className="flex flex-col gap-3">
-          <SubjectCard done="5" total="10" subject="LINGUAGENS" />
-          <SubjectCard done="5" total="10" subject="MATEMÁTICA" />
-          <SubjectCard done="5" total="10" subject="HUMANAS" />
-          <SubjectCard done="5" total="10" subject="NATUREZA" />
+          { listAreaDoConhecimento }
         </ul>
         <Card.Container direction="col">
           <Card.Title text="QUESTÕES FEITAS" />
@@ -226,10 +254,10 @@ function Test() {
             <span className="text-Midnight text-6xl font-bold">
               {list.length}
             </span>{" "}
-            de {numberOfQuestions}
+            de {totalQuestions}
           </p>
           <p className="mt-3 text-Secondary text-center text-base font-semibold">
-            Restam {numberOfQuestions - list.length} questões
+            Restam {totalQuestions - list.length} questões
           </p>
         </Card.Container>
         <Button color="warning" size="w-full" onClick={changeOpenEncerramento}>
@@ -244,19 +272,19 @@ function Test() {
       {openEncerramento && (
         <Modal
           text={
-            numberOfQuestions - list.length > 0
+            totalQuestions - list.length > 0
               ? `Deseja mesmo encerrar a prova? Ainda há ${
-                numberOfQuestions - list.length
+                totalQuestions - list.length
                 } questões sem resposta.`
               : `Deseja mesmo encerrar a prova?`
           }
           title="Atenção"
-          variant={numberOfQuestions - list.length > 0 ? "alert" : "default"}
+          variant={totalQuestions - list.length > 0 ? "alert" : "default"}
           inputs
           buttons={[
             <Button
               variant={
-                numberOfQuestions - list.length > 0 ? undefined : "outline"
+                totalQuestions - list.length > 0 ? undefined : "outline"
               }
               onClick={changeOpenEncerramento}
             >
@@ -265,10 +293,10 @@ function Test() {
             </Button>,
             <Button
               variant={
-                numberOfQuestions - list.length > 0 ? "outline" : undefined
+                totalQuestions - list.length > 0 ? "outline" : undefined
               }
               color={
-                numberOfQuestions - list.length > 0 ? "alert" : "default"
+                totalQuestions - list.length > 0 ? "alert" : "default"
               }
               onClick={changeOpenPassword}
             >
@@ -296,7 +324,7 @@ function Test() {
             <Button
               onClick={changeOpenPassword}
               variant={
-                test!.numberQuestion - list.length > 0 ? undefined : "outline"
+                totalQuestions - list.length > 0 ? undefined : "outline"
               }
             >
               <AiOutlineArrowLeft />
@@ -304,10 +332,10 @@ function Test() {
             </Button>,
             <Button
               variant={
-                test!.numberQuestion - list.length > 0 ? "outline" : undefined
+                totalQuestions - list.length > 0 ? "outline" : undefined
               }
               color={
-                test!.numberQuestion - list.length > 0 ? "alert" : "default"
+                totalQuestions - list.length > 0 ? "alert" : "default"
               }
               type="submit"
               onClick={handleSubmit}
