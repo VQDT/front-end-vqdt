@@ -17,6 +17,7 @@ export interface Test {
   classroom: classroom;
   questionId: string | null;
   milliseconds: number;
+  frequencyFinished: boolean;
   testPeriod: boolean;
   testAttendances?: TestAttendance[]
 }

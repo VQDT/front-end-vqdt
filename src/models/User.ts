@@ -1,7 +1,13 @@
 import z from "zod";
-import { Role } from "./Role";
+import { TestAttendance } from "./TestAttendance";
+import { CourseAttendance } from "./Course";
 
-export interface User {
+export interface Role {
+  id:number;
+  name: string
+}
+
+export type UserOutput = {
   id: string;
   firstName: string;
   lastName: string;
@@ -12,7 +18,28 @@ export interface User {
   phone: string;
   occupation: string;
   idAddress: string;
+  password?: string;
   roles: Role[];
+  testAttendances: TestAttendance[]
+  courseAttendances: CourseAttendance[]
+}
+
+export interface AuthenticationOutput {
+  user: UserOutput;
+  token: string;
+}
+
+export type sessionUser = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  cpf: string;
+  email: string;
+  gender: string;
+  race: string;
+  phone: string;
+  occupation: string;
+  idAddress: string;
 }
 
 export const LoginInputSchema = z.object({

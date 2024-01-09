@@ -18,9 +18,14 @@ function NormalizeDate(date: string) {
 
 function TestPainel() {
 
-  const { roles, currentRole } = useAuth();
+  const { user, currentRole } = useAuth();
   const { tests } = useTest();
+  const roles = user?.roles;
   const navigation = useNavigate();
+  
+  function navigateTest(id: string) {
+    navigation("/provas/" + id);
+  }
 
   function navigateApplicatorTest(id: string) {
     navigation("/application/" + id);
@@ -29,10 +34,8 @@ function TestPainel() {
   let listFutureTests: ReactElement[] = [];
   let listPastTests: ReactElement[] = [];
 
-  const isRoleCondidate = currentRole?.name === "Candidato";
-
   if(roles && currentRole){
-    if (isRoleCondidate){
+    if (currentRole.name === "Candidato"){
       listFutureTests = tests
       .filter(
         (test) => !isFuture(test.timeEnd) && !test.testAttendances?.[0].testFinished
@@ -45,7 +48,7 @@ function TestPainel() {
             description={test.description}
             textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigation("/provas/" + test.id)}
+            handleClick={() => navigateTest(test.id)}
           />
         );
       });
@@ -67,7 +70,7 @@ function TestPainel() {
                 : AiOutlineCloseCircle
             }
             variant={test.testAttendances?.[0].approved ? "confirm" : "alert"}
-            handleClick={() => navigation("/provas/" + test.id)}
+            handleClick={() => navigateTest(test.id)}
           />
         );
       });

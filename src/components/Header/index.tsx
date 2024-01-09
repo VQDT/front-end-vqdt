@@ -25,27 +25,24 @@ const drawerWidth = 240;
 function Header({ window }: Props) {
   
   const navItems = [
-  {
-    name: "Provas",
-    to: "/",
-  },
-  {
-    name: "changeRole",
-    to: ""
-  },
-  {
-    name: "Sair",
-    to: "/auth",
-  },
-  
-];
+    {
+      name: "Provas",
+      to: "/",
+    },
+    {
+      name: "changeRole",
+      to: ""
+    },
+    {
+      name: "Sair",
+      to: "/auth",
+    },
+    
+  ];
 
   const [mobileOpen, setMobileOpen] = useState(false)
-  
-  const { loggout, getRole, roles, currentRole } = useAuth();
-  const [currentRoleSelected, setCurrentRoleSelected] = useState<string | undefined | ''>(currentRole?.toString());
-
-  //Applicator.id === 2 || Candidate.id === 3
+  const { user, loggout, currentRole, changeCurrentRole } = useAuth();
+  const roles = user?.roles
   
   if(currentRole?.name === "Aplicador"){
     navItems.unshift({
@@ -55,14 +52,10 @@ function Header({ window }: Props) {
   }
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    const { value }  = event.target
-    if (typeof value === "string") {
-      getRole(value);
-    }
-    setCurrentRoleSelected(event.target.value as string)
+    const value = event.target.value;
+    const role = roles?.find((role) => role.id === Number(value));
+    if(role) changeCurrentRole(role);
   };
-  
-  console.log(currentRole)
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
@@ -87,6 +80,15 @@ function Header({ window }: Props) {
     );
   });
 
+  const selectRole =  (
+    <Select
+      value={currentRole?.id.toString()}
+      onChange={handleChange}
+      className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
+      options={roles}
+    />
+  );
+
   const linkList = navItems.map((item) => {
     if (item.name === "Sair") {
       return (
@@ -108,13 +110,7 @@ function Header({ window }: Props) {
     else if (item.name === "changeRole") {
       return(
         roles && roles.length > 1 &&
-        <Select
-          value={currentRoleSelected}
-          onChange={handleChange}
-          className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
-          options={roles}
-          
-        />
+        selectRole
       )
     }
     else {
@@ -134,8 +130,6 @@ function Header({ window }: Props) {
     }
   });
 
-  console.log(roles)
-
   const drawer = (
     <>
       <Box onClick={handleDrawerToggle}>
@@ -145,12 +139,7 @@ function Header({ window }: Props) {
         <List className="flex-nowrap">
           {
             roles && roles.length > 1 &&
-              <Select
-                value={currentRoleSelected}
-                onChange={handleChange}
-                className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
-                options={roles}
-              />
+            selectRole
           }
           {linkListDrawer}
         </List>

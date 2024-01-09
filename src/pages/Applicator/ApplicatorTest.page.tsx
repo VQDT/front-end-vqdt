@@ -11,29 +11,23 @@ import TableBody from "@mui/material/TableBody";
 import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
+import isFuture from "../../utils/isFuture";
 
 function ApplicatorTestPage() {
   const { id } = useParams()
-  const { candidates, getCandidates, getTest, test, updateAttendance } = useTest();
-  const [isDisabled, setIsDisabled] = useState<boolean | undefined>(undefined);
+  const { candidates, getCandidates, getTest, test, updateAttendance, updateCandidateList } = useTest();
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-  const [presents, setPresents] = useState<string[]>([])
 
   function handleCheckbox(id: string){
-    if(test){
-      if (presents.indexOf(id) > -1){
-        const newPresents = presents.filter((element) => element !== id);
-        setPresents(newPresents)
-      }
-      else{
-        setPresents([...presents, id])
-      }
+    if(test && candidates){
+      updateCandidateList(id)
     }
   }
 
   function handleSubmit(){
-    if(test){
-      updateAttendance(presents, test.id)
+    if(test && candidates){
+      updateAttendance(candidates, test)
     }
     setIsDisabled(true)
   }
@@ -42,10 +36,13 @@ function ApplicatorTestPage() {
     if (id){
       getTest(id)
       getCandidates(id)
-      
+      if(test){
+        const time = new Date(test.timeEnd).getTime()/2
+        setIsDisabled(!isFuture(time.toString()))
+      }
     }
   },[])
-  
+
   return (
     <Main>
       <header className="bg-Blue text-white p-5 mx-3 w-full rounded-md font-semibold text-2xl">
@@ -61,8 +58,8 @@ function ApplicatorTestPage() {
               <TableRow className="text-sky-500">
                 <TableCell className="text-sky-500">CPF</TableCell>
                 <TableCell align="center">EMAIL</TableCell>
-                <TableCell align="center">PRIMEIRO NOME</TableCell>
-                <TableCell align="center">ULTIMO NOME</TableCell>
+                <TableCell align="center">NOME</TableCell>
+                <TableCell align="center">FEZ O CURSO</TableCell>
                 <TableCell align="center">PRESENÇA</TableCell>
               </TableRow>
             </TableHead>
@@ -76,17 +73,18 @@ function ApplicatorTestPage() {
                     {row.cpf}
                   </TableCell>
                   <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.firstName}</TableCell>
-                  <TableCell align="center">{row.lastName}</TableCell>
-                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence === true ? true : isDisabled} disabled={row.testAttendances?.[0].presence === true ? true : isDisabled}/></TableCell>
+                  <TableCell align="center">{row.firstName + " " + row.lastName}</TableCell>
+                  <TableCell align="center">{row.courseAttendances?.[0].presence ? "SIM" : "NÃO"}</TableCell>
+                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence } disabled={isDisabled}/></TableCell>
                 </TableRow>
+
               ))}
             </TableBody>
           </Table>
         </TableContainer>
       }
       <div className="m-3">
-        <Button onClick={handleSubmit}>FINALIZAR FREQUÊNCIA</Button>
+        <Button onClick={handleSubmit} >FINALIZAR FREQUÊNCIA</Button>
       </div>
     </Main>
   );

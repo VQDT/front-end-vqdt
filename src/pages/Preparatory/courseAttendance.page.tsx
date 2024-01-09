@@ -11,40 +11,33 @@ import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
 import usePreparatory from "../../context/preparatory/usePreparatory";
-import { Course, User } from "../../models";
+import { CourseAttendance, CourseDay } from "../../models/Course";
 
 function CourseAttendancePage() {
-  const { id } = useParams()
-  const { CourseDays, courseCandidates, getCourseCandidates, updateCourseAttendance } = usePreparatory();
-  const [isDisabled, setIsDisabled] = useState<boolean | undefined>(undefined);
+  const { id } = useParams();
+  const { CourseDays, courseCandidates, getCourseCandidates, updateCourseAttendance, updateCandidateList } = usePreparatory();
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
-  const [presents, setPresents] = useState<string[]>([])
-  const [currentCourse, setCurrentCourse] = useState<Course | undefined>(undefined)
+  const [currentCourseDay, setCurrentCourseDay] = useState<CourseDay | undefined>(undefined)
 
   function handleCheckbox(id: string){
-    if(courseCandidates){
-      if (presents.indexOf(id) > -1){
-        const newPresents = presents.filter((element) => element !== id);
-        setPresents(newPresents)
-      }
-      else{
-        setPresents([...presents, id])
-      }
+    if(currentCourseDay && courseCandidates){
+      updateCandidateList(id)
     }
   }
 
   function handleSubmit(){
-    if(currentCourse){
-      updateCourseAttendance(presents, currentCourse.id)
+    if(currentCourseDay && courseCandidates){
+      updateCourseAttendance(courseCandidates, currentCourseDay.id)
     }
     setIsDisabled(true)
   }
   
   useEffect(()=> {
     if (id && CourseDays){
-      const currentDay = CourseDays.filter(day => day.id === id)
-      getCourseCandidates(currentDay[0].course.id)
-      setCurrentCourse(currentDay[0].course)
+      const currentDay : CourseDay[] = CourseDays.filter(day => day.id === id)
+      getCourseCandidates(currentDay[0].id)
+      setCurrentCourseDay(currentDay[0])
     }
   },[])
   
@@ -52,7 +45,7 @@ function CourseAttendancePage() {
     <Main>
       <header className="bg-Blue text-white p-5 mx-3 w-full rounded-md font-semibold text-2xl">
         {
-          currentCourse && currentCourse?.title
+          currentCourseDay && currentCourseDay?.course.title + " / " + currentCourseDay.title
         }        
       </header>
       {
@@ -69,18 +62,18 @@ function CourseAttendancePage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courseCandidates.map((row:User) => (
+              {courseCandidates.map(( row: CourseAttendance) => (
                 <TableRow
-                  key={row.cpf}
+                  key={row.user.cpf}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.cpf}
+                    {row.user.cpf}
                   </TableCell>
-                  <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.firstName}</TableCell>
-                  <TableCell align="center">{row.lastName}</TableCell>
-                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence === true ? true : isDisabled} disabled={row.testAttendances?.[0].presence === true ? true : isDisabled}/></TableCell>
+                  <TableCell align="center">{row.user.email}</TableCell>
+                  <TableCell align="center">{row.user.firstName}</TableCell>
+                  <TableCell align="center">{row.user.lastName}</TableCell>
+                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.user.id)} checked={ row.presence } disabled={ isDisabled }/></TableCell>
                 </TableRow>
               ))}
             </TableBody>

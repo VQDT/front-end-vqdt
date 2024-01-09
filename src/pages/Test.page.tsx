@@ -31,13 +31,14 @@ function Test() {
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
-  const totalQuestions = questions.length;
 
   useEffect(() => {
     if (id) {
       getTest(id), getQuestions(id);
     }
   }, []);
+
+  const totalQuestions = questions.length;
 
   function changeOpenEncerramento() {
     setOpenEncerramento((prev) => !prev);
@@ -85,8 +86,7 @@ function Test() {
       list.map((item) => {
         questions
           .find((q) => q.id === item.idQuestion)
-          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct ===
-          true && score++;
+          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct === true && score++;
       });
       if (score >= test.numberQuestion / 2) {
         status = true;
@@ -321,7 +321,7 @@ function Test() {
             <Button
               onClick={changeOpenPassword}
               variant={
-                totalQuestions - list.length > 0 ? undefined : "outline"
+                test!.numberQuestion - list.length > 0 ? undefined : "outline"
               }
             >
               <AiOutlineArrowLeft />
@@ -329,10 +329,10 @@ function Test() {
             </Button>,
             <Button
               variant={
-                totalQuestions - list.length > 0 ? "outline" : undefined
+                test!.numberQuestion - list.length > 0 ? "outline" : undefined
               }
               color={
-                totalQuestions - list.length > 0 ? "alert" : "default"
+                test!.numberQuestion - list.length > 0 ? "alert" : "default"
               }
               type="submit"
               onClick={handleSubmit}

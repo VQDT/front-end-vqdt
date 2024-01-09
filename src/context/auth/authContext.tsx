@@ -1,6 +1,5 @@
 import instance from "../../axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Role, sessionUser, User } from "../../models";
 import {
   deleteTokenSessinStorage,
   deleteUserSessionStorage,
@@ -9,32 +8,29 @@ import {
   saveTokenSessinStorage,
   saveUserSessionStorage,
 } from "./utils";
+import { UserOutput, Role } from "../../models/User";
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 interface AuthContextProps {
-  user: User | undefined;
-  roles: Role[] | undefined;
+  user: UserOutput | undefined;
   currentRole: Role | undefined;
-  getRole: (value: string) => void;
   login: (cpf: string, password: string) => Promise<void>;
   loggout: () => void;
+  changeCurrentRole: (role: Role) => void;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps) {
-
-  const [user, setUser] = useState<User | undefined>(undefined);
-  const [roles, setRoles] = useState<Role[] | undefined>(undefined);
-  const [currentRole, setCurrentRole] = useState<Role | undefined>(undefined);
+  const [user, setUser] = useState<UserOutput | undefined>();
+  const [currentRole, setCurrentRole] = useState<Role | undefined>();
 
   useEffect(() => {
     const existUser = getUserSessionStorage();
     const existToken = getTokenSessionStorage();
-    getUserRoles();
     if (existUser && existToken) {
       setUser(JSON.parse(existUser));
     }
@@ -43,66 +39,26 @@ function AuthProvider({ children }: AuthProviderProps) {
   async function login(cpf: string, password: string) {
     const response = await instance.post("users/auth/login", { cpf, password });
     if (response.status === 200) {
-      const data = await response.data;
-      setUser(data.user);
-      const {
-        cpf,
-        email,
-        firstName,
-        gender,
-        id,
-        idAddress,
-        lastName,
-        occupation,
-        phone,
-        race,
-      }: sessionUser = data.user;
-      const sessionUser: sessionUser = {
-        cpf,
-        email,
-        firstName,
-        gender,
-        id,
-        idAddress,
-        lastName,
-        occupation,
-        phone,
-        race,
-      };
-      saveTokenSessinStorage(data.token);
-      saveUserSessionStorage(sessionUser);
+      const { user, token } = await response.data;
+      setUser(user);
+      setCurrentRole(user.roles[0]);
+      saveTokenSessinStorage(token);
+      saveUserSessionStorage(user);
     }
   }
 
-  async function getUserRoles(): Promise<Role[] | undefined> {
-    try {
-      await instance.get("users/user/roles").then(
-        response => {
-          setRoles(response.data.roles)
-          setCurrentRole(response.data.roles[0])
-        }
-      );
-    } catch (error) {
-      if (error instanceof Error) console.log(error.message);
-      return [];
-    }
-  }
-
-  function getRole(id: string){
-    if(roles){
-      const newCurrentRole = roles.find(role => role.id === parseInt(id))
-      setCurrentRole(newCurrentRole);
-    }
-  }
-  
   function loggout() {
     deleteTokenSessinStorage();
     deleteUserSessionStorage();
     setUser(undefined);
   }
 
+  function changeCurrentRole(role: Role) {
+    setCurrentRole(role);
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, loggout, roles, getRole, currentRole }}>
+    <AuthContext.Provider value={{ user, login, loggout, currentRole, changeCurrentRole }}>
       {children}
     </AuthContext.Provider>
   );

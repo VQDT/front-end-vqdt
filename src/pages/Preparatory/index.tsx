@@ -17,13 +17,13 @@ function NormalizeDate(date: string) {
 
 function PreparatoryPainel() {
 
-  const { user, roles, currentRole } = useAuth();
+  const { user, currentRole } = useAuth();
   const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
-
+  const roles = user?.roles;
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (currentRole && currentRole.id !== 1){
+    if (currentRole && currentRole.id !== 2){
       navigation("/")
     }
     else if(user){
@@ -47,7 +47,7 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title+ " - DIA" + day.id }
+            title={day.course.title + " - DIA " + day.id }
             description="descrição"
             textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
@@ -64,7 +64,7 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title + " - DIA" + day.id }
+            title={day.course.title + " - DIA " + day.id }
             description="descrição"
             textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
