@@ -18,14 +18,10 @@ function NormalizeDate(date: string) {
 
 function TestPainel() {
 
-  const { roles, currentRole } = useAuth();
+  const { user, currentRole } = useAuth();
   const { tests } = useTest();
+  const roles = user?.roles;
   const navigation = useNavigate();
-
-  
-  function navigateTest(id: string) {
-    navigation("/provas/" + id);
-  }
 
   function navigateApplicatorTest(id: string) {
     navigation("/application/" + id);
@@ -105,7 +101,7 @@ function TestPainel() {
             key={test.id}
             title={test.name}
             description={test.description}
-            subText={NormalizeDate(test.dateStart)}
+            textAux={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateApplicatorTest(test.id)}
           />
