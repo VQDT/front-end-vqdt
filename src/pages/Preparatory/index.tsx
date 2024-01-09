@@ -49,7 +49,7 @@ function PreparatoryPainel() {
             key={day.id}
             title={day.course.title+ " - DIA" + day.id }
             description="descrição"
-            subText={NormalizeDate(day.timeStart)}
+            textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateCourseDay(day.id)}
           />
@@ -66,7 +66,7 @@ function PreparatoryPainel() {
             key={day.id}
             title={day.course.title + " - DIA" + day.id }
             description="descrição"
-            subText={NormalizeDate(day.timeStart)}
+            textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateCourseDay(day.id)}
           />

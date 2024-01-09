@@ -1,8 +1,4 @@
 import Button from "../../components/Button";
-import Header from "../../components/TestCard/Header";
-import Title from "../../components/TestCard/Title";
-import SubText from "../../components/TestCard/SubText";
-import SubTextContainer from "./SubtextContainer";
 import About from "./About";
 import AboutTitle from "./AboutTitle";
 import AboutContent from "./AboutContent";
@@ -17,7 +13,6 @@ import {
   AiOutlineArrowLeft,
   AiOutlineCalendar,
   AiOutlineCheckCircle,
-  AiOutlineClockCircle,
   AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { BiBookOpen, BiMath } from "react-icons/bi";
@@ -27,6 +22,7 @@ import useTest from "../../context/test/useTest";
 import { useEffect, useState } from "react";
 import { format } from 'date-fns-tz';
 import isFuture from "../../utils/isFuture";
+import InfoBox from "../../components/InfoBox";
 interface AboutTest {
   variant?: "default" | "alert" | "warning" | "confirm";
 }
@@ -70,47 +66,28 @@ function AboutTest({ variant = "default" }: AboutTest) {
       },
     } = test;
 
-    console.log(testPeriod, testAttendances?.[0].presence, testAttendances?.[0].testFinished)
+    const isFutureTestOrFinishedTest = isFuture(timeEnd) || testAttendances?.[0].testFinished;
+    const isApproved = testAttendances?.[0].approved;
+    
 
     return (
       <>
         <Container>
-          <Header size="large">
-            <Title>
-              <span className="text-2xl uppercase">{name}</span>
-            </Title>
-            { 
-              isFuture(timeEnd) || testAttendances?.[0].testFinished
-                ?<SubText
-                  variant={testAttendances?.[0].approved ? "confirm" : "alert"}
-                >
-                  {testAttendances?.[0].approved ? (
-                    <AiOutlineCheckCircle size={36} />
-                  ) : (
-                    <AiOutlineCloseCircle size={36} />
-                  )}
-                  <p className="text-lg p-3">
-                    {testAttendances?.[0].approved ? "Aprovado" : "Reprovado"}
-                  </p>
-                </SubText>
-                :<SubTextContainer>
-                  <SubText variant={variant}>
-                    <AiOutlineCalendar size={36} className="text-Concrete" />
-                    <span className="text-lg font-bold uppercase">
-                      {format(new Date(dateStart), "dd/MM/yyyy")}
-                    </span>
-                  </SubText>
-                  <SubText variant={variant}>
-                    <AiOutlineClockCircle size={36} className="text-Concrete" />
-                    <span className="text-lg font-bold uppercase">{`${format(
-                      new Date(dateStart), "HH:mm"
-                    )} - ${format(
-                      new Date(timeEnd), "HH:mm"
-                    )}`}</span>
-                  </SubText>
-                </SubTextContainer>                
-            }
-          </Header>
+          {
+            isFutureTestOrFinishedTest
+              ?<InfoBox
+                title={name}
+                textAux={isApproved ? "Aprovado" : "Reprovado"}
+                variant={isApproved ? "confirm" : "alert"}
+                icon={isApproved ? AiOutlineCheckCircle : AiOutlineCloseCircle}
+              />
+              :<InfoBox
+                title={name}
+                textAux={format(new Date(dateStart), "dd/MM/yyyy") + " - " + format(new Date(timeEnd), "HH:mm")}
+                variant={variant}
+                icon={AiOutlineCalendar}
+              />
+          }
           <About>
             <AboutTitle text="Sobre a prova" />
             <AboutContent text={description} />
