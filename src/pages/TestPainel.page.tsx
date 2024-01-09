@@ -34,7 +34,6 @@ function TestPainel() {
   let listFutureTests: ReactElement[] = [];
   let listPastTests: ReactElement[] = [];
 
-  console.log(tests)
   if(roles && currentRole){
     if (currentRole.name === "Candidato"){
       listFutureTests = tests
@@ -49,7 +48,7 @@ function TestPainel() {
             description={test.description}
             subText={NormalizeDate(test.dateStart)}
             icon={AiOutlineCalendar}
-            handleClick={() => navigateTest(test.id)}
+            handleClick={() => navigation("/provas/" + test.id)}
           />
         );
       });
@@ -71,7 +70,7 @@ function TestPainel() {
                 : AiOutlineCloseCircle
             }
             variant={test.testAttendances?.[0].approved ? "confirm" : "alert"}
-            handleClick={() => navigateTest(test.id)}
+            handleClick={() => navigation("/provas/" + test.id)}
           />
         );
       });
