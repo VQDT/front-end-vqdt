@@ -18,8 +18,9 @@ function NormalizeDate(date: string) {
 
 function TestPainel() {
 
-  const { roles, currentRole } = useAuth();
+  const { user, currentRole } = useAuth();
   const { tests } = useTest();
+  const roles = user?.roles;
   const navigation = useNavigate();
 
   function navigateApplicatorTest(id: string) {
