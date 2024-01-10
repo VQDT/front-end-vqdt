@@ -13,9 +13,6 @@ export type UserOutput = {
   lastName: string;
   cpf: string;
   email: string;
-  gender: string;
-  race: string;
-  phone: string;
   occupation: string;
   idAddress: string;
   password?: string;

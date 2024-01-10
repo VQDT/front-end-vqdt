@@ -47,8 +47,8 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title + " - DIA " + day.id }
-            description="descrição"
+            title={day.course.title + " / " + day.title }
+            description="O curso preparatório para a prova de Ensino Fundamental para Jovens e Adultos em processo de alfabetização é uma iniciativa cuidadosamente elaborada para atender às necessidades específicas desse público."
             textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateCourseDay(day.id)}
@@ -64,8 +64,8 @@ function PreparatoryPainel() {
         return (
           <TestCard
             key={day.id}
-            title={day.course.title + " - DIA " + day.id }
-            description="descrição"
+            title={day.course.title + " / " + day.title }
+            description="O curso preparatório para a prova de Ensino Fundamental para Jovens e Adultos em processo de alfabetização é uma iniciativa cuidadosamente elaborada para atender às necessidades específicas desse público."
             textAux={NormalizeDate(day.timeStart)}
             icon={AiOutlineCalendar}
             handleClick={() => navigateCourseDay(day.id)}

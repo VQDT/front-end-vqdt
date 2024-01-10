@@ -27,21 +27,29 @@ function ApplicatorTestPage() {
 
   function handleSubmit(){
     if(test && candidates){
+      const time = new Date(test.timeEnd).getTime()/2
+      if(!isFuture(time.toString())){
+        return 0
+      }
       updateAttendance(candidates, test)
     }
     setIsDisabled(true)
   }
   
   useEffect(()=> {
-    if (id){
+    if(id){
       getTest(id)
       getCandidates(id)
-      if(test){
-        const time = new Date(test.timeEnd).getTime()/2
-        setIsDisabled(!isFuture(time.toString()))
-      }
     }
   },[])
+
+  useEffect(()=> {
+    if(test){
+      const time = new Date(test.timeEnd).getTime()/2
+      setIsDisabled(!isFuture(time.toString()))
+    }
+  },[])
+  
 
   return (
     <Main>

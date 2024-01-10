@@ -1,10 +1,13 @@
 import instance from "../../axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import {
+  deleteCurrentRoleSessionStorage,
   deleteTokenSessinStorage,
   deleteUserSessionStorage,
+  getCurrentRoleSessionStorage,
   getTokenSessionStorage,
   getUserSessionStorage,
+  saveCurrentRoleSessionStorage,
   saveTokenSessinStorage,
   saveUserSessionStorage,
 } from "./utils";
@@ -31,8 +34,10 @@ function AuthProvider({ children }: AuthProviderProps) {
   useEffect(() => {
     const existUser = getUserSessionStorage();
     const existToken = getTokenSessionStorage();
-    if (existUser && existToken) {
+    const existCurrentRole = getCurrentRoleSessionStorage();
+    if (existUser && existToken && existCurrentRole) {
       setUser(JSON.parse(existUser));
+      setCurrentRole(JSON.parse(existCurrentRole));
     }
   }, []);
 
@@ -44,17 +49,20 @@ function AuthProvider({ children }: AuthProviderProps) {
       setCurrentRole(user.roles[0]);
       saveTokenSessinStorage(token);
       saveUserSessionStorage(user);
+      saveCurrentRoleSessionStorage(user.roles[0]);
     }
   }
 
   function loggout() {
     deleteTokenSessinStorage();
     deleteUserSessionStorage();
+    deleteCurrentRoleSessionStorage();
     setUser(undefined);
   }
 
   function changeCurrentRole(role: Role) {
     setCurrentRole(role);
+    saveCurrentRoleSessionStorage(role);
   }
 
   return (

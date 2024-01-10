@@ -37,10 +37,8 @@ function TestProvider({ children }: TestProviderProps) {
   const [ testAttendance, setTestAttendance ] = useState<TestAttendance | null>(null)
   const [ candidates, setCandidates ] = useState<UserOutput[]| undefined>(undefined)
 
-  const roles = user?.roles;
-
   async function getTests() {
-    if (roles && currentRole){
+    if (user && currentRole){
       let url = `/tests`;
 
       if (currentRole.name === "Aplicador"){
@@ -49,7 +47,6 @@ function TestProvider({ children }: TestProviderProps) {
 
       console.log("requisitando provas: ",url)
       const response = await instance.get(url);
-      
       setTests(response.data);
     }
   }
@@ -129,10 +126,8 @@ function TestProvider({ children }: TestProviderProps) {
   }
   
   useEffect(() => {
-    if(user){
       getTests();
-    }
-  }, [user, currentRole, testAttendance]);
+  }, [currentRole, testAttendance]);
 
   return(
       <TestContext.Provider value={{ candidates, questions, tests, test, testAttendance, updateCandidateList, updateAttendance, getCandidates, getTest, removeTestAttendance, getQuestions, setScoreAndStatus, getTestAttendance }}>
