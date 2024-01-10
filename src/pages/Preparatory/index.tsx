@@ -1,4 +1,3 @@
-//import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import ListCard from "../../components/ListCard";
 import TestCard from "../../components/TestCard";
 import Main from "../../components/Main";
@@ -17,19 +16,20 @@ function NormalizeDate(date: string) {
 
 function PreparatoryPainel() {
 
-  const { user, currentRole } = useAuth();
+  const { user, checkRolePermission } = useAuth();
   const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
-  const roles = user?.roles;
+
   const navigation = useNavigate();
 
   useEffect(() => {
-    if (currentRole && currentRole.id !== 2){
+    const check = checkRolePermission(2)
+    if (!check){
       navigation("/")
     }
     else if(user){
       getPreparatoryCourseDays(user.id)
     }
-  })
+  },[])
 
   function navigateCourseDay(id: string) {
     navigation("/courseDay/" + id);
@@ -38,7 +38,7 @@ function PreparatoryPainel() {
   let listFuturePreparatoryDays: ReactElement[] = [];
   let listPastPreparatoryDays: ReactElement[] = [];
   
-  if(roles && currentRole && CourseDays){
+  if(CourseDays){
       listFuturePreparatoryDays = CourseDays
       .filter(
         (day) => !isFuture(day.timeEnd)
@@ -74,7 +74,6 @@ function PreparatoryPainel() {
       })
   }
   
-
   return (
     <Main>
       <h2 className="text-Blue text-lg font-bold uppercase">CURSOS ABERTOS</h2>

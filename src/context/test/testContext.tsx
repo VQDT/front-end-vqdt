@@ -30,7 +30,7 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
 
-  const { user, currentRole } = useAuth();
+  const { currentRole } = useAuth();
   const [ tests, setTests ] = useState<Test[]>([]);
   const [ test, setTest ] = useState<Test | null >(null);
   const [ questions, setQuestions ] = useState<Question[]>([]);
@@ -38,17 +38,9 @@ function TestProvider({ children }: TestProviderProps) {
   const [ candidates, setCandidates ] = useState<UserOutput[]| undefined>(undefined)
 
   async function getTests() {
-    if (user && currentRole){
-      let url = `/tests`;
-
-      if (currentRole.name === "Aplicador"){
-        url = `/tests/applicator`;
-      }
-
-      console.log("requisitando provas: ",url)
+      const url = `/tests`;
       const response = await instance.get(url);
       setTests(response.data);
-    }
   }
 
   async function getTest(id: string) {

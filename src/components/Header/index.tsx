@@ -11,7 +11,7 @@ import Image from "./Image";
 import logo from "../../assets/logo.png";
 import { ChangeEvent, useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../../context/auth/useAuth";
 import Select from "../Select/index"
 
@@ -23,15 +23,19 @@ const drawerWidth = 240;
 
 
 function Header({ window }: Props) {
-  
+
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const { user, loggout, currentRole, changeCurrentRole } = useAuth();
+  const roles = user?.roles
+
   const navItems = [
     {
       name: "Provas",
-      to: "/",
+      to:  currentRole?.id === 1 ? "/" : "/aplicador",
     },
     {
       name: "changeRole",
-      to: ""
+      to: "",
     },
     {
       name: "Sair",
@@ -40,11 +44,9 @@ function Header({ window }: Props) {
     
   ];
 
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const { user, loggout, currentRole, changeCurrentRole } = useAuth();
-  const roles = user?.roles
-  
-  if(currentRole?.name === "Aplicador"){
+  const navigate = useNavigate();
+
+  if(currentRole?.id === 2){
     navItems.unshift({
       name: "Preparatório",
       to: "/preparatorio",
@@ -54,8 +56,14 @@ function Header({ window }: Props) {
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
     const role = roles?.find((role) => role.id === Number(value));
-    if(role) changeCurrentRole(role);
-  };
+    if(role) changeCurrentRole(role)
+    if(role?.id === 2){
+      navigate("/aplicador")
+    }
+    else if(role?.id === 1){
+      navigate("/")
+    }
+  }
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 

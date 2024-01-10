@@ -1,5 +1,5 @@
 import { SelectHTMLAttributes } from "react";
-import { Role } from "../../models";
+import { Role } from "../../models/User";
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   variant?: "solid" | "outline";

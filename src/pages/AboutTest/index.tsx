@@ -19,7 +19,7 @@ import { BiBookOpen, BiMath } from "react-icons/bi";
 import { MdOutlineScience, MdOutlinePsychology } from "react-icons/md";
 import { useNavigate, useParams } from "react-router-dom";
 import useTest from "../../context/test/useTest";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { format } from 'date-fns-tz';
 import isFuture from "../../utils/isFuture";
 import InfoBox from "../../components/InfoBox";
@@ -31,7 +31,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
   const { id } = useParams();
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
-  const [removed, setRemoved] = useState<boolean>(false);
 
   useEffect(() => {
     if (id) {
@@ -39,15 +38,13 @@ function AboutTest({ variant = "default" }: AboutTest) {
     }
   }, []);
 
-  function removeAttendance() {
+  async function removeAttendance() {
     if(id){
-      removeTestAttendance(id)
-      setRemoved(true)
+      const remove = await removeTestAttendance(id)
+      if (remove){
+        navigate("/")
+      }
     }
-  }
-
-  if(removed){
-    navigate("/")
   }
 
   if (test) {
@@ -69,7 +66,6 @@ function AboutTest({ variant = "default" }: AboutTest) {
     const isFutureTestOrFinishedTest = isFuture(timeEnd) || testAttendances?.[0].testFinished;
     const isApproved = testAttendances?.[0].approved;
     
-
     return (
       <>
         <Container>

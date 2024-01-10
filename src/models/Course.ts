@@ -1,4 +1,4 @@
-import { User } from "./User"
+import { UserOutput } from "./User"
 
 export type Course = {
     id: string, 
@@ -26,7 +26,7 @@ export type CourseDay = {
 export type CourseAttendance = {
     id: string,
     presence: boolean,
-    user: User,
+    user: UserOutput,
     idCourseDay: string,
     idCandidate: string
 }

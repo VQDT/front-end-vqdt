@@ -13,8 +13,6 @@ export type UserOutput = {
   lastName: string;
   cpf: string;
   email: string;
-  occupation: string;
-  idAddress: string;
   password?: string;
   roles: Role[];
   testAttendances: TestAttendance[]

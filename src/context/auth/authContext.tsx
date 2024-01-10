@@ -23,11 +23,13 @@ interface AuthContextProps {
   login: (cpf: string, password: string) => Promise<void>;
   loggout: () => void;
   changeCurrentRole: (role: Role) => void;
+  checkRolePermission : (roleId: number) => Promise<boolean>;
 }
 
 const AuthContext = createContext<AuthContextProps>({} as AuthContextProps);
 
 function AuthProvider({ children }: AuthProviderProps) {
+
   const [user, setUser] = useState<UserOutput | undefined>();
   const [currentRole, setCurrentRole] = useState<Role | undefined>();
 
@@ -65,8 +67,16 @@ function AuthProvider({ children }: AuthProviderProps) {
     saveCurrentRoleSessionStorage(role);
   }
 
+  async function checkRolePermission(roleId: number) {
+    const response = await instance.get("users/auth/role/" + roleId);
+    if (response.status === 200) {
+      return true;
+    }
+    return false;
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, loggout, currentRole, changeCurrentRole }}>
+    <AuthContext.Provider value={{ user, currentRole, login, loggout, changeCurrentRole, checkRolePermission }}>
       {children}
     </AuthContext.Provider>
   );
