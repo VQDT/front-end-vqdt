@@ -19,9 +19,10 @@ function ApplicatorTestPainel() {
     const navigation = useNavigate();
 
     useEffect(() => {
+        console.log("entrou")
         const check = checkRolePermission(2);
         if (!check){
-            alert("Você não tem permissão para acessar essa página")
+            window.alert("Você não tem permissão para acessar essa página")
             navigation("/")
         }
     },[])
