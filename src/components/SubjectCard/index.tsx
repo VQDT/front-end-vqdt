@@ -1,4 +1,3 @@
-
 interface SubjectCardProps {
   subject: string;
   done: string;

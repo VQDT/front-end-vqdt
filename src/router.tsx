@@ -14,6 +14,7 @@ import TestLayout from "./layout/Test.Layout";
 import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
 import CourseAttendancePage from "./pages/Preparatory/courseAttendance.page";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
+import ErrorPage from "./pages/ErrorPage";
 
 export const Router = createBrowserRouter([
   {
@@ -23,9 +24,10 @@ export const Router = createBrowserRouter([
         <AppLayout />
       </ProtectLayout>
     ),
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "/",
+        path: "/candidato",
         element: <TestPainel />,
       },
       {

@@ -12,11 +12,13 @@ import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
 import isFuture from "../../utils/isFuture";
+import useAuth from "../../context/auth/useAuth";
 
 function ApplicatorTestPage() {
   const { id } = useParams()
+  const { checkRolePermission, setError, loggout } = useAuth()
   const { candidates, getCandidates, getTest, test, updateAttendance, updateCandidateList } = useTest();
-  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [ isDisabled, setIsDisabled ] = useState<boolean>(false);
 
 
   function handleCheckbox(id: string){
@@ -37,10 +39,19 @@ function ApplicatorTestPage() {
   }
   
   useEffect(()=> {
+    
+    checkRolePermission(2).then((check) => {
+        if (!check){
+            setError(true)
+            loggout();
+        }
+    })
+
     if(id){
       getTest(id)
       getCandidates(id)
     }
+
   },[])
 
   useEffect(()=> {

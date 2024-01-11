@@ -6,10 +6,11 @@ import GOV from "../assets/GOV.png";
 import VQDT from "../assets/VQDT.png";
 import useAuth from "../context/auth/useAuth";
 import { Link } from "react-router-dom";
+import ErroAlert from "../components/ErrorAlert";
 
 function LoginPage() {
 
-  const { login } = useAuth();
+  const { login, error } = useAuth();
   const {
     register,
     handleSubmit,
@@ -25,7 +26,11 @@ function LoginPage() {
   };
   
   return (
+
     <div className="w-full max-w-xs">
+      {
+        error && <ErroAlert/>
+      }
       <img src={VQDT} className="max-w-full mx-auto mb-7" />
       <form
         className="w-full p-6 bg-White rounded-xl flex flex-col gap-3"

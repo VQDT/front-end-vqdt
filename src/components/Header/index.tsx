@@ -31,7 +31,7 @@ function Header({ window }: Props) {
   const navItems = [
     {
       name: "Provas",
-      to:  currentRole?.id === 1 ? "/" : "/aplicador",
+      to:  currentRole?.id === 1 ? "/candidato" : "/aplicador",
     },
     {
       name: "changeRole",
@@ -61,7 +61,7 @@ function Header({ window }: Props) {
       navigate("/aplicador")
     }
     else if(role?.id === 1){
-      navigate("/")
+      navigate("/candidato")
     }
   }
 

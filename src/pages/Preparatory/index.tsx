@@ -16,17 +16,19 @@ function NormalizeDate(date: string) {
 
 function PreparatoryPainel() {
 
-  const { user, checkRolePermission } = useAuth();
+  const { user, checkRolePermission, loggout, setError } = useAuth();
   const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
 
   const navigation = useNavigate();
 
   useEffect(() => {
-    const check = checkRolePermission(2)
-    if (!check){
-      navigation("/")
-    }
-    else if(user){
+    checkRolePermission(2).then((check) => {
+      if (!check){
+        setError(true)
+        loggout();
+      }
+    })
+    if(user){
       getPreparatoryCourseDays(user.id)
     }
   },[])

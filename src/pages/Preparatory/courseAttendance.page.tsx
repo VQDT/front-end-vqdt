@@ -13,12 +13,13 @@ import Button from "../../components/Button";
 import usePreparatory from "../../context/preparatory/usePreparatory";
 import { CourseAttendance, CourseDay } from "../../models/Course";
 import isFuture from "../../utils/isFuture";
+import useAuth from "../../context/auth/useAuth";
 
 function CourseAttendancePage() {
   const { id } = useParams();
   const { CourseDays, courseCandidates, getCourseCandidates, updateCourseAttendance, updateCandidateList } = usePreparatory();
+  const { checkRolePermission, loggout, setError } = useAuth();
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
-
   const [currentCourseDay, setCurrentCourseDay] = useState<CourseDay | undefined>(undefined)
 
   function handleCheckbox(id: string){
@@ -30,10 +31,8 @@ function CourseAttendancePage() {
   function handleSubmit(){
     if(currentCourseDay && isFuture(currentCourseDay.timeEnd)){
       console.log(isFuture(currentCourseDay.timeEnd))
-      console.log("entrou")
       return
     }
-
     if(currentCourseDay && courseCandidates){
       updateCourseAttendance(courseCandidates, currentCourseDay.id)
     }
@@ -41,6 +40,13 @@ function CourseAttendancePage() {
   }
   
   useEffect(()=> {
+    checkRolePermission(2).then((check) => {
+      if (!check){
+        setError(true)
+        loggout();
+      }
+    })
+
     if (id && CourseDays){
       const currentDay : CourseDay[] = CourseDays.filter(day => day.id === id)
       const time = new Date(currentDay[0].timeEnd).getTime()/2
@@ -50,6 +56,7 @@ function CourseAttendancePage() {
       getCourseCandidates(currentDay[0].id)
       setCurrentCourseDay(currentDay[0])
     }
+
   },[])
   
   return (

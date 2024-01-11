@@ -14,17 +14,17 @@ function NormalizeDate(date: string) {
 
 function ApplicatorTestPainel() {
 
-    const { checkRolePermission } = useAuth();
+    const { checkRolePermission, loggout, setError } = useAuth();
     const { tests } = useTest();
     const navigation = useNavigate();
 
     useEffect(() => {
-        console.log("entrou")
-        const check = checkRolePermission(2);
-        if (!check){
-            window.alert("Você não tem permissão para acessar essa página")
-            navigation("/")
-        }
+        checkRolePermission(2).then((check) => {
+            if (!check){
+                setError(true)
+                loggout();
+            }
+        })
     },[])
 
     function navigateApplicatorTest(id: string) {
