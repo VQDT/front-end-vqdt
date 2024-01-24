@@ -1,14 +1,14 @@
-import ListCard from "../components/ListCard";
-import TestCard from "../components/TestCard";
-import Main from "../components/Main";
-import useTest from "../context/test/useTest";
+import ListCard from "../../components/ListCard";
+import TestCard from "../../components/TestCard";
+import Main from "../../components/Main";
+import useTest from "../../context/test/useTest";
 import {
   AiOutlineCalendar,
   AiOutlineCheckCircle,
   AiOutlineCloseCircle,
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
-import isFuture from "../utils/isFuture";
+import isFuture from "../../utils/isFuture";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");

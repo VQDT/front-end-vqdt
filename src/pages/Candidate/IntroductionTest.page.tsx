@@ -1,7 +1,7 @@
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import Button from "../components/Button";
-import Main from "../components/Main";
-import useTestContext from "../context/test/useTest";
+import Button from "../../components/Button";
+import Main from "../../components/Main";
+import useTestContext from "../../context/test/useTest";
 import { useNavigate, useParams } from "react-router-dom";
 
 function IntroductionTestPage() {

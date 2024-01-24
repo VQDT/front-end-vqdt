@@ -1,12 +1,12 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginInput, LoginInputSchema } from "../models/User";
+import { LoginInput, LoginInputSchema } from "../../models/User";
 import MaskedInput from "react-text-mask";
 import GOV from "../assets/GOV.png";
 import VQDT from "../assets/VQDT.png";
-import useAuth from "../context/auth/useAuth";
+import useAuth from "../../context/auth/useAuth";
 import { Link } from "react-router-dom";
-import ErroAlert from "../components/ErrorAlert";
+import ErroAlert from "../../components/ErrorAlert";
 
 function LoginPage() {
 

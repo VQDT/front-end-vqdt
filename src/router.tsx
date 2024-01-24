@@ -1,18 +1,18 @@
 import { createBrowserRouter } from "react-router-dom";
 import ProtectLayout from "./layout/Protect.Layout";
 import LoginLayout from "./layout/Login.Layout";
-import Login from "./pages/Login.page";
-import TestPainel from "./pages/TestPainel.page";
-import Preparatory from "./pages/Preparatory";
-import RecoverPassword from "./pages/RecoverPassword";
-import CandidateResult from "./pages/CandidateResult/CandidateResult";
+import Login from "./pages/Auth/LoginPage";
+import TestPainel from "./pages/Candidate/TestPainelPage";
+import Preparatory from "./pages/Applicator/PreparatoryPage";
+import RecoverPassword from "./pages/Auth/RecoverPasswordPage";
+import CandidateResult from "./pages/Candidate/CandidateResultPage";
 import AppLayout from "./layout/App.Layout";
 import AboutTest from "./pages/AboutTest";
-import Test from "./pages/Test.page";
-import IntroductionTestPage from "./pages/IntroductionTest.page";
+import Test from "./pages/Candidate/TestPage";
+import IntroductionTestPage from "./pages/Candidate/IntroductionTest.page";
 import TestLayout from "./layout/Test.Layout";
 import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
-import CourseAttendancePage from "./pages/Preparatory/courseAttendance.page";
+import CourseAttendancePage from "./pages/Applicator/CourseAttendancePage";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
 import ErrorPage from "./pages/ErrorPage";
 

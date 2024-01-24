@@ -1,17 +1,17 @@
-import SubjectCard from "../components/SubjectCard";
-import Button from "../components/Button";
-import Card from "../components/Card";
-import Modal from "../components/Modal";
-import Input from "../components/Input";
-import Stopwatch from "../components/Stopwatch";
-import Question from "../components/question";
-import { ContentAux } from "../models/ContentAux";
-import { Alternative } from "../models/Alternative";
-import { Answer } from "../models/Question";
+import SubjectCard from "../../components/SubjectCard";
+import Button from "../../components/Button";
+import Card from "../../components/Card";
+import Modal from "../../components/Modal";
+import Input from "../../components/Input";
+import Stopwatch from "../../components/Stopwatch";
+import Question from "../../components/question";
+import { ContentAux } from "../../models/ContentAux";
+import { Alternative } from "../../models/Alternative";
+import { Answer } from "../../models/Question";
 
-import instance from "../axios";
-import useAuth from "../context/auth/useAuth";
-import useTest from "../context/test/useTest";
+import instance from "../../axios";
+import useAuth from "../../context/auth/useAuth";
+import useTest from "../../context/test/useTest";
 
 import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
