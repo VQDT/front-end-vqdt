@@ -17,7 +17,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import logo from "../assets/logo.png";
+import logo from "../../assets/logo.png";
 
 function Test() {
   const { user } = useAuth();
