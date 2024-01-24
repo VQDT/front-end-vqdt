@@ -4,6 +4,7 @@ import { GoAlert } from "react-icons/go";
 import useAuth from '../../context/auth/useAuth';
 
 export default function ErroAlert() {
+  
   const [open, setOpen] = useState(true)
   const { setError } = useAuth();
   const cancelButtonRef = useRef(null)

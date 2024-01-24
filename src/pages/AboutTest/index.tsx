@@ -42,7 +42,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
     if(id){
       const remove = await removeTestAttendance(id)
       if (remove){
-        navigate("/")
+        navigate("/candidato")
       }
     }
   }
@@ -124,7 +124,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
           <Button
             variant="outline"
             onClick={() => {
-              navigate("/");
+              navigate("/candidato");
             }}
           >
             <AiOutlineArrowLeft />
