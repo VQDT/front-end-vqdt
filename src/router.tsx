@@ -15,6 +15,9 @@ import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
 import CourseAttendancePage from "./pages/Applicator/CourseAttendancePage";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
 import ErrorPage from "./pages/ErrorPage";
+import ElaboratorPainelPage  from "./pages/Elaborator/ElaboratorPainelPage";
+import AplicadorLayout from "./layout/AplicadorLayout";
+import ElaboradorLayout from "./layout/ElaboradorLayout";
 
 export const Router = createBrowserRouter([
   {
@@ -24,37 +27,72 @@ export const Router = createBrowserRouter([
         <AppLayout />
       </ProtectLayout>
     ),
-    errorElement: <ErrorPage />,
+    errorElement: <ErrorPage reason="not found" />,
     children: [
       {
         path: "/candidato",
         element: <TestPainel />,
       },
       {
-        path: "/aplicador",
-        element: <ApplicatorTestPainel />,  
-      },
-      {
-        path: "/preparatorio",
-        element: <Preparatory />,
-      },
-      {
-        path: "/courseDay/:id",
-        element: <CourseAttendancePage />
-      },
-      {
         path: "/provas/:id",
         element: <AboutTest />,
       },
       {
-        path:"/comprovante-de-participacao/:id",
+        path: "/comprovante-de-participacao/:id",
         element: <CandidateResult />,
       },
+    ],
+  },
+  {
+    path: "/elaborador",
+    element: (
+      <ProtectLayout>
+        <ElaboradorLayout />
+      </ProtectLayout>
+    ),
+    errorElement: <ErrorPage reason="not found"/>,
+    children:[
       {
-        path: "/application/:id",
+        path: "/elaborador",
+        element: <ElaboratorPainelPage />,
+      }
+    ]
+  },
+  {
+    path: "/aplicador",
+    element: (
+      <ProtectLayout>
+        <AplicadorLayout />
+      </ProtectLayout>
+    ),
+    children: [
+      {
+        path: "/aplicador/application/:id",
         element: <ApplicatorTestPage />,
       },
-    ],
+      {
+        path: "/aplicador/courseDay/:id",
+        element: <CourseAttendancePage />
+      },
+      {
+        path: "/aplicador",
+        element: <ApplicatorTestPainel />,
+      },
+      {
+        path: "/aplicador/preparatorio",
+        element: <Preparatory />,
+      },
+    ]
+  },
+  {
+    path: "/error",
+    element: <ErrorPage reason="not found" />,
+    children: [
+      {
+        path: "/error/unauthorized",
+        element: <ErrorPage reason="unauthorized" />,
+      },
+    ]
   },
   {
     path: "/prova",
@@ -63,6 +101,7 @@ export const Router = createBrowserRouter([
         <TestLayout />
       </ProtectLayout>
     ),
+    errorElement: <ErrorPage reason="not found" />,
     children: [
       {
         path: "/prova/introduction/:id",
@@ -76,12 +115,13 @@ export const Router = createBrowserRouter([
   },
   {
     path: "/recuperar-senha",
-    element: <RecoverPassword />, 
+    element: <RecoverPassword />,
+    errorElement: <ErrorPage reason="not found" />,
   },
-  
   {
     path: "/auth",
     element: <LoginLayout />,
+    errorElement: <ErrorPage reason="not found" />,
     children: [
       {
         path: "/auth",

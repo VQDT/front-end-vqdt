@@ -4,6 +4,9 @@ import { ContentAux } from "./ContentAux";
 export interface Question {
     id: string;
     type: string;
+    createdAt: Date;
+    updatedAt: Date;
+    status: "PENDENTE" | "APROVADA" | "REPROVADA" | "RASCUNHO"
     isCorrect?: boolean;
     skill: string;
     competence: string;

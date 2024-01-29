@@ -49,8 +49,14 @@ function Header({ window }: Props) {
   if(currentRole?.id === 2){
     navItems.unshift({
       name: "Preparatório",
-      to: "/preparatorio",
+      to: "/aplicador/preparatorio",
     })
+  }
+  else if(currentRole?.id === 3){
+    navItems[0]={
+      name: "Questões",
+      to: "/elaborador",
+    }
   }
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -62,6 +68,9 @@ function Header({ window }: Props) {
     }
     else if(role?.id === 1){
       navigate("/candidato")
+    }
+    else if(role?.id === 3){
+      navigate("/elaborador")
     }
   }
 

@@ -3,17 +3,19 @@ import useAuth from "../context/auth/useAuth"
 
 function LoginLayout() {
   const { user } = useAuth();
-  if (user){
+  if (user) {
     switch (user.roles[0].id) {
       case 1:
-        return <Navigate to={"/candidato"} replace/>;
+        return <Navigate to={"/candidato"} replace />;
       case 2:
-        return <Navigate to={"/aplicador"} replace/>;
+        return <Navigate to={"/aplicador"} replace />;
+      case 3:
+        return <Navigate to={"/elaborador"} replace />;
       default:
-        return <Navigate to={"/candidato"} replace/>;
+        return <Navigate to={"/candidato"} replace />;
     }
   }
-  else{
+  else {
     return <div className="w-full min-h-screen bg-Blue flex justify-center items-center"><Outlet /></div>
   }
 }

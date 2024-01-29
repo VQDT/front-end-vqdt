@@ -49,7 +49,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
     setTimeout(() => {
       setOnLoading(false);
-    }, 500);
+    }, 1000);
     
   }, []);
 

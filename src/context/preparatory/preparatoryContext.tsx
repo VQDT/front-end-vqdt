@@ -71,6 +71,7 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
   }
 
   useEffect(() => {
+    console.log(user)
     if(user){
       getPreparatoryCourseDays(user.id)
     }
