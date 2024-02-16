@@ -21,3 +21,26 @@ export type Answer = {
     idQuestion: string;
     idAlternatives: string;
 }
+
+export type QuestionLevel = "INFANTIL" | "FUNDAMENTAL" | "MEDIO";
+export type QuestionArea = "LINGUAGENS" | "MATEMATICA" | "CIENCIAS_HUMANAS" | "CIENCIAS_NATUREZA";
+export type QuestionDifficulty = "1" | "2" | "3";
+export type QuestionType = "multiple-choice" | "true-or-false";
+
+export interface ContentAuxRequest {
+  type: string;
+  content: string;
+  order: number;
+}
+
+export interface QuestionRequest {
+  level: QuestionLevel;
+  area: QuestionArea;
+  difficulty: QuestionDifficulty;
+  skill: string;
+  competence: string;
+  alternatives: Alternative[];
+  contentAux: ContentAuxRequest[];
+  type: QuestionType;
+  isCorrect?: boolean;
+}
