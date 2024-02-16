@@ -65,7 +65,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
 
     const isFutureTestOrFinishedTest = isFuture(timeEnd) || testAttendances?.[0].testFinished;
     const isApproved = testAttendances?.[0].approved;
-    
+        
     return (
       <>
         <Container>
@@ -79,7 +79,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
               />
               :<InfoBox
                 title={name}
-                textAux={format(new Date(dateStart), "dd/MM/yyyy") + " - " + format(new Date(timeEnd), "HH:mm")}
+                textAux={format(new Date(dateStart), "dd/MM/yyyy") + " - " + format(new Date(dateStart), "HH:mm")}
                 variant={variant}
                 icon={AiOutlineCalendar}
               />

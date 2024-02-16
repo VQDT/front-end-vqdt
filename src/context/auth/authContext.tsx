@@ -43,7 +43,9 @@ function AuthProvider({ children }: AuthProviderProps) {
     const existUser = getUserSessionStorage();
     const existToken = getTokenSessionStorage();
     const existCurrentRole = getCurrentRoleSessionStorage();
-    if (existUser && existToken && existCurrentRole) {
+    if (existUser && existToken && !!existCurrentRole) {
+      console.log(existUser)
+      console.log(existCurrentRole)
       setUser(JSON.parse(existUser));
       setCurrentRole(JSON.parse(existCurrentRole));
     }
