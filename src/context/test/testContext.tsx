@@ -61,7 +61,6 @@ function TestProvider({ children }: TestProviderProps) {
 
     } catch(error) {
       if( error instanceof Error) console.log(error.message); 
-      console.log("Erro desconhecido");
     }
   }
 

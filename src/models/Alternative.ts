@@ -4,3 +4,8 @@ export interface Alternative {
     correct: boolean;
     idQuestion: string;
 }
+
+export interface AlternativeRequest {
+  content: string;
+  correct: boolean;
+}

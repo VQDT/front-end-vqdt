@@ -1,7 +1,8 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoginInput, LoginInputSchema } from "../../models/User";
 import MaskedInput from "react-text-mask";
+import { Toaster } from "sonner";
+import { LoginInput, LoginInputSchema } from "../../models/User";
 import GOV from "../../assets/GOV.png";
 import VQDT from "../../assets/VQDT.png";
 import useAuth from "../../context/auth/useAuth";
@@ -84,6 +85,12 @@ function LoginPage() {
         </div>
         <img src={GOV} className="max-h-full mx-auto" />
       </div>
+      <Toaster 
+        duration={5000}
+        position="top-right"
+        pauseWhenPageIsHidden={true}
+        theme="light"
+      />
     </div>
   );
 }

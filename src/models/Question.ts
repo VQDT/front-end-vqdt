@@ -1,4 +1,4 @@
-import { Alternative } from "./Alternative";
+import { Alternative, AlternativeRequest } from "./Alternative";
 import { ContentAux } from "./ContentAux";	
 
 export interface Question {
@@ -39,7 +39,7 @@ export interface QuestionRequest {
   difficulty: QuestionDifficulty;
   skill: string;
   competence: string;
-  alternatives: Alternative[];
+  alternatives: AlternativeRequest[];
   contentAux: ContentAuxRequest[];
   type: QuestionType;
   isCorrect?: boolean;

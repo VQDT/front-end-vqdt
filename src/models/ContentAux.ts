@@ -7,3 +7,8 @@ export interface ContentAux {
 }
 
 export type TypeContentAux = "asking" | "paragraph" | "text" | "image" | "ref" | "title";
+
+export interface CreateContentAux {
+  type: TypeContentAux;
+  content: string;
+}

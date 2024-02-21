@@ -12,6 +12,8 @@ import {
   saveUserSessionStorage,
 } from "./utils";
 import { UserOutput, Role } from "../../models/User";
+import { toast } from "sonner";
+import { AxiosError } from "axios";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -44,8 +46,6 @@ function AuthProvider({ children }: AuthProviderProps) {
     const existToken = getTokenSessionStorage();
     const existCurrentRole = getCurrentRoleSessionStorage();
     if (existUser && existToken && !!existCurrentRole) {
-      console.log(existUser)
-      console.log(existCurrentRole)
       setUser(JSON.parse(existUser));
       setCurrentRole(JSON.parse(existCurrentRole));
     }
@@ -56,14 +56,20 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, []);
 
   async function login(cpf: string, password: string) {
-    const response = await instance.post("users/auth/login", { cpf, password });
-    if (response.status === 200) {
+    try {
+      const response = await instance.post("users/auth/login", { cpf, password });
       const { user, token } = await response.data;
       setUser(user);
       setCurrentRole(user.roles[0]);
       saveTokenSessinStorage(token);
       saveUserSessionStorage(user);
       saveCurrentRoleSessionStorage(user.roles[0]);
+    } catch(error) {  
+      if(error instanceof AxiosError && error.response?.data){
+        toast.error(error.response?.data)
+      } else {
+        toast.error("Erro ao fazer login");
+      }
     }
   }
 
