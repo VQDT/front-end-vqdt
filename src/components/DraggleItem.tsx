@@ -37,12 +37,14 @@ function DraggleItem({ type, content, index }: DraggleItemProps) {
           {hover && (
             <div className="bg-white border-l border-b border-zinc-300 shadow flex justify-start absolute top-0 right-0">
               <button
+                type="button"
                 className="p-3 border-r border-zinc-300 hover:bg-blue-200 aspect-square grid place-content-center"
                 onClick={() => handleOpenModalEditContent(index)}
               >
                 <AiOutlineEdit />
               </button>
               <button
+                type="button"
                 className="p-3 hover:bg-red-200 aspect-square  grid place-content-center"
                 onClick={() => handleRemoveContentAux(index)}
               >

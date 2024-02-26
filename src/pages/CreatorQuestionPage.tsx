@@ -160,7 +160,7 @@ export function CreatorQuestionPage() {
           <section className="mt-8 flex flex-col gap-8">
             <div className="flex justify-between items-center">
               <TitleSection title="Conteúdo da Questão" />
-              <Button onClick={handleOpenModalAddContent}>
+              <Button type="button" onClick={handleOpenModalAddContent}>
                 Adicionar
                 <AiOutlinePlus />
               </Button>
@@ -182,21 +182,24 @@ export function CreatorQuestionPage() {
           <section className="mt-8 flex flex-col gap-8">
             <div className="flex justify-between items-center">
               <TitleSection title="Alternativas da Questão" />
-              <Button onClick={handleOpenAddAlternative}>
+              <Button type="button" onClick={handleOpenAddAlternative}>
                 Adicionar
                 <AiOutlinePlus />
               </Button>
             </div>
             <div className="mb-6 flex flex-col gap-3">{alternativesList}</div>
           </section>
-          <Button>Criar Questão</Button>
+          <Button type="submit">Criar Questão</Button>
         </form>
       </Main>
       {modalAddContentIsOpen && <ModalAddContent />}
       {modalEditIsOpen && <ModalEditContent />}
       {modalAddAlternativeIsOpen && <ModalAddAlternative />}
       {modalEditAlternativeIsOpen && <ModalEditAlternative />}
-      <Toaster duration={5000} position="top-right" />
+      <Toaster 
+        duration={5000} 
+        position="top-right" 
+      />
     </>
   );
 }

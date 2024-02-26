@@ -1,4 +1,4 @@
-import { ChangeEvent, ReactNode, createContext, useState } from "react";
+import { ChangeEvent, FormEvent, ReactNode, createContext, useState } from "react";
 import { ContentAuxRequest, QuestionArea, QuestionDifficulty, QuestionLevel, QuestionRequest } from "../../models/Question";
 import { CreateContentAux, TypeContentAux } from "../../models/ContentAux";
 import { DropResult } from "@hello-pangea/dnd";
@@ -11,7 +11,6 @@ import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import instance from "../../axios";
 import { AxiosError } from "axios";
-import { UseFormRegister, useForm } from "react-hook-form";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -47,8 +46,7 @@ interface QuestionContextProps {
   handleOpenModalEditAlternative: (index: number) => void;
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
-  handleSubmitQuestion: () => void;
-  register: UseFormRegister<QuestionRequest>;
+  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
 }
 
 
@@ -76,10 +74,6 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
   const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] = useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm<QuestionRequest>();
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -127,7 +121,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
           {
             type: content.type,
             content: content.content,
-            order: 0,
+            order: state.contentAux.length - 1,
           },
         ],
       }
@@ -352,12 +346,14 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
     }
   }
 
-  async function handleSubmitQuestion() {
+  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     try {
       const response = await instance.post("/questions", questionRequest);
       console.log(response.status);
       if(response.status === 201) {
         toast.success("Questão criada com sucesso");
+        setQuestionRequest(initState);
       } else {
         toast.error("Erro ao criar questão");
       }
@@ -406,7 +402,6 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
       handleCloseModalEditAlternative,
       handleEditAlternative,
       handleSubmitQuestion,
-      register
     }}>
       {children}
     </QuestionContext.Provider>

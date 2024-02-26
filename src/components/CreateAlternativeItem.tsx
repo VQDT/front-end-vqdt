@@ -17,21 +17,23 @@ export function CreateAlternativeItem({
   const { deleteAlternative, handleOpenModalEditAlternative } = useQuestion();
 
   return (
-    <form action="#">
+    <div>
       <div
-        className="w-full p-4 bg-white border border-zinc-300 rounded-md shadow flex items-center items-stretch gap-6 relative overflow-hidden"
+        className="w-full p-4 bg-white border border-zinc-300 rounded-md shadow flex items-stretch gap-6 relative overflow-hidden"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       > 
         {hover && (
           <div className="bg-white border-l border-b border-zinc-300 shadow flex justify-start absolute top-0 right-0">
             <button
+              type="button"
               className="p-3 border-r border-zinc-300 hover:bg-blue-200 aspect-square grid place-content-center"
               onClick={() => handleOpenModalEditAlternative(Number(id))}
             >
               <AiOutlineEdit />
             </button>
             <button
+              type="button"
               className="p-3 hover:bg-red-200 aspect-square  grid place-content-center"
               onClick={() => deleteAlternative(Number(id)) }
             >
@@ -51,6 +53,6 @@ export function CreateAlternativeItem({
           {label}
         </label>
       </div>
-    </form>
+    </div>
   );
 }
