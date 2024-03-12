@@ -5,7 +5,7 @@ import { useQuestion } from "../context/question/useQuestionContext";
 
 interface DraggleItemProps {
   type: string;
-  content: string;
+  content: string | File;
   index: number;
 }
 

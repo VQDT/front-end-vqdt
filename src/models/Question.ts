@@ -29,7 +29,7 @@ export type QuestionType = "multiple-choice" | "true-or-false";
 
 export interface ContentAuxRequest {
   type: string;
-  content: string;
+  content: string | File;
   order: number;
 }
 

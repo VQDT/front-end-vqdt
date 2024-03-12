@@ -32,9 +32,12 @@ function Test() {
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
 
+  console.log(questions)
+
   useEffect(() => {
     if (id) {
-      getTest(id), getQuestions(id);
+      getTest(id);
+      getQuestions(id);
     }
   }, []);
 
@@ -226,6 +229,7 @@ function Test() {
       );
     }
   );
+
 
   return (
     <div className="w-full min-h-screen p-3 bg-Blue flex gap-3 box-border">

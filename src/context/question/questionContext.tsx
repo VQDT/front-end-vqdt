@@ -1,5 +1,17 @@
-import { ChangeEvent, FormEvent, ReactNode, createContext, useState } from "react";
-import { ContentAuxRequest, QuestionArea, QuestionDifficulty, QuestionLevel, QuestionRequest } from "../../models/Question";
+import {
+  ChangeEvent,
+  FormEvent,
+  ReactNode,
+  createContext,
+  useState,
+} from "react";
+import {
+  ContentAuxRequest,
+  QuestionArea,
+  QuestionDifficulty,
+  QuestionLevel,
+  QuestionRequest,
+} from "../../models/Question";
 import { CreateContentAux, TypeContentAux } from "../../models/ContentAux";
 import { DropResult } from "@hello-pangea/dnd";
 import ContentTitle from "../../components/ContentTitle";
@@ -32,12 +44,14 @@ interface QuestionContextProps {
   setIndexContentEdit: (index: number | null) => void;
   handleEditContentAux: () => void;
   handleDragEnd: (event: DropResult) => void;
-  switchContent: (type: string, content: string) => ReactNode;
+  switchContent: (type: string, content: string | File) => ReactNode;
   alternatives: AlternativeRequest[];
   changeCorrectAlternative: (index: number) => void;
   modalAddAlternativeIsOpen: boolean;
   contentAlternative: string;
-  handleChangeContentAlternative: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  handleChangeContentAlternative: (
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) => void;
   handleAddAlternative: () => void;
   handleCloseAddAlternative: () => void;
   handleOpenAddAlternative: () => void;
@@ -47,8 +61,8 @@ interface QuestionContextProps {
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
   handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
+  contentAux: string | File;
 }
-
 
 export const QuestionContext = createContext<QuestionContextProps | null>(null);
 
@@ -61,19 +75,23 @@ const initState: QuestionRequest = {
   alternatives: [],
   contentAux: [],
   type: "multiple-choice",
-}
+};
 
-export function QuestionProvider({ children }: {children: ReactNode}) {
-
+export function QuestionProvider({ children }: { children: ReactNode }) {
   const [questionRequest, setQuestionRequest] = useState<QuestionRequest>(initState);
-  const [content, setContent] = useState<CreateContentAux>({ type: "" as TypeContentAux, content: "" });
-  const [contentAlternative, setContentAlternative] = useState<string>("") 
+  const [content, setContent] = useState<CreateContentAux>({
+    type: "" as TypeContentAux,
+    content: "",
+  });
+  const [contentAlternative, setContentAlternative] = useState<string>("");
+  const [contentAux, setContentAux] = useState<string | File>("");
   const [modalAddContentIsOpen, setmodalAddContentIsOpen] = useState(false);
   const [modalEditContentIsOpen, setModalEditContentIsOpen] = useState(false);
-  const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] = useState(false);
-  const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] = useState(false);
+  const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] =
+    useState(false);
+  const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] =
+    useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
-
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -86,26 +104,25 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
   function handleType(event: ChangeEvent<HTMLSelectElement>) {
     const value = event.target.value;
     setContent((state) => {
-      return { ...state, type: value as TypeContentAux }
+      return { ...state, type: value as TypeContentAux };
     });
   }
 
   function handleContent(event: ChangeEvent<HTMLTextAreaElement>) {
     const value = event.target.value;
     setContent((state) => {
-      return { ...state, content: value }
+      return { ...state, content: value };
     });
   }
 
   function handleContentImage(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files && event.currentTarget.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setContent((state) => {
-        return { ...state, content: reader.result as string }
+    if (file) {
+      setContent({
+        type: "image",
+        content: file,
       });
     }
-    file && reader.readAsDataURL(file);
   }
 
   function handleResetContent() {
@@ -121,15 +138,15 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
           {
             type: content.type,
             content: content.content,
-            order: state.contentAux.length - 1,
+            order: state.contentAux.length + 1,
           },
         ],
-      }
+      };
     });
   }
- 
+
   function handleAddContentAux() {
-    if(!content.type || !content.content || content.content === "") {
+    if (!content.type || !content.content || content.content === "") {
       toast.error("Preencha todos os campos");
     } else {
       addContentAux();
@@ -153,7 +170,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
 
   function handleOpenModalEditContent(index: number) {
     setIndexContentEdit(index);
-    setContentAlternative(questionRequest.contentAux[index].content);
+    setContentAux(questionRequest.contentAux[index].content);
     setModalEditContentIsOpen(true);
   }
 
@@ -165,19 +182,19 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
             ...item,
             type: content.type,
             content: content.content,
-          }
+          };
         }
         return item;
       });
       return {
         ...state,
         contentAux,
-      }
+      };
     });
   }
-  
+
   function handleEditContentAux() {
-    if(!content.type || !content.content || content.content === "") {
+    if (!content.type || !content.content || content.content === "") {
       toast.error("Preencha todos os campos");
     } else {
       EditContentAux();
@@ -186,7 +203,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
       setModalEditContentIsOpen(false);
     }
   }
-  
+
   function handleOpenModalAddContent() {
     setmodalAddContentIsOpen(true);
   }
@@ -201,8 +218,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
     handleResetContent();
     setmodalAddContentIsOpen(false);
   }
-  
-  
+
   function handleDragEnd(event: DropResult) {
     const { source, destination } = event;
 
@@ -211,7 +227,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
     const contentAux = questionRequest.contentAux;
     const [removed] = contentAux.splice(source.index, 1);
     contentAux
-    .splice(destination.index, 0, removed)
+      .splice(destination.index, 0, removed)
       .map((item, index) => (item.order = index));
 
     setQuestionRequest((state) => ({
@@ -220,22 +236,35 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
     }));
   }
 
-  function switchContent(type: string, content: string) {
+  function switchContent(type: string, content: string | File) {
     switch (type) {
       case "title":
-        return <ContentTitle>{content}</ContentTitle>;
-        
-      case "text":
-        return <ContentText>{content}</ContentText>;
+        return (
+          <ContentTitle>{typeof content === "string" && content}</ContentTitle>
+        );
 
-        case "ref":
-        return <ContentRef>{content}</ContentRef>;
-        
-        case "image":
-          return <ContentImage src={content}/>;
+      case "text":
+        return (
+          <ContentText>{typeof content === "string" && content}</ContentText>
+        );
+
+      case "ref":
+        return (
+          <ContentRef>{typeof content === "string" && content}</ContentRef>
+        );
+
+      case "image":
+        if (typeof content !== "string") {
+          return <ContentImage src={URL.createObjectURL(content)} />;
+        }
+        break;
 
       case "asking":
-        return <ContentAsking>{content}</ContentAsking>;
+        return (
+          <ContentAsking>
+            {typeof content === "string" && content}
+          </ContentAsking>
+        );
     }
   }
 
@@ -247,7 +276,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
     setContentAlternative("");
     setModalAddAlternativeIsOpen(false);
   }
-    
+
   function changeCorrectAlternative(index: number) {
     setQuestionRequest((state) => {
       const alternatives = state.alternatives.map((alternative, i) => {
@@ -255,7 +284,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
           return {
             ...alternative,
             correct: !alternative.correct,
-          }
+          };
         }
         return {
           ...alternative,
@@ -265,7 +294,7 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
       return {
         ...state,
         alternatives,
-      }
+      };
     });
   }
 
@@ -278,18 +307,20 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
           {
             content: contentAlternative,
             correct: false,
-          }
+          },
         ],
-      }
+      };
     });
   }
 
-  function handleChangeContentAlternative(event: ChangeEvent<HTMLTextAreaElement>) {
+  function handleChangeContentAlternative(
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) {
     setContentAlternative(event.target.value);
   }
 
   function handleAddAlternative() {
-    if(contentAlternative === "") {
+    if (contentAlternative === "") {
       toast.error("Preencha todos os campos");
     } else {
       addAlternative();
@@ -298,13 +329,13 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
   }
 
   function deleteAlternative(index: number) {
-    console.log(index)
+    console.log(index);
     setQuestionRequest((state) => {
       const alternatives = state.alternatives.filter((_, i) => i !== index);
       return {
         ...state,
         alternatives,
-      }
+      };
     });
   }
 
@@ -326,19 +357,19 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
           return {
             ...alternative,
             content: contentAlternative,
-          }
+          };
         }
         return alternative;
       });
       return {
         ...state,
         alternatives,
-      }
+      };
     });
   }
 
   function handleEditAlternative() {
-    if(contentAlternative === "") {
+    if (contentAlternative === "") {
       toast.error("Preencha todos os campos");
     } else {
       editAlternative();
@@ -349,60 +380,95 @@ export function QuestionProvider({ children }: {children: ReactNode}) {
   async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      const response = await instance.post("/questions", questionRequest);
-      console.log(response.status);
-      if(response.status === 201) {
+      console.log(questionRequest);
+      const formData = new FormData();
+      formData.append("level", questionRequest.level);
+      formData.append("area", questionRequest.area);
+      formData.append("difficulty", questionRequest.difficulty);
+      formData.append("skill", questionRequest.skill);
+      formData.append("competence", questionRequest.competence);
+      formData.append("type", questionRequest.type);
+      questionRequest.contentAux.forEach((contentAux, index) => {
+        formData.append(`contentAux[${index}][type]`, contentAux.type);
+        formData.append(
+          `contentAux[${index}][order]`,
+          String(contentAux.order)
+        );
+        if (contentAux.content instanceof File) {
+          console.log(contentAux.content);
+          formData.append(
+            `contentAux[${index}][content]`,
+            contentAux.content.name
+          );
+          formData.append("image", contentAux.content);
+        } else {
+          formData.append(`contentAux[${index}][content]`, contentAux.content);
+        }
+      });
+      questionRequest.alternatives.forEach((alternative, index) => {
+        formData.append(`alternatives[${index}][content]`, alternative.content);
+        formData.append(
+          `alternatives[${index}][correct]`,
+          JSON.stringify(alternative.correct)
+        );
+      });
+
+      const response = await instance.post("/questions", formData);
+      if (response.status === 201) {
         toast.success("Questão criada com sucesso");
         setQuestionRequest(initState);
       } else {
         toast.error("Erro ao criar questão");
       }
     } catch (error) {
-      console.log(error)
-      if(error instanceof AxiosError) {
-        toast.error(error.response?.data.message || "Erro ao criar questão")
+      console.log(error);
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data.message || "Erro ao criar questão");
       }
       toast.error("Erro ao criar questão");
     }
   }
-    
+
   return (
-    <QuestionContext.Provider value={{ 
-      questionRequest, 
-      handleChangeCategories,
-      contentsAux: questionRequest.contentAux,
-      modalAddContentIsOpen, 
-      handleOpenModalAddContent,
-      handleCloseModalAddContent,
-      modalEditContentIsOpen,
-      handleOpenModalEditContent,
-      handleCloseModalEditContent,
-      content: content,
-      handleType,
-      handleContent,
-      handleContentImage,
-      handleAddContentAux,
-      handleRemoveContentAux,
-      indexContentEdit,
-      setIndexContentEdit,
-      handleEditContentAux,
-      handleDragEnd,
-      switchContent,
-      alternatives: questionRequest.alternatives,
-      changeCorrectAlternative,
-      modalAddAlternativeIsOpen,
-      contentAlternative,
-      handleChangeContentAlternative,
-      handleAddAlternative,
-      handleCloseAddAlternative,
-      handleOpenAddAlternative,
-      deleteAlternative,
-      modalEditAlternativeIsOpen,
-      handleOpenModalEditAlternative,
-      handleCloseModalEditAlternative,
-      handleEditAlternative,
-      handleSubmitQuestion,
-    }}>
+    <QuestionContext.Provider
+      value={{
+        questionRequest,
+        handleChangeCategories,
+        contentsAux: questionRequest.contentAux,
+        modalAddContentIsOpen,
+        handleOpenModalAddContent,
+        handleCloseModalAddContent,
+        modalEditContentIsOpen,
+        handleOpenModalEditContent,
+        handleCloseModalEditContent,
+        content: content,
+        handleType,
+        handleContent,
+        handleContentImage,
+        handleAddContentAux,
+        handleRemoveContentAux,
+        indexContentEdit,
+        setIndexContentEdit,
+        handleEditContentAux,
+        handleDragEnd,
+        switchContent,
+        alternatives: questionRequest.alternatives,
+        changeCorrectAlternative,
+        modalAddAlternativeIsOpen,
+        contentAlternative,
+        handleChangeContentAlternative,
+        handleAddAlternative,
+        handleCloseAddAlternative,
+        handleOpenAddAlternative,
+        deleteAlternative,
+        modalEditAlternativeIsOpen,
+        handleOpenModalEditAlternative,
+        handleCloseModalEditAlternative,
+        handleEditAlternative,
+        handleSubmitQuestion,
+        contentAux,
+      }}
+    >
       {children}
     </QuestionContext.Provider>
   );

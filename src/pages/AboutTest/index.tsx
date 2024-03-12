@@ -65,7 +65,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
 
     const isFutureTestOrFinishedTest = isFuture(timeEnd) || testAttendances?.[0].testFinished;
     const isApproved = testAttendances?.[0].approved;
-        
+
     return (
       <>
         <Container>

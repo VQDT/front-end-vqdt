@@ -10,5 +10,5 @@ export type TypeContentAux = "asking" | "paragraph" | "text" | "image" | "ref" |
 
 export interface CreateContentAux {
   type: TypeContentAux;
-  content: string;
+  content: string | File;
 }
