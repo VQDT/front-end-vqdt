@@ -6,7 +6,7 @@ import { ContainerModal } from "./ContainerModal";
 
 export function ModalEditContent() {
   const {
-    content,
+    contentAux,
     handleType,
     handleContent,
     handleContentImage,
@@ -29,7 +29,7 @@ export function ModalEditContent() {
         <div className="mt-4 flex flex-col gap-2">
           <SelectField
             label="Selecione o tipo de conteúdo"
-            value={content.type}
+            value={contentAux?.type}
             required
             options={[
               { value: "", label: "Selecione um tipo" },
@@ -44,16 +44,16 @@ export function ModalEditContent() {
         </div>
         <div>
           <label className="pl-3">Conteúdo</label>
-          {content.type === "image" ? (
-            <input
-              type="file"
-              datatype="image/png, image/jpeg"
-              onChange={handleContentImage}
-              required
-            />
-          ) : (
-            <TextArea onChange={handleContent} children={content.content} required/>
-          )}
+          {
+            contentAux.content instanceof File
+            ? <input
+                type="file"
+                datatype="image/png, image/jpeg"
+                onChange={handleContentImage}
+                required
+              />
+            : <TextArea onChange={handleContent} children={contentAux.content} required/>
+          }
         </div>
         <div className="mt-4 flex justify-end">
           <button

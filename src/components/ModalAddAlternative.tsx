@@ -20,6 +20,7 @@ export function ModalAddAlternative() {
             <TextArea
               name="content"
               value={contentAlternative}
+              required
               onChange={handleChangeContentAlternative}
             />
           </div>

@@ -1,5 +1,5 @@
 import { Alternative, AlternativeRequest } from "./Alternative";
-import { ContentAux } from "./ContentAux";	
+import { ContentAux, ContentAuxRequest } from "./ContentAux";	
 
 export interface Question {
     id: string;
@@ -26,12 +26,6 @@ export type QuestionLevel = "INFANTIL" | "FUNDAMENTAL" | "MEDIO";
 export type QuestionArea = "LINGUAGENS" | "MATEMATICA" | "CIENCIAS_HUMANAS" | "CIENCIAS_NATUREZA";
 export type QuestionDifficulty = "1" | "2" | "3";
 export type QuestionType = "multiple-choice" | "true-or-false";
-
-export interface ContentAuxRequest {
-  type: string;
-  content: string | File;
-  order: number;
-}
 
 export interface QuestionRequest {
   level: QuestionLevel;

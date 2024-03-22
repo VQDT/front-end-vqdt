@@ -1,9 +1,15 @@
 export interface ContentAux {
   id: string;
-  type: string;
-  content: TypeContentAux;
+  type: TypeContentAux;
+  content:  string | File;
   order: number;
   idQuestion: string;
+}
+
+export interface ContentAuxRequest {
+  type: TypeContentAux;
+  content: string | File;
+  order: number;
 }
 
 export type TypeContentAux = "asking" | "paragraph" | "text" | "image" | "ref" | "title";

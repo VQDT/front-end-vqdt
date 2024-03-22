@@ -83,6 +83,7 @@ function Test() {
   })
 
   function calculateResult() {
+    
     if (test) {
       let score = 0;
       let status = false;

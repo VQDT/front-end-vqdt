@@ -29,6 +29,7 @@ export function ModalEditAlternative() {
           <label className="pl-3">Conteúdo da alternativa</label>
           <TextArea
             name="content"
+            required
             onChange={handleChangeContentAlternative}
           >
             {contentAlternative}

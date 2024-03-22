@@ -28,6 +28,7 @@ export function ModalAddContent() {
             label="Selecione o tipo de conteúdo"
             name="type"
             value={content.type}
+            required
             options={[
               { value: "", label: "Selecione um tipo" },
               { value: "title", label: "Título"},
@@ -43,8 +44,8 @@ export function ModalAddContent() {
           <label className="pl-3">Conteúdo</label>
           { 
             content.type === "image"
-            ?  <input type="file"  datatype="image/png, image/jpeg" onChange={handleContentImage} name="content"/>
-            :  <TextArea onChange={handleContent}  name="content"/>
+            ?  <input type="file" required datatype="image/png, image/jpeg" onChange={handleContentImage} name="content"/>
+            :  <TextArea required onChange={handleContent}  name="content"/>
           }
         </div>
         <div className="mt-4 flex justify-end">

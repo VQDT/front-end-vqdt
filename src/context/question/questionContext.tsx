@@ -6,13 +6,12 @@ import {
   useState,
 } from "react";
 import {
-  ContentAuxRequest,
   QuestionArea,
   QuestionDifficulty,
   QuestionLevel,
   QuestionRequest,
 } from "../../models/Question";
-import { CreateContentAux, TypeContentAux } from "../../models/ContentAux";
+import { ContentAuxRequest, CreateContentAux, TypeContentAux } from "../../models/ContentAux";
 import { DropResult } from "@hello-pangea/dnd";
 import ContentTitle from "../../components/ContentTitle";
 import ContentText from "../../components/ContentText";
@@ -61,7 +60,7 @@ interface QuestionContextProps {
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
   handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
-  contentAux: string | File;
+  contentAux: CreateContentAux;
 }
 
 export const QuestionContext = createContext<QuestionContextProps | null>(null);
@@ -84,7 +83,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     content: "",
   });
   const [contentAlternative, setContentAlternative] = useState<string>("");
-  const [contentAux, setContentAux] = useState<string | File>("");
+  const [contentAux, setContentAux] = useState<CreateContentAux>({} as CreateContentAux);
   const [modalAddContentIsOpen, setmodalAddContentIsOpen] = useState(false);
   const [modalEditContentIsOpen, setModalEditContentIsOpen] = useState(false);
   const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] =
@@ -117,6 +116,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   function handleContentImage(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files && event.currentTarget.files[0];
+    console.log(file)
     if (file) {
       setContent({
         type: "image",
@@ -170,7 +170,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   function handleOpenModalEditContent(index: number) {
     setIndexContentEdit(index);
-    setContentAux(questionRequest.contentAux[index].content);
+    setContentAux({
+      content: questionRequest.contentAux[index].content,
+      type: questionRequest.contentAux[index].type
+    });
     setModalEditContentIsOpen(true);
   }
 
@@ -379,6 +382,27 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    if(questionRequest.contentAux.length === 0) {
+      toast.error("Questão sem conteúdo!", {
+        style: {
+          backgroundColor: "#F63B42",
+          color: "white"
+        }
+      });
+      return;
+    }
+
+    if(questionRequest.contentAux.length < 2 && questionRequest.type === "multiple-choice") {
+      toast.error("Questão deve ter no mínimo 2 alternativas", {
+        style: {
+          backgroundColor: "#F63B42",
+          color: "white"
+        }
+      });
+      return;
+    }
+
     try {
       console.log(questionRequest);
       const formData = new FormData();
@@ -395,7 +419,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
           String(contentAux.order)
         );
         if (contentAux.content instanceof File) {
-          console.log(contentAux.content);
           formData.append(
             `contentAux[${index}][content]`,
             contentAux.content.name

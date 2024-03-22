@@ -1,7 +1,6 @@
 import { ContainerInput } from "../components/ContainerInputs";
 import SelectioField from "../components/SelectField";
 import { TitleSection } from "../components/TitleSection";
-import { ContentAuxRequest } from "../models/Question";
 import Main from "../components/Main";
 import { AiOutlinePlus } from "react-icons/ai";
 import Button from "../components/Button";
@@ -14,6 +13,7 @@ import { Toaster } from "sonner";
 import { ModalAddAlternative } from "../components/ModalAddAlternative";
 import { CreateAlternativeItem } from "../components/CreateAlternativeItem";
 import { ModalEditAlternative } from "../components/ModalEditAlternative";
+import { ContentAuxRequest } from "../models/ContentAux";
 
 export function CreatorQuestionPage() {
   const {
@@ -43,6 +43,7 @@ export function CreatorQuestionPage() {
       <CreateAlternativeItem
         label={alternative.content}
         key={index}
+        required
         checked={alternative.correct}
         id={index.toString()}
         onClick={() => changeCorrectAlternative(index)}
@@ -63,6 +64,7 @@ export function CreatorQuestionPage() {
                 name="level"
                 onChange={handleChangeCategories}
                 className="max-w-none"
+                required
                 options={[
                   { value: "", label: "Selecione um nível" },
                   { value: "INFANTIL", label: "Ensino Infantil" },
@@ -75,6 +77,7 @@ export function CreatorQuestionPage() {
                 value={questionRequest.area}
                 name="area"
                 onChange={handleChangeCategories}
+                required
                 className="max-w-none"
                 options={[
                   { value: "", label: "Selecione uma área" },
@@ -91,6 +94,7 @@ export function CreatorQuestionPage() {
                 value={questionRequest.difficulty}
                 name="difficulty"
                 onChange={handleChangeCategories}
+                required
                 className="max-w-none"
                 options={[
                   { value: "", label: "Selecione uma dificuldade" },
@@ -103,6 +107,7 @@ export function CreatorQuestionPage() {
                 label="Habilidade"
                 value={questionRequest.skill}
                 name="skill"
+                required
                 onChange={handleChangeCategories}
                 options={[
                   { value: "", label: "Selecione uma habilidade" },
@@ -119,13 +124,14 @@ export function CreatorQuestionPage() {
                 label="Competência"
                 value={questionRequest.competence}
                 name="competence"
+                required
                 onChange={handleChangeCategories}
                 options={[
                   { value: "", label: "Selecione uma competência" },
-                  { value: "1", label: "compreender" },
-                  { value: "2", label: "interpretar" },
-                  { value: "3", label: "analisar" },
-                  { value: "4", label: "refletir" },
+                  { value: "COMPREENDER", label: "Compreender" },
+                  { value: "INTERPRETAR", label: "Interpretar" },
+                  { value: "ANALISAR", label: "Analisar" },
+                  { value: "REFLETIR", label: "Refletir" },
                 ]}
                 className="max-w-none"
               />
@@ -133,6 +139,7 @@ export function CreatorQuestionPage() {
                 label="Tipo de Questão"
                 value={questionRequest.type}
                 name="type"
+                required
                 onChange={handleChangeCategories}
                 options={[
                   { value: "multiple-choice", label: "Múltipla escolha" },
@@ -147,6 +154,7 @@ export function CreatorQuestionPage() {
                   label="A questão é verdadeira ou falsa?"
                   value={String(questionRequest.isCorrect)}
                   name="isCorrect"
+                  required
                   onChange={handleChangeCategories}
                   options={[
                     { value: "", label: "Selecione uma opção" },
@@ -179,16 +187,19 @@ export function CreatorQuestionPage() {
               </Droppable>
             </DragDropContext>
           </section>
-          <section className="mt-8 flex flex-col gap-8">
-            <div className="flex justify-between items-center">
-              <TitleSection title="Alternativas da Questão" />
-              <Button type="button" onClick={handleOpenAddAlternative}>
-                Adicionar
-                <AiOutlinePlus />
-              </Button>
-            </div>
-            <div className="mb-6 flex flex-col gap-3">{alternativesList}</div>
-          </section>
+          {
+            questionRequest.type ===  "multiple-choice" &&
+            <section className="mt-8 flex flex-col gap-8">
+              <div className="flex justify-between items-center">
+                <TitleSection title="Alternativas da Questão" />
+                <Button type="button" onClick={handleOpenAddAlternative}>
+                  Adicionar
+                  <AiOutlinePlus />
+                </Button>
+              </div>
+              <div className="mb-6 flex flex-col gap-3">{alternativesList}</div>
+            </section>
+          }
           <Button type="submit">Criar Questão</Button>
         </form>
       </Main>
