@@ -5,7 +5,6 @@ import Modal from "../../components/Modal";
 import Input from "../../components/Input";
 import Stopwatch from "../../components/Stopwatch";
 import Question from "../../components/question";
-import { ContentAux } from "../../models/ContentAux";
 import { Alternative } from "../../models/Alternative";
 import { Answer } from "../../models/Question";
 
@@ -18,6 +17,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import logo from "../../assets/logo.png";
+import { ContentAuxResponse } from "../../models/ContentAux";
 
 function Test() {
   const { user } = useAuth();
@@ -31,8 +31,6 @@ function Test() {
 
   const { id } = useParams<{ id: string }>();
   const navigation = useNavigate();
-
-  console.log(questions)
 
   useEffect(() => {
     if (id) {
@@ -53,44 +51,48 @@ function Test() {
   }
 
   interface listaPorAreaDoConhecimento {
-    area: string
-    question: string[]
+    area: string;
+    question: string[];
   }
 
-  const areaDoConhecimentoList = questions?.reduce((acc: listaPorAreaDoConhecimento[], question) => {
-    const { knowledgeArea } = question;
-    const areaExist = acc.findIndex((item) => item.area === knowledgeArea)
-    if(areaExist === -1) {
-      acc.push({ area: knowledgeArea, question: [question.id] })
-    } else {
-      acc[areaExist].question.push(question.id)
-    }
-    return acc;
-  }, []);
+  const areaDoConhecimentoList = questions?.reduce(
+    (acc: listaPorAreaDoConhecimento[], question) => {
+      const { knowledgeArea } = question;
+      const areaExist = acc.findIndex((item) => item.area === knowledgeArea);
+      if (areaExist === -1) {
+        acc.push({ area: knowledgeArea, question: [question.id] });
+      } else {
+        acc[areaExist].question.push(question.id);
+      }
+      return acc;
+    },
+    []
+  );
 
   const listAreaDoConhecimento = areaDoConhecimentoList.map((resposta) => {
     const nQuestionResp = list.filter((item) => {
       return resposta.question.includes(item.idQuestion);
-    })
+    });
 
     return (
-      <SubjectCard 
+      <SubjectCard
+        key={resposta.area}
         done={nQuestionResp.length.toString()}
-        total={resposta.question.length.toString()} 
-        subject={resposta.area} 
+        total={resposta.question.length.toString()}
+        subject={resposta.area}
       />
     );
-  })
+  });
 
   function calculateResult() {
-    
     if (test) {
       let score = 0;
       let status = false;
       list.map((item) => {
         questions
           .find((q) => q.id === item.idQuestion)
-          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct === true && score++;
+          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct ===
+          true && score++;
       });
       if (score >= test.numberQuestion / 2) {
         status = true;
@@ -132,10 +134,11 @@ function Test() {
     }
   }
 
-  function switchContent(contentList: ContentAux[]) {
+  function switchContent(contentList: ContentAuxResponse[]) {
     return contentList
       ?.sort((a, b) => a.order - b.order)
       ?.map(({ id, type, content }) => {
+          
         switch (type) {
           case "title":
             return <Question.Title key={id} text={content} />;
@@ -153,7 +156,7 @@ function Test() {
             return <Question.Asking key={id} text={content} />;
 
           default:
-            return <div key={id}></div>;
+            return null;
         }
       });
   }
@@ -177,7 +180,6 @@ function Test() {
       calculateResult();
     }
   }, [checkTimeEnd]);
-
 
   const questionList = questions?.map(
     ({ id, type, knowledgeArea, alternatives, ContentAux }, index) => {
@@ -231,7 +233,6 @@ function Test() {
     }
   );
 
-
   return (
     <div className="w-full min-h-screen p-3 bg-Blue flex gap-3 box-border">
       <div className="w-fit flex flex-col gap-3">
@@ -247,9 +248,7 @@ function Test() {
         <h3 className="text-White text-center text-2xl font-semibold uppercase">
           Progresso
         </h3>
-        <ul className="flex flex-col gap-3">
-          { listAreaDoConhecimento }
-        </ul>
+        <ul className="flex flex-col gap-3">{listAreaDoConhecimento}</ul>
         <Card.Container direction="col">
           <Card.Title text="QUESTÕES FEITAS" />
           <p className="max-w-fit m-auto p-3 text-Secondary text-4xl border-b border-Secondary">
@@ -276,7 +275,7 @@ function Test() {
           text={
             totalQuestions - list.length > 0
               ? `Deseja mesmo encerrar a prova? Ainda há ${
-                totalQuestions - list.length
+                  totalQuestions - list.length
                 } questões sem resposta.`
               : `Deseja mesmo encerrar a prova?`
           }
@@ -285,21 +284,15 @@ function Test() {
           inputs
           buttons={[
             <Button
-              variant={
-                totalQuestions - list.length > 0 ? undefined : "outline"
-              }
+              variant={totalQuestions - list.length > 0 ? undefined : "outline"}
               onClick={changeOpenEncerramento}
             >
               <AiOutlineArrowLeft />
               Voltar
             </Button>,
             <Button
-              variant={
-                totalQuestions - list.length > 0 ? "outline" : undefined
-              }
-              color={
-                totalQuestions - list.length > 0 ? "alert" : "default"
-              }
+              variant={totalQuestions - list.length > 0 ? "outline" : undefined}
+              color={totalQuestions - list.length > 0 ? "alert" : "default"}
               onClick={changeOpenPassword}
             >
               Encerrar

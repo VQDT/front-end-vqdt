@@ -1,5 +1,5 @@
 import { Alternative, AlternativeRequest } from "./Alternative";
-import { ContentAux, ContentAuxRequest } from "./ContentAux";	
+import { ContentAuxRequest, ContentAuxResponse } from "./ContentAux";	
 
 export interface Question {
     id: string;
@@ -14,7 +14,7 @@ export interface Question {
     idCreator: string;
     idReviewer: string;
     alternatives: Alternative[]
-    ContentAux: ContentAux[];
+    ContentAux: ContentAuxResponse[];
 }
 
 export type Answer = {
