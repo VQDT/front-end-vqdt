@@ -15,6 +15,7 @@ import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
 import CourseAttendancePage from "./pages/Applicator/CourseAttendancePage";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
 import ErrorPage from "./pages/ErrorPage";
+import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
 
 export const Router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const Router = createBrowserRouter([
         path: "/application/:id",
         element: <ApplicatorTestPage />,
       },
+      {
+        path: "/CreatorQuestion",
+        element: <CreatorQuestionPage />,
+      }
     ],
   },
   {

@@ -3,7 +3,7 @@ import useAuth from "../context/auth/useAuth"
 
 function LoginLayout() {
   const { user } = useAuth();
-  if (user){
+  if (user?.roles[0].id){
     switch (user.roles[0].id) {
       case 1:
         return <Navigate to={"/candidato"} replace/>;

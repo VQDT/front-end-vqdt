@@ -4,7 +4,7 @@ interface AskingProps {
 
 function  Asking({ text }: AskingProps) {
   return(
-    <p className="text-Midnight font-medium">{ text }</p>
+    <p className="my-7 text-Midnight font-medium">{ text }</p>
   );
 }
 
