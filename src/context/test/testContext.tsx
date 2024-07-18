@@ -1,10 +1,10 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Test } from "../../models/Test";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import instance from "../../axios";
 import { Question } from "../../models/Question";
+import { Test } from "../../models/Test";
 import { TestAttendance } from "../../models/TestAttendance";
 import { UserOutput } from "../../models/User";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 
 interface TestProviderProps {
   children: ReactNode;
@@ -29,7 +29,7 @@ interface TestContextProps {
 const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
-  const isAuthenticated = useIsAuthenticated();
+  const authUser = useAuthUser() as UserOutput;
   const [tests, setTests] = useState<Test[]>([]);
   const [test, setTest] = useState<Test | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -122,10 +122,11 @@ function TestProvider({ children }: TestProviderProps) {
   }
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (authUser) {
+      console.log("User is authenticated", authUser);
       getTests();
     }
-  }, [isAuthenticated, testAttendance]);
+  }, [authUser, testAttendance]);
 
   return (
     <TestContext.Provider
@@ -151,3 +152,4 @@ function TestProvider({ children }: TestProviderProps) {
 }
 
 export { TestContext, TestProvider };
+
