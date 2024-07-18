@@ -1,13 +1,15 @@
 import React from "react";
+import AuthProvider from "react-auth-kit";
+import createStore from "react-auth-kit/createStore";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import "./index.css";
-import router from "./router";
-import createStore from "react-auth-kit/createStore";
-import AuthProvider from "react-auth-kit";
-import { TestProvider } from "./context/test/testContext";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { PreparatoryProvider } from "./context/preparatory/preparatoryContext";
 import { QuestionProvider } from "./context/question/questionContext";
+import { TestProvider } from "./context/test/testContext";
+import "./index.css";
+import router from "./router";
 
 const store = createStore({
   authName: "_auth",
@@ -18,14 +20,15 @@ const store = createStore({
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AuthProvider store={store}>
-      <TestProvider>
-        <PreparatoryProvider>
-          <QuestionProvider>
-            <RouterProvider router={router} />
-          </QuestionProvider>
-        </PreparatoryProvider>
-      </TestProvider>
-    </AuthProvider>
+      <ToastContainer />
+      <AuthProvider store={store}>
+        <TestProvider>
+          <PreparatoryProvider>
+            <QuestionProvider>
+              <RouterProvider router={router} />
+            </QuestionProvider>
+          </PreparatoryProvider>
+        </TestProvider>
+      </AuthProvider>
   </React.StrictMode>
 );

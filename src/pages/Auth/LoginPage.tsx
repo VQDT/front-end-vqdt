@@ -1,15 +1,16 @@
-import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+import { Controller, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import MaskedInput from "react-text-mask";
 import { Toaster } from "sonner";
-import { LoginInput, LoginInputSchema, UserOutput } from "../../models/User";
 import GOV from "../../assets/GOV.png";
 import VQDT from "../../assets/VQDT.png";
-import { Link, useNavigate } from "react-router-dom";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
 import instance from "../../axios";
-import { useToast } from "../../hooks/useToast";
-import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+// import { useToast } from "../../hooks/useToast";
+import { AxiosError } from "axios";
+import { toast } from "react-toastify";
+import { LoginInput, LoginInputSchema } from "../../models/User";
 
 function LoginPage() {
   const {
@@ -20,8 +21,7 @@ function LoginPage() {
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginInputSchema),
   });
-  const { showToast } = useToast();
-  const authUser = useAuthUser() as UserOutput;
+  // const authUser = useAuthUser() as UserOutput;
   const navigate = useNavigate();
   const signIn = useSignIn();
   const cpfMask = [
@@ -40,18 +40,14 @@ function LoginPage() {
     /\d/,
     /\d/,
   ];
-  const submitLogin = async ({ cpf, password }: LoginInput, e: Event) => {
-    e.preventDefault();
-    console.log("Entered Login", cpf, password);
+  const submitLogin = async ({ cpf, password }: LoginInput) => {
     try {
       const response = await instance.post("users/auth/login", {
         cpf: cpf.replace(/[^\d]/g, ""),
         password,
       });
-      console.log("POST Complete", response);
 
       const { user, token } = await response.data;
-      console.log("POST DATA", user, token);
 
       if (
         signIn({
@@ -62,17 +58,21 @@ function LoginPage() {
           userState: user,
         })
       ) {
-        console.log("User Signed In", authUser);
-        navigate("/home");
+        navigate("/");
       }
-      console.log("User Not Signed In");
     } catch (error) {
-      // showToast({ message: "Erro ao efetuar login" });
-      console.log(error);
+      switch ((error as AxiosError)?.response?.status) {
+        case 404:
+          toast.error("Usuário ou senha inválidos");
+          break;
+        default:
+          toast.error("Erro ao realizar login");
+      }
     }
   };
-
+  
   return (
+    <div className="w-full min-h-screen bg-Blue flex justify-center items-center">
     <div className="w-full max-w-xs">
       <img src={VQDT} className="max-w-full mx-auto mb-7" />
       <form
@@ -112,7 +112,7 @@ function LoginPage() {
           )}
         </div>
         <p className="w-full m-1 text-right text-Concrete">
-          <Link to={"/auth/register"}>Esqueceu a senha?</Link>
+          <Link to={"/cadastro"}>Esqueceu a senha?</Link>
         </p>
         <button
           type="submit"
@@ -136,6 +136,7 @@ function LoginPage() {
         pauseWhenPageIsHidden={true}
         theme="light"
       />
+    </div>
     </div>
   );
 }
