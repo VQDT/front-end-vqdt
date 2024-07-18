@@ -3,8 +3,8 @@ import { TestAttendance } from "./TestAttendance";
 import { CourseAttendance } from "./Course";
 
 export interface Role {
-  id:number;
-  name: string
+  id: number;
+  name: "applicator" | "candidate" | "elaborator" | "reviewer" | "admin" | "supervisor";
 }
 
 export type UserOutput = {

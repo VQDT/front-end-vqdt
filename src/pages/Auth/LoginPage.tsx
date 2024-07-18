@@ -2,16 +2,16 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import MaskedInput from "react-text-mask";
 import { Toaster } from "sonner";
-import { LoginInput, LoginInputSchema } from "../../models/User";
+import { LoginInput, LoginInputSchema, UserOutput } from "../../models/User";
 import GOV from "../../assets/GOV.png";
 import VQDT from "../../assets/VQDT.png";
-import useAuth from "../../context/auth/useAuth";
-import { Link } from "react-router-dom";
-import ErroAlert from "../../components/ErrorAlert";
+import { Link, useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
+import instance from "../../axios";
+import { useToast } from "../../hooks/useToast";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 function LoginPage() {
-
-  const { login, error } = useAuth();
   const {
     register,
     handleSubmit,
@@ -20,41 +20,81 @@ function LoginPage() {
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginInputSchema),
   });
-  
-  const cpfMask = [/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/];
-  const submitLogin = (data: LoginInput) => {
-    login(data.cpf.replace(/[^\d]/g, ""), data.password)
-  };
-  
-  return (
+  const { showToast } = useToast();
+  const authUser = useAuthUser() as UserOutput;
+  const navigate = useNavigate();
+  const signIn = useSignIn();
+  const cpfMask = [
+    /\d/,
+    /\d/,
+    /\d/,
+    ".",
+    /\d/,
+    /\d/,
+    /\d/,
+    ".",
+    /\d/,
+    /\d/,
+    /\d/,
+    "-",
+    /\d/,
+    /\d/,
+  ];
+  const submitLogin = async ({ cpf, password }: LoginInput, e: Event) => {
+    e.preventDefault();
+    console.log("Entered Login", cpf, password);
+    try {
+      const response = await instance.post("users/auth/login", {
+        cpf: cpf.replace(/[^\d]/g, ""),
+        password,
+      });
+      console.log("POST Complete", response);
 
-    <div className="w-full max-w-xs">
-      {
-        error && <ErroAlert/>
+      const { user, token } = await response.data;
+      console.log("POST DATA", user, token);
+
+      if (
+        signIn({
+          auth: {
+            token: token,
+            type: "Bearer",
+          },
+          userState: user,
+        })
+      ) {
+        console.log("User Signed In", authUser);
+        navigate("/home");
       }
+      console.log("User Not Signed In");
+    } catch (error) {
+      // showToast({ message: "Erro ao efetuar login" });
+      console.log(error);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-xs">
       <img src={VQDT} className="max-w-full mx-auto mb-7" />
       <form
         className="w-full p-6 bg-White rounded-xl flex flex-col gap-3"
         onSubmit={handleSubmit(submitLogin)}
       >
         <div className="flex flex-col">
-          <Controller 
+          <Controller
             name="cpf"
             control={control}
             defaultValue=""
             render={({ field }) => (
               <MaskedInput
                 mask={cpfMask}
-                { ...field }
+                {...field}
                 placeholder="CPF"
                 className="p-2 rounded-md border border-Concrete"
               />
             )}
           />
           {errors.cpf && (
-            <span className="text-Red70 text-xs">
-              {errors.cpf.message}
-            </span>
+            <span className="text-Red70 text-xs">{errors.cpf.message}</span>
           )}
         </div>
         <div className="flex flex-col">
@@ -74,18 +114,23 @@ function LoginPage() {
         <p className="w-full m-1 text-right text-Concrete">
           <Link to={"/auth/register"}>Esqueceu a senha?</Link>
         </p>
-        <button type="submit" className="bg-Blue py-2 rounded-md text-White font-semibold uppercase">
+        <button
+          type="submit"
+          className="bg-Blue py-2 rounded-md text-White font-semibold uppercase"
+        >
           Entrar
         </button>
       </form>
       <div className="h-28 mt-5 flex justify-between gap-5">
         <div className="w-[175px] h-full flex flex-col justify-end items-end">
           <p className="text-White text-2xl font-bold">SEDUC</p>
-          <p className="text-White text-right font-normal">Secretária de Estado da Educação de Alagoas</p>
+          <p className="text-White text-right font-normal">
+            Secretária de Estado da Educação de Alagoas
+          </p>
         </div>
         <img src={GOV} className="max-h-full mx-auto" />
       </div>
-      <Toaster 
+      <Toaster
         duration={5000}
         position="top-right"
         pauseWhenPageIsHidden={true}
