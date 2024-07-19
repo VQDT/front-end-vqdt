@@ -16,6 +16,7 @@ import TestPainel from "./pages/Candidate/TestPainelPage";
 import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
+import LogoutPage from "./pages/Logout/LogoutPage";
 
 export const Router = createBrowserRouter([
   {
@@ -46,15 +47,18 @@ export const Router = createBrowserRouter([
       // CANDIDATE ROUTES
 
       {
-        element: <Protect permittedRoles={["candidate"]} />,
+        element: <Protect permittedRoles={["candidate", "admin"]} />,
         children: [
-          { path: "/candidato", element: <TestPainel /> },
+          { path: "/painel-de-provas", element: <TestPainel /> },
           { path: "/provas/:id", element: <AboutTest /> },
           {
             path: "/prova",
             element: <TestLayout />,
             children: [
-              { path: "/prova/introducao/:id", element: <IntroductionTestPage /> },
+              {
+                path: "/prova/introducao/:id",
+                element: <IntroductionTestPage />,
+              },
               { path: "/prova/:id", element: <Test /> },
             ],
           },
@@ -108,6 +112,10 @@ export const Router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   { path: "/cadastro", element: <h1>Register</h1> },
+  {
+    path: "/logout",
+    element: <LogoutPage />,
+  },
 ]);
 
 export default Router;

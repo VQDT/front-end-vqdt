@@ -49,15 +49,18 @@ function LoginPage() {
 
       const { user, token } = await response.data;
 
+      console.log(user, token);
+
       if (
         signIn({
           auth: {
             token: token,
             type: "Bearer",
           },
-          userState: user,
+          userState: user ,
         })
       ) {
+        localStorage.setItem("currentRole", user.roles[0].name);
         navigate("/");
       }
     } catch (error) {

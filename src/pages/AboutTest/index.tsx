@@ -28,6 +28,7 @@ interface AboutTest {
 }
 
 function AboutTest({ variant = "default" }: AboutTest) {
+  
   const { id } = useParams();
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
@@ -36,7 +37,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
     if (id) {
       getTest(id);
     }
-  }, []);
+  }, [getTest, id]);
 
   async function removeAttendance() {
     if(id){

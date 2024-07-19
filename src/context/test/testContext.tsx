@@ -5,6 +5,7 @@ import { Question } from "../../models/Question";
 import { Test } from "../../models/Test";
 import { TestAttendance } from "../../models/TestAttendance";
 import { UserOutput } from "../../models/User";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
 interface TestProviderProps {
   children: ReactNode;
@@ -30,6 +31,7 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
   const authUser = useAuthUser() as UserOutput;
+  const authHeader = useAuthHeader();
   const [tests, setTests] = useState<Test[]>([]);
   const [test, setTest] = useState<Test | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -42,13 +44,22 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function getTests() {
     const url = `/tests`;
-    const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
+    console.log(response.data);
     setTests(response.data);
   }
 
   async function getTest(id: string) {
     const url = `/tests/test/` + id;
-    const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
     setTest(response.data);
   }
 

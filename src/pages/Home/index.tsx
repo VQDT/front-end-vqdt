@@ -1,7 +1,4 @@
-
-type Props = {};
-
-const index = (props: Props) => {
+const index = () => {
   console.log("Home page.");
   return <div>Home!</div>;
 };
