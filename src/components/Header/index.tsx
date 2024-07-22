@@ -31,7 +31,7 @@ const drawerWidth = 240;
 
 function Header({ window }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const { roles, id } = useAuthUser() as UserOutput;
+  const { roles } = useAuthUser() as UserOutput;
   const currentRole = localStorage.getItem("currentRole") || "default";
   const signOut = useSignOut();
 
@@ -96,7 +96,7 @@ function Header({ window }: Props) {
   const linkList = navItems[currentRole].map((item) => (
     <Link
       key={item.name}
-      to={item.to + id}
+      to={item.to}
       className="
             h-full py-0 px-5 
             border-r border-White rounded-none text-lg 
