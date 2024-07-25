@@ -16,6 +16,7 @@ import CourseAttendancePage from "./pages/Applicator/CourseAttendancePage";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
 import ErrorPage from "./pages/ErrorPage";
 import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
+import CreatorPanel from "./pages/Creator/CreatorPanel";
 
 export const Router = createBrowserRouter([
   {
@@ -33,7 +34,7 @@ export const Router = createBrowserRouter([
       },
       {
         path: "/aplicador",
-        element: <ApplicatorTestPainel />,  
+        element: <ApplicatorTestPainel />,
       },
       {
         path: "/preparatorio",
@@ -58,6 +59,10 @@ export const Router = createBrowserRouter([
       {
         path: "/CreatorQuestion",
         element: <CreatorQuestionPage />,
+      },
+      {
+        path: "/CreatorPanel",
+        element: <CreatorPanel />,
       }
     ],
   },
@@ -81,9 +86,9 @@ export const Router = createBrowserRouter([
   },
   {
     path: "/recuperar-senha",
-    element: <RecoverPassword />, 
+    element: <RecoverPassword />,
   },
-  
+
   {
     path: "/auth",
     element: <LoginLayout />,
