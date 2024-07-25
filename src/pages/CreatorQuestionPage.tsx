@@ -189,7 +189,7 @@ export function CreatorQuestionPage() {
           </section>
           {
             questionRequest.type ===  "multiple-choice" &&
-            <section className="mt-4 flex flex-col gap-8">
+            <section className="mt-4  flex flex-col gap-8">
               <div className="flex justify-between items-center">
                 <TitleSection title="Alternativas da Questão" />
                 <Button type="button" onClick={handleOpenAddAlternative}>
@@ -200,7 +200,9 @@ export function CreatorQuestionPage() {
               <div className="mb-4 flex flex-col gap-3">{alternativesList}</div>
             </section>
           }
-          <Button type="submit">Criar Questão</Button>
+        <div className="mt-2">
+        <Button   type="submit">Criar Questão</Button>
+        </div>
         </form>
       </Main>
       {modalAddContentIsOpen && <ModalAddContent />}
