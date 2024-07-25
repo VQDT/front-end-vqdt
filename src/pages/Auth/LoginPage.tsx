@@ -11,6 +11,7 @@ import instance from "../../axios";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { LoginInput, LoginInputSchema } from "../../models/User";
+import Button from "../../components/Button";
 
 function LoginPage() {
   const {
@@ -21,7 +22,6 @@ function LoginPage() {
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginInputSchema),
   });
-  // const authUser = useAuthUser() as UserOutput;
   const navigate = useNavigate();
   const signIn = useSignIn();
   const cpfMask = [
@@ -40,16 +40,15 @@ function LoginPage() {
     /\d/,
     /\d/,
   ];
+
   const submitLogin = async ({ cpf, password }: LoginInput) => {
     try {
-      const response = await instance.post("users/auth/login", {
+      const response = await instance.post("/account/login", {
         cpf: cpf.replace(/[^\d]/g, ""),
         password,
       });
 
       const { user, token } = await response.data;
-
-      console.log(user, token);
 
       if (
         signIn({
@@ -57,10 +56,10 @@ function LoginPage() {
             token: token,
             type: "Bearer",
           },
-          userState: user ,
+          userState: user,
         })
       ) {
-        localStorage.setItem("currentRole", user.roles[0].name);
+        localStorage.setItem("currentRole", user.roles[0]);
         navigate("/");
       }
     } catch (error) {
@@ -73,73 +72,73 @@ function LoginPage() {
       }
     }
   };
-  
+
   return (
     <div className="w-full min-h-screen bg-Blue flex justify-center items-center">
-    <div className="w-full max-w-xs">
-      <img src={VQDT} className="max-w-full mx-auto mb-7" />
-      <form
-        className="w-full p-6 bg-White rounded-xl flex flex-col gap-3"
-        onSubmit={handleSubmit(submitLogin)}
-      >
-        <div className="flex flex-col">
-          <Controller
-            name="cpf"
-            control={control}
-            defaultValue=""
-            render={({ field }) => (
-              <MaskedInput
-                mask={cpfMask}
-                {...field}
-                placeholder="CPF"
-                className="p-2 rounded-md border border-Concrete"
-              />
-            )}
-          />
-          {errors.cpf && (
-            <span className="text-Red70 text-xs">{errors.cpf.message}</span>
-          )}
-        </div>
-        <div className="flex flex-col">
-          <input
-            type="password"
-            id="password"
-            {...register("password")}
-            placeholder="Senha"
-            className="p-2 rounded-md border border-Concrete"
-          />
-          {errors.password && (
-            <span className="text-Red70 text-xs">
-              {errors.password.message}
-            </span>
-          )}
-        </div>
-        <p className="w-full m-1 text-right text-Concrete">
-          <Link to={"/cadastro"}>Esqueceu a senha?</Link>
-        </p>
-        <button
-          type="submit"
-          className="bg-Blue py-2 rounded-md text-White font-semibold uppercase"
+      <div className="w-full max-w-xs">
+        <img src={VQDT} className="max-w-full mx-auto mb-7" />
+        <form
+          className="w-full p-6 bg-White rounded-xl flex flex-col gap-3"
+          onSubmit={handleSubmit(submitLogin)}
         >
-          Entrar
-        </button>
-      </form>
-      <div className="h-28 mt-5 flex justify-between gap-5">
-        <div className="w-[175px] h-full flex flex-col justify-end items-end">
-          <p className="text-White text-2xl font-bold">SEDUC</p>
-          <p className="text-White text-right font-normal">
-            Secretária de Estado da Educação de Alagoas
+          <div className="flex flex-col">
+            <Controller
+              name="cpf"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <MaskedInput
+                  mask={cpfMask}
+                  {...field}
+                  placeholder="CPF"
+                  className="p-2 rounded-md border border-Concrete"
+                />
+              )}
+            />
+            {errors.cpf && (
+              <span className="text-Red70 text-xs">{errors.cpf.message}</span>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <input
+              type="password"
+              id="password"
+              {...register("password")}
+              placeholder="Senha"
+              className="p-2 rounded-md border border-Concrete"
+            />
+            {errors.password && (
+              <span className="text-Red70 text-xs">
+                {errors.password.message}
+              </span>
+            )}
+          </div>
+          <p className="w-full m-1 text-right text-Concrete">
+            <Link to={"/cadastro"}>Esqueceu a senha?</Link>
           </p>
+          <Button
+            type="submit"
+            className="bg-Blue py-2 rounded-md text-White font-semibold uppercase"
+          >
+            Entrar
+          </Button>
+        </form>
+        <div className="h-28 mt-5 flex justify-between gap-5">
+          <div className="w-[175px] h-full flex flex-col justify-end items-end">
+            <p className="text-White text-2xl font-bold">SEDUC</p>
+            <p className="text-White text-right font-normal">
+              Secretária de Estado da Educação de Alagoas
+            </p>
+          </div>
+          <img src={GOV} className="max-h-full mx-auto" />
         </div>
-        <img src={GOV} className="max-h-full mx-auto" />
+        <Toaster
+          duration={5000}
+          position="top-right"
+          pauseWhenPageIsHidden={true}
+          theme="light"
+        />
       </div>
-      <Toaster
-        duration={5000}
-        position="top-right"
-        pauseWhenPageIsHidden={true}
-        theme="light"
-      />
-    </div>
     </div>
   );
 }

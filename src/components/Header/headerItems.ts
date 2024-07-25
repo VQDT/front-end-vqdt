@@ -4,35 +4,43 @@ interface INavItem extends Record<string, string> {
 }
 
 export const navItems: Record<string, INavItem[]> = {
-    "admin": [
+    "ADMIN": [
         {
             name: "Provas",
-            to: "/painel-de-provas/",
+            to: "/painel-de-provas",
         },
-    ],
-    "applicator": [
         {
             name: "Preparatório",
             to: "/preparatorio",
+        },
+        {
+            name: "Aplicações",
+            to: "/aplicador",
         }
     ],
-    "candidate": [
+    "APPLICATOR": [
+        {
+            name: "Preparatório",
+            to: "/preparatorio",
+        },
+        {
+            name: "Aplicações",
+            to: "/aplicador",
+        }
+    ],
+    "CANDIDATE": [
         {
             name: "Provas",
-            to: "/painel-de-provas/",
-        },
-        {
-            name: "Dias de Curso",
-            to: "/dias-de-curso",
+            to: "/painel-de-provas",
         },
     ],
-    "elaborator": [
+    "ELABORATOR": [
 
     ],
-    "reviewer": [
+    "REVIEWER": [
 
     ],
-    "supervisor": [
+    "SUPERVISOR": [
 
     ],
     "default": [],

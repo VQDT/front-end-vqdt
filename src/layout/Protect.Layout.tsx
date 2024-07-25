@@ -11,7 +11,7 @@ function ProtectLayout(props: ProtectLayoutProps) {
   const { roles } = useAuthUser() as UserOutput;
 
   if (props.permittedRoles) {
-    if (!roles.some((role) => props.permittedRoles?.includes(role.name))) {
+    if (!roles.some((role) => props.permittedRoles?.includes(role))) {
       return <Navigate to={"/"} replace />;
     }
   }

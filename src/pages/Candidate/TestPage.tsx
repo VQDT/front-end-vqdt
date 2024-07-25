@@ -9,18 +9,19 @@ import { Alternative } from "../../models/Alternative";
 import { Answer } from "../../models/Question";
 
 import instance from "../../axios";
-import useAuth from "../../context/auth/useAuth";
 import useTest from "../../context/test/useTest";
 
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import logo from "../../assets/logo.png";
 import { ContentAuxResponse } from "../../models/ContentAux";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
 
 function Test() {
-  const { user } = useAuth();
+  const user = useAuthUser() as UserOutput;
   const { test, getTest, getQuestions, questions, setScoreAndStatus } =
     useTest();
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
@@ -84,7 +85,7 @@ function Test() {
     );
   });
 
-  function calculateResult() {
+  const calculateResult = useCallback(() => {
     if (test) {
       let score = 0;
       let status = false;
@@ -100,7 +101,7 @@ function Test() {
       setScoreAndStatus(test.id, score, status);
       navigation("/comprovante-de-participacao/" + test.id);
     }
-  }
+  }, [test, list, questions, setScoreAndStatus, navigation]);
 
   async function handleSubmit() {
     try {
@@ -179,7 +180,7 @@ function Test() {
     if (checkTimeEnd) {
       calculateResult();
     }
-  }, [checkTimeEnd]);
+  }, [calculateResult, checkTimeEnd]);
 
   const questionList = questions?.map(
     ({ id, type, knowledgeArea, alternatives, ContentAux }, index) => {

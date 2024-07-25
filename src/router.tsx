@@ -35,7 +35,7 @@ export const Router = createBrowserRouter([
       // APPLICATOR ROUTES
 
       {
-        element: <Protect permittedRoles={["applicator"]} />,
+        element: <Protect permittedRoles={["APPLICATOR", "ADMIN"]} />,
         children: [
           { path: "/aplicador", element: <ApplicatorTestPainel /> },
           { path: "/preparatorio", element: <Preparatory /> },
@@ -47,7 +47,7 @@ export const Router = createBrowserRouter([
       // CANDIDATE ROUTES
 
       {
-        element: <Protect permittedRoles={["candidate", "admin"]} />,
+        element: <Protect permittedRoles={["CANDIDATE", "ADMIN"]} />,
         children: [
           { path: "/painel-de-provas", element: <TestPainel /> },
           { path: "/provas/:id", element: <AboutTest /> },

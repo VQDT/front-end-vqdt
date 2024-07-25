@@ -39,8 +39,8 @@ function Header({ window }: Props) {
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
-    const role = roles?.find((role) => role.name === value);
-    if (role) localStorage.setItem("currentRole", role.name);
+    const role = roles?.find((role) => role === value);
+    if (role) localStorage.setItem("currentRole", role);
     navigate("/");
   };
 
@@ -80,14 +80,14 @@ function Header({ window }: Props) {
       onChange={() => handleChange}
       className="border-2 border-white m-2 bg-Blue !text-white rounded-md p-2 appearance-none"
       sx={{
-        '.MuiSvgIcon-root ': {
-              fill: "white !important",
-            }
+        ".MuiSvgIcon-root ": {
+          fill: "white !important",
+        },
       }}
     >
       {roles.map((op) => (
-        <MenuItem key={op.id} value={op.name} id={op.id.toString()}>
-          {roleTranslation[op.name]}
+        <MenuItem key={op} value={op} id={op}>
+          {roleTranslation[op]}
         </MenuItem>
       ))}
     </Select>

@@ -5,8 +5,6 @@ import useTest from "../../context/test/useTest";
 import { AiOutlineCalendar } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import isFuture from "../../utils/isFuture";
-import useAuth from "../../context/auth/useAuth";
-import { useEffect } from "react";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -14,18 +12,8 @@ function NormalizeDate(date: string) {
 
 function ApplicatorTestPainel() {
 
-    const { checkRolePermission, loggout, setError } = useAuth();
     const { tests } = useTest();
     const navigation = useNavigate();
-
-    useEffect(() => {
-        checkRolePermission(2).then((check) => {
-            if (!check){
-                setError(true)
-                loggout();
-            }
-        })
-    },[])
 
     function navigateApplicatorTest(id: string) {
         navigation("/application/" + id);

@@ -1,7 +1,9 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import useAuth from "../auth/useAuth";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import instance from "../../axios";
 import { CourseAttendance, CourseDay } from "../../models/Course";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface PreparatoryProviderProps {
   children: ReactNode;
@@ -19,27 +21,25 @@ interface PreparatoryContextProps {
 const PreparatoryContext = createContext<PreparatoryContextProps | null>(null);
 
 function PreparatoryProvider({ children }: PreparatoryProviderProps) {
-
-  const { user, currentRole } = useAuth();
+  const user = useAuthUser() as UserOutput;
+  const authHeader = useAuthHeader();
   const [ CourseDays, setCouseDays ] = useState<CourseDay[]>([]);
   const [ courseCandidates, setCourseCandidates ] = useState<CourseAttendance[]| undefined>(undefined);
-
-  const roles = user?.roles;
   
-  async function getPreparatoryCourseDays(applicatorId: string) {
-    if (roles && currentRole){
+  const getPreparatoryCourseDays = useCallback(async (applicatorId: string) => {
       const url = `/courseDays/applicator/`+applicatorId;
-      const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
       setCouseDays(response.data);
-    }
-  }
+  }, [authHeader, setCouseDays]);
 
   async function getCourseCandidates(courseDayId: string){
-    if (roles && currentRole){
       const url = `/users/courseDay/`+courseDayId;
       const response = await instance.get(url);
       setCourseCandidates(response.data);
-    }
   }
 
   async function updateCourseAttendance(presents: CourseAttendance[], courseDayId: string){
@@ -71,10 +71,8 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
   }
 
   useEffect(() => {
-    if(user){
       getPreparatoryCourseDays(user.id)
-    }
-  },[])
+  },[getPreparatoryCourseDays, user.id])
 
   return(
       <PreparatoryContext.Provider value={{ courseCandidates, CourseDays, getPreparatoryCourseDays, getCourseCandidates, updateCourseAttendance, updateCandidateList }}>
