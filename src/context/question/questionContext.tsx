@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import instance from "../../axios";
 import { AxiosError } from "axios";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -77,6 +78,7 @@ const initState: QuestionRequest = {
 };
 
 export function QuestionProvider({ children }: { children: ReactNode }) {
+  const authHeader = useAuthHeader();
   const [questionRequest, setQuestionRequest] = useState<QuestionRequest>(initState);
   const [content, setContent] = useState<CreateContentAux>({
     type: "" as TypeContentAux,
@@ -393,7 +395,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       return;
     }
 
-    if(questionRequest.contentAux.length < 2 && questionRequest.type === "multiple-choice") {
+    if(questionRequest.alternatives.length < 2 && questionRequest.type === "multiple-choice") {
       toast.error("Questão deve ter no mínimo 2 alternativas", {
         style: {
           backgroundColor: "#F63B42",
@@ -436,12 +438,19 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         );
       });
 
-      const response = await instance.post("/questions", formData);
+      console.log(authHeader);
+
+      const response = await instance.post("/questions", {
+        headers: {
+          Authorization: authHeader,
+        },
+        formData: formData,
+      });
       if (response.status === 201) {
         toast.success("Questão criada com sucesso");
         setQuestionRequest(initState);
       } else {
-        toast.error("Erro ao criar questão");
+        toast.error("Erro ao submeter questão");
       }
     } catch (error) {
       console.log(error);

@@ -1,8 +1,6 @@
-import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useState } from "react";
 import instance from "../../axios";
 import { CourseAttendance, CourseDay } from "../../models/Course";
-import useAuthUser from "react-auth-kit/hooks/useAuthUser";
-import { UserOutput } from "../../models/User";
 import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface PreparatoryProviderProps {
@@ -21,7 +19,6 @@ interface PreparatoryContextProps {
 const PreparatoryContext = createContext<PreparatoryContextProps | null>(null);
 
 function PreparatoryProvider({ children }: PreparatoryProviderProps) {
-  const user = useAuthUser() as UserOutput;
   const authHeader = useAuthHeader();
   const [ CourseDays, setCouseDays ] = useState<CourseDay[]>([]);
   const [ courseCandidates, setCourseCandidates ] = useState<CourseAttendance[]| undefined>(undefined);
@@ -38,7 +35,11 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
 
   async function getCourseCandidates(courseDayId: string){
       const url = `/users/courseDay/`+courseDayId;
-      const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
       setCourseCandidates(response.data);
   }
 
@@ -47,7 +48,13 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
     try{
       presents.map(async (elem) => {
         const userId = elem.user.id;
-        await instance.put(url, { userId, courseDayId })
+        await instance.put(url, {
+          headers: {
+            Authorization: authHeader,
+          },
+          userId,
+          courseDayId
+        })
       })
       return true
     }
@@ -69,10 +76,6 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
       setCourseCandidates(newList)
     }
   }
-
-  useEffect(() => {
-      getPreparatoryCourseDays(user.id)
-  },[getPreparatoryCourseDays, user.id])
 
   return(
       <PreparatoryContext.Provider value={{ courseCandidates, CourseDays, getPreparatoryCourseDays, getCourseCandidates, updateCourseAttendance, updateCandidateList }}>
