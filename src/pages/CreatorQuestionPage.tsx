@@ -54,9 +54,9 @@ export function CreatorQuestionPage() {
   return (
     <>
       <Main>
-        <form action="#" encType="multpart/form-data" onSubmit={handleSubmitQuestion}>
+        <form className="mt-4" action="#" encType="multpart/form-data" onSubmit={handleSubmitQuestion}>
           <TitleSection title="Categorização" />
-          <section className="mt-8 flex flex-col gap-8">
+          <section className="mt-4 flex flex-col gap-8">
             <ContainerInput>
               <SelectioField
                 label="Nível de Conhecimento"
@@ -165,7 +165,7 @@ export function CreatorQuestionPage() {
               )}
             </ContainerInput>
           </section>
-          <section className="mt-8 flex flex-col gap-8">
+          <section className="mt-4 flex flex-col gap-8">
             <div className="flex justify-between items-center">
               <TitleSection title="Conteúdo da Questão" />
               <Button type="button" onClick={handleOpenModalAddContent}>
@@ -189,7 +189,7 @@ export function CreatorQuestionPage() {
           </section>
           {
             questionRequest.type ===  "multiple-choice" &&
-            <section className="mt-8 flex flex-col gap-8">
+            <section className="mt-4 flex flex-col gap-8">
               <div className="flex justify-between items-center">
                 <TitleSection title="Alternativas da Questão" />
                 <Button type="button" onClick={handleOpenAddAlternative}>
@@ -197,7 +197,7 @@ export function CreatorQuestionPage() {
                   <AiOutlinePlus />
                 </Button>
               </div>
-              <div className="mb-6 flex flex-col gap-3">{alternativesList}</div>
+              <div className="mb-4 flex flex-col gap-3">{alternativesList}</div>
             </section>
           }
           <Button type="submit">Criar Questão</Button>
@@ -207,9 +207,9 @@ export function CreatorQuestionPage() {
       {modalEditIsOpen && <ModalEditContent />}
       {modalAddAlternativeIsOpen && <ModalAddAlternative />}
       {modalEditAlternativeIsOpen && <ModalEditAlternative />}
-      <Toaster 
-        duration={5000} 
-        position="top-right" 
+      <Toaster
+        duration={5000}
+        position="top-right"
       />
     </>
   );
