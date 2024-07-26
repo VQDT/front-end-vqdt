@@ -1,19 +1,19 @@
-import { ContainerInput } from "../components/ContainerInputs";
-import SelectioField from "../components/SelectField";
-import { TitleSection } from "../components/TitleSection";
-import Main from "../components/Main";
+import { ContainerInput } from "../../components/ContainerInputs";
+import SelectioField from "../../components/SelectField";
+import { TitleSection } from "../../components/TitleSection";
+import Main from "../../components/Main";
 import { AiOutlinePlus } from "react-icons/ai";
-import Button from "../components/Button";
-import { ModalAddContent } from "../components/ModalAddContent";
-import DraggleItem from "../components/DraggleItem";
+import Button from "../../components/Button";
+import { ModalAddContent } from "../../components/ModalAddContent";
+import DraggleItem from "../../components/DraggleItem";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { ModalEditContent } from "../components/ModalEditContent";
-import { useQuestion } from "../context/question/useQuestionContext";
+import { ModalEditContent } from "../../components/ModalEditContent";
+import { useQuestion } from "../../context/question/useQuestionContext";
 import { Toaster } from "sonner";
-import { ModalAddAlternative } from "../components/ModalAddAlternative";
-import { CreateAlternativeItem } from "../components/CreateAlternativeItem";
-import { ModalEditAlternative } from "../components/ModalEditAlternative";
-import { ContentAuxRequest } from "../models/ContentAux";
+import { ModalAddAlternative } from "../../components/ModalAddAlternative";
+import { CreateAlternativeItem } from "../../components/CreateAlternativeItem";
+import { ModalEditAlternative } from "../../components/ModalEditAlternative";
+import { ContentAuxRequest } from "../../models/ContentAux";
 
 export function CreatorQuestionPage() {
   const {
@@ -54,7 +54,12 @@ export function CreatorQuestionPage() {
   return (
     <>
       <Main>
-        <form className="mt-4" action="#" encType="multpart/form-data" onSubmit={handleSubmitQuestion}>
+        <form
+          className="mt-4"
+          action="#"
+          encType="multpart/form-data"
+          onSubmit={handleSubmitQuestion}
+        >
           <TitleSection title="Categorização" />
           <section className="mt-4 flex flex-col gap-8">
             <ContainerInput>
@@ -188,8 +193,7 @@ export function CreatorQuestionPage() {
               </Droppable>
             </DragDropContext>
           </section>
-          {
-            questionRequest.type ===  "multiple-choice" &&
+          {questionRequest.type === "multiple-choice" && (
             <section className="mt-4  flex flex-col gap-8">
               <div className="flex justify-between items-center">
                 <TitleSection title="Alternativas da Questão" />
@@ -200,20 +204,17 @@ export function CreatorQuestionPage() {
               </div>
               <div className="mb-4 flex flex-col gap-3">{alternativesList}</div>
             </section>
-          }
-        <div className="mt-2">
-        <Button   type="submit">Criar Questão</Button>
-        </div>
+          )}
+          <div className="mt-2">
+            <Button type="submit">Criar Questão</Button>
+          </div>
         </form>
       </Main>
       {modalAddContentIsOpen && <ModalAddContent />}
       {modalEditIsOpen && <ModalEditContent />}
       {modalAddAlternativeIsOpen && <ModalAddAlternative />}
       {modalEditAlternativeIsOpen && <ModalEditAlternative />}
-      <Toaster
-        duration={5000}
-        position="top-right"
-      />
+      <Toaster duration={5000} position="top-right" />
     </>
   );
 }

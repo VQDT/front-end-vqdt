@@ -13,7 +13,7 @@ import CandidateResult from "./pages/Candidate/CandidateResultPage";
 import IntroductionTestPage from "./pages/Candidate/IntroductionTest.page";
 import Test from "./pages/Candidate/TestPage";
 import TestPainel from "./pages/Candidate/TestPainelPage";
-import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
+import { CreatorQuestionPage } from "./pages/Creator/CreatorQuestionPage";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
@@ -40,9 +40,9 @@ export const Router = createBrowserRouter([
           { path: "/aplicacao/:id", element: <ApplicatorTestPage /> },
         ],
       },
-      
+
       // CANDIDATE ROUTES
-      
+
       {
         element: <Protect permittedRoles={["CANDIDATE", "ADMIN"]} />,
         children: [
@@ -65,7 +65,7 @@ export const Router = createBrowserRouter([
           },
         ],
       },
-        
+
       // // REVIEWER ROUTES
 
       // {
@@ -80,12 +80,21 @@ export const Router = createBrowserRouter([
       //   children: [],
       // },
 
-      // // ELABORATOR ROUTES
+      // ELABORATOR ROUTES
 
-      // {
-      //   element: <Protect permittedRoles={["elaborator"]} />,
-      //   children: [],
-      // },
+      {
+        element: <Protect permittedRoles={["ELABORATOR", "ADMIN"]} />,
+        children: [
+          {
+            path: "/criar-questao",
+            element: <CreatorQuestionPage />,
+          },
+          {
+            path: "/painel-de-elaborador",
+            element: <CreatorPanel />,
+          },
+        ],
+      },
 
       // // ADMIN ROUTES
 
@@ -93,18 +102,8 @@ export const Router = createBrowserRouter([
       //   element: <Protect permittedRoles={["admin"]} />,
       //   children: [],
       // },
-        
-      {
-        path: "/CreatorQuestion",
-        element: <CreatorQuestionPage />,
-      },
-      {
-        path: "/CreatorPanel",
-        element: <CreatorPanel />,
-      }
     ],
   },
-        
 
   // PUBLIC ROUTES
 
@@ -118,9 +117,9 @@ export const Router = createBrowserRouter([
     element: <Login />,
     errorElement: <ErrorPage />,
   },
-  { 
-    path: "/cadastro", 
-    element: <h1>Register</h1> 
+  {
+    path: "/cadastro",
+    element: <h1>Register</h1>,
   },
   {
     path: "/logout",

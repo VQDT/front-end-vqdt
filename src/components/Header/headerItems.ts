@@ -16,7 +16,11 @@ export const navItems: Record<string, INavItem[]> = {
         {
             name: "Aplicações",
             to: "/aplicador",
-        }
+        },
+        {
+            name: "Elaboração",
+            to: "/painel-de-elaborador",
+        },
     ],
     "APPLICATOR": [
         {
@@ -35,7 +39,10 @@ export const navItems: Record<string, INavItem[]> = {
         },
     ],
     "ELABORATOR": [
-
+        {
+            name: "Elaboração",
+            to: "/painel-de-elaborador",
+        },
     ],
     "REVIEWER": [
 

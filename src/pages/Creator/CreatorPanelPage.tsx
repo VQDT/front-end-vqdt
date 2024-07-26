@@ -4,8 +4,12 @@ import SearchBar from "../../components/SearchBar/SearchBar";
 import StatusOption from "../../components/StatusOption/StatusOption";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
 import CreatorPanelTabel from "../../components/CreatorPanelTable/CreatorPanelTabel";
+import { useNavigate } from "react-router-dom";
 
 const CreatorPanel = () => {
+
+    const navigate = useNavigate();
+
     const suggestions = [
         "Apple",
         "Banana",
@@ -25,7 +29,7 @@ const CreatorPanel = () => {
         <div className="container mx-auto mt-8 p-28">
             <div className="flex items-center justify-between">
                 <TitleSection underline title="SUAS QUESTÕES" />
-                <button className="button outline default py-1 px-5 text-sm flex items-center" type="button">
+                <button className="button outline default py-1 px-5 text-sm flex items-center" type="button" onClick={()=>navigate("/criar-questao")} >
                     NOVA QUESTÃO
                     <AiOutlinePlus className="ml-2" />
                 </button>
