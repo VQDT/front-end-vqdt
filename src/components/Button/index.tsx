@@ -8,7 +8,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 function Button({variant = "solid", color = "default", size, ...props}: ButtonProps) {
   return(
-    <button 
+    <button
       className={`button ${variant} ${color} ${size}`}
       {...props}
     >

@@ -17,6 +17,7 @@ import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
+import CreatorPanel from "./pages/Creator/CreatorPanel";
 
 export const Router = createBrowserRouter([
   {
@@ -26,10 +27,6 @@ export const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
-      },
-      {
-        path: "/CreatorQuestion",
-        element: <CreatorQuestionPage />,
       },
 
       // APPLICATOR ROUTES
@@ -43,9 +40,9 @@ export const Router = createBrowserRouter([
           { path: "/aplicacao/:id", element: <ApplicatorTestPage /> },
         ],
       },
-
+      
       // CANDIDATE ROUTES
-
+      
       {
         element: <Protect permittedRoles={["CANDIDATE", "ADMIN"]} />,
         children: [
@@ -68,7 +65,7 @@ export const Router = createBrowserRouter([
           },
         ],
       },
-
+        
       // // REVIEWER ROUTES
 
       // {
@@ -96,8 +93,18 @@ export const Router = createBrowserRouter([
       //   element: <Protect permittedRoles={["admin"]} />,
       //   children: [],
       // },
+        
+      {
+        path: "/CreatorQuestion",
+        element: <CreatorQuestionPage />,
+      },
+      {
+        path: "/CreatorPanel",
+        element: <CreatorPanel />,
+      }
     ],
   },
+        
 
   // PUBLIC ROUTES
 
@@ -111,7 +118,10 @@ export const Router = createBrowserRouter([
     element: <Login />,
     errorElement: <ErrorPage />,
   },
-  { path: "/cadastro", element: <h1>Register</h1> },
+  { 
+    path: "/cadastro", 
+    element: <h1>Register</h1> 
+  },
   {
     path: "/logout",
     element: <LogoutPage />,
