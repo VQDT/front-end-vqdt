@@ -61,11 +61,11 @@ function CandidateResult() {
         <Button
             variant="outline"
             onClick={() => {
-                navigate("/candidato");
+                navigate("/");
             }}
         >
           <AiOutlineArrowLeft />
-          VOLTAR
+          VOLTAR AO INICIO
         </Button>
       </div>
     </div>
