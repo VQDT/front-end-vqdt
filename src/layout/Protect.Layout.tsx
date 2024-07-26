@@ -1,27 +1,22 @@
-import { Navigate } from "react-router-dom";
-import useAuth from "../context/auth/useAuth"
-import OnLoad from "../components/onLoad";
-import "./style.css"
+import { Navigate, Outlet } from "react-router-dom";
+import "./style.css";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../models/User";
 
 interface ProtectLayoutProps {
-  children: React.ReactNode;
+  permittedRoles?: string[];
 }
 
 function ProtectLayout(props: ProtectLayoutProps) {
-  const { user, onLoading } = useAuth()
-  if(onLoading) return <><OnLoad/></>
-  else if(user){
-      return (
-        <>
-          <div className="FadeInAndOut">
-            {props.children}
-          </div>
-        </>
-      );
+  const { roles } = useAuthUser() as UserOutput;
+
+  if (props.permittedRoles) {
+    if (!roles.some((role) => props.permittedRoles?.includes(role))) {
+      return <Navigate to={"/"} replace />;
+    }
   }
-  else{
-      return <Navigate to={"/auth"} replace/>;
-  }
+
+  return <Outlet />;
 }
 
 export default ProtectLayout;

@@ -2,10 +2,7 @@ import z from "zod";
 import { TestAttendance } from "./TestAttendance";
 import { CourseAttendance } from "./Course";
 
-export interface Role {
-  id:number;
-  name: string
-}
+export type Role = "ADMIN" | "APPLICATOR" | "CANDIDATE" | "ELABORATOR" | "REVIEWER" | "SUPERVISOR";
 
 export type UserOutput = {
   id: string;

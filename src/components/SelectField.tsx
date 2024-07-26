@@ -12,8 +12,8 @@ interface SelectioFieldProps extends ComponentProps<"select"> {
 
 function SelectioField({ label, options, ...rest }: SelectioFieldProps) {
 
-  const optionsList = options.map((option) => (
-    <option value={option.value}>{option.label}</option>
+  const optionsList = options.map((option,index) => (
+    <option key={index}  value={option.value}>{option.label}</option>
   ));
 
 

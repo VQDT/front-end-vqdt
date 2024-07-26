@@ -8,7 +8,7 @@ function ErrorPage() {
         <div className="w-full flex-col flex justify-center items-center">
             <h1>Página não encontrada</h1>
             <div className="mt-3">
-                <Button type="button" onClick={() => navigate("/auth")}>Voltar ao inicio</Button>
+                <Button type="button" onClick={() => navigate("/")}>Voltar ao inicio</Button>
             </div>
         </div>
     </div>

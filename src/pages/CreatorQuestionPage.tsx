@@ -34,7 +34,7 @@ export function CreatorQuestionPage() {
 
   function ListContent(contentList: ContentAuxRequest[]) {
     return contentList?.map(({ type, content }, index) => (
-      <DraggleItem type={type} content={content} index={index} />
+      <DraggleItem key={index} type={type} content={content} index={index} />
     ));
   }
 
@@ -46,7 +46,7 @@ export function CreatorQuestionPage() {
         required
         checked={alternative.correct}
         id={index.toString()}
-        onClick={() => changeCorrectAlternative(index)}
+        onChange={() => changeCorrectAlternative(index)}
       />
     );
   });
@@ -182,6 +182,7 @@ export function CreatorQuestionPage() {
                     ref={provided.innerRef}
                   >
                     {ListContent(contentsAux)}
+                    {provided.placeholder}
                   </div>
                 )}
               </Droppable>

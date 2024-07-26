@@ -1,19 +1,27 @@
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
 import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
+import {
+  Toolbar,
+  Select,
+  ListItem,
+  List,
+  Drawer,
+  Divider,
+  Box,
+  AppBar,
+  MenuItem,
+} from "@mui/material";
 import Image from "./Image";
 import logo from "../../assets/logo.png";
 import { ChangeEvent, useState } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
-import useAuth from "../../context/auth/useAuth";
-import Select from "../Select/index"
+import useSignOut from "react-auth-kit/hooks/useSignOut";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
+import { navItems } from "./headerItems";
+import { Button } from "@mui/material";
+import { roleTranslation } from "./translateRole";
 
 interface Props {
   window?: () => Window;
@@ -21,53 +29,30 @@ interface Props {
 
 const drawerWidth = 240;
 
-
 function Header({ window }: Props) {
-
-  const [mobileOpen, setMobileOpen] = useState(false)
-  const { user, loggout, currentRole, changeCurrentRole } = useAuth();
-  const roles = user?.roles
-
-  const navItems = [
-    {
-      name: "Provas",
-      to:  currentRole?.id === 1 ? "/candidato" : "/aplicador",
-    },
-    {
-      name: "changeRole",
-      to: "",
-    },
-    {
-      name: "Sair",
-      to: "/auth",
-    },
-    
-  ];
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const { roles } = useAuthUser() as UserOutput;
+  const currentRole = localStorage.getItem("currentRole") || "default";
+  const signOut = useSignOut();
 
   const navigate = useNavigate();
 
-  if(currentRole?.id === 2){
-    navItems.unshift({
-      name: "Preparatório",
-      to: "/preparatorio",
-    })
-  }
-
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value;
-    const role = roles?.find((role) => role.id === Number(value));
-    if(role) changeCurrentRole(role)
-    if(role?.id === 2){
-      navigate("/aplicador")
-    }
-    else if(role?.id === 1){
-      navigate("/candidato")
-    }
-  }
+    const role = roles?.find((role) => role === value);
+    if (role) localStorage.setItem("currentRole", role);
+    navigate("/");
+  };
+
+  const handleSignOut = () => {
+    signOut();
+    localStorage.removeItem("currentRole");
+    navigate("/login");
+  };
 
   const handleDrawerToggle = () => setMobileOpen((prevState) => !prevState);
 
-  const linkListDrawer = navItems.map((item) => {
+  const linkListDrawer = navItems[currentRole].map((item) => {
     return (
       <div key={item.name}>
         <Divider />
@@ -88,55 +73,39 @@ function Header({ window }: Props) {
     );
   });
 
-  const selectRole =  (
+  const selectRole = (
     <Select
-      value={currentRole?.id.toString()}
-      onChange={handleChange}
-      className="border-2 border-white m-2 bg-Blue rounded-md p-2 appearance-none focus:outline-none"
-      options={roles}
-    />
+      value={currentRole}
+      defaultValue={currentRole}
+      onChange={() => handleChange}
+      className="border-2 border-white m-2 bg-Blue !text-white rounded-md p-2 appearance-none"
+      sx={{
+        ".MuiSvgIcon-root ": {
+          fill: "white !important",
+        },
+      }}
+    >
+      {roles.map((op) => (
+        <MenuItem key={op} value={op} id={op}>
+          {roleTranslation[op]}
+        </MenuItem>
+      ))}
+    </Select>
   );
 
-  const linkList = navItems.map((item) => {
-    if (item.name === "Sair") {
-      return (
-        <Link
-          key={item.name}
-          to={item.to}
-          onClick={loggout}
-          className="
-          h-full py-0 px-5 
-          rounded-none text-lg 
-          text-White hover:text-LightTextSecondary font-semibold
-          flex justify-center items-center gap-1"
-        >
-          <RiLogoutBoxRLine className="flex-shrink-0" />
-          {item.name}
-        </Link>
-      );
-    }
-    else if (item.name === "changeRole") {
-      return(
-        roles && roles.length > 1 &&
-        selectRole
-      )
-    }
-    else {
-      return (
-        <Link
-          key={item.name}
-          to={item.to}
-          className="
+  const linkList = navItems[currentRole].map((item) => (
+    <Link
+      key={item.name}
+      to={item.to}
+      className="
             h-full py-0 px-5 
             border-r border-White rounded-none text-lg 
             text-White hover:text-LightTextSecondary uppercase font-semibold
             flex justify-center items-center gap-1"
-        >
-          {item.name}
-        </Link>
-      );
-    }
-  });
+    >
+      {item.name}
+    </Link>
+  ));
 
   const drawer = (
     <>
@@ -145,10 +114,7 @@ function Header({ window }: Props) {
           <Image src={logo} />
         </div>
         <List className="flex-nowrap">
-          {
-            roles && roles.length > 1 &&
-            selectRole
-          }
+          {roles && roles.length > 1 && selectRole}
           {linkListDrawer}
         </List>
       </Box>
@@ -183,13 +149,23 @@ function Header({ window }: Props) {
           >
             <MenuIcon />
           </IconButton>
-
-          <Box className="h-full hidden sm:flex">{linkList}</Box>
+          <Box className="h-full hidden sm:flex">
+            {linkList}
+            {roles.length >= 0 && selectRole}
+            <Button
+              variant="text"
+              sx={{ color: "white", padding: "0 1rem" }}
+              startIcon={<RiLogoutBoxRLine className="flex-shrink-0" />}
+              key={"logout"}
+              onClick={handleSignOut}
+            >
+              Sair
+            </Button>
+          </Box>
         </Toolbar>
       </AppBar>
 
       <nav>
-
         <Drawer
           container={container}
           variant="temporary"

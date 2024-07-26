@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
-import useAuth from "../auth/useAuth";
+import { createContext, ReactNode, useCallback, useState } from "react";
 import instance from "../../axios";
 import { CourseAttendance, CourseDay } from "../../models/Course";
+import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface PreparatoryProviderProps {
   children: ReactNode;
@@ -19,27 +19,28 @@ interface PreparatoryContextProps {
 const PreparatoryContext = createContext<PreparatoryContextProps | null>(null);
 
 function PreparatoryProvider({ children }: PreparatoryProviderProps) {
-
-  const { user, currentRole } = useAuth();
+  const authHeader = useAuthHeader();
   const [ CourseDays, setCouseDays ] = useState<CourseDay[]>([]);
   const [ courseCandidates, setCourseCandidates ] = useState<CourseAttendance[]| undefined>(undefined);
-
-  const roles = user?.roles;
   
-  async function getPreparatoryCourseDays(applicatorId: string) {
-    if (roles && currentRole){
+  const getPreparatoryCourseDays = useCallback(async (applicatorId: string) => {
       const url = `/courseDays/applicator/`+applicatorId;
-      const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
       setCouseDays(response.data);
-    }
-  }
+  }, [authHeader, setCouseDays]);
 
   async function getCourseCandidates(courseDayId: string){
-    if (roles && currentRole){
       const url = `/users/courseDay/`+courseDayId;
-      const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
       setCourseCandidates(response.data);
-    }
   }
 
   async function updateCourseAttendance(presents: CourseAttendance[], courseDayId: string){
@@ -47,7 +48,13 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
     try{
       presents.map(async (elem) => {
         const userId = elem.user.id;
-        await instance.put(url, { userId, courseDayId })
+        await instance.put(url, {
+          headers: {
+            Authorization: authHeader,
+          },
+          userId,
+          courseDayId
+        })
       })
       return true
     }
@@ -69,12 +76,6 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
       setCourseCandidates(newList)
     }
   }
-
-  useEffect(() => {
-    if(user){
-      getPreparatoryCourseDays(user.id)
-    }
-  },[])
 
   return(
       <PreparatoryContext.Provider value={{ courseCandidates, CourseDays, getPreparatoryCourseDays, getCourseCandidates, updateCourseAttendance, updateCandidateList }}>

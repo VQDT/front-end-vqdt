@@ -1,12 +1,15 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
+import RequireAuth from "@auth-kit/react-router/RequireAuth";
 
 function AppLayout() {
   return (
-    <>
-      <Header />
-      <Outlet />
-    </>
+    <RequireAuth fallbackPath="/login">
+      <>
+        <Header />
+        <Outlet />
+      </>
+    </RequireAuth>
   );
 }
 

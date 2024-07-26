@@ -6,9 +6,10 @@ import {
 } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import isFuture from "../../utils/isFuture";
-import useAuth from "../../context/auth/useAuth";
 import { ReactElement, useEffect } from "react";
 import usePreparatory from "../../context/preparatory/usePreparatory";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
 
 function NormalizeDate(date: string) {
   return date.split("T")[0].split("-").reverse().join("/");
@@ -16,22 +17,15 @@ function NormalizeDate(date: string) {
 
 function PreparatoryPainel() {
 
-  const { user, checkRolePermission, loggout, setError } = useAuth();
+  const user = useAuthUser() as UserOutput;
   const { CourseDays, getPreparatoryCourseDays } = usePreparatory();
 
   const navigation = useNavigate();
 
   useEffect(() => {
-    checkRolePermission(2).then((check) => {
-      if (!check){
-        setError(true)
-        loggout();
-      }
-    })
-    if(user){
+      console.log("Getting preparatory course days");
       getPreparatoryCourseDays(user.id)
-    }
-  },[])
+  },[getPreparatoryCourseDays, user.id])
 
   function navigateCourseDay(id: string) {
     navigation("/courseDay/" + id);

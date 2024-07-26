@@ -1,10 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
-import useAuth from "../auth/useAuth";
-import { Test } from "../../models/Test";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import instance from "../../axios";
 import { Question } from "../../models/Question";
+import { Test } from "../../models/Test";
 import { TestAttendance } from "../../models/TestAttendance";
 import { UserOutput } from "../../models/User";
+import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
 
 interface TestProviderProps {
   children: ReactNode;
@@ -29,7 +30,8 @@ interface TestContextProps {
 const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
-  const { currentRole } = useAuth();
+  const authUser = useAuthUser() as UserOutput;
+  const authHeader = useAuthHeader();
   const [tests, setTests] = useState<Test[]>([]);
   const [test, setTest] = useState<Test | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -42,13 +44,22 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function getTests() {
     const url = `/tests`;
-    const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
+    console.log(response.data);
     setTests(response.data);
   }
 
   async function getTest(id: string) {
     const url = `/tests/test/` + id;
-    const response = await instance.get(url);
+    const response = await instance.get(url, {
+      headers: {
+        Authorization: authHeader,
+      },
+    });
     setTest(response.data);
   }
 
@@ -122,8 +133,11 @@ function TestProvider({ children }: TestProviderProps) {
   }
 
   useEffect(() => {
-    getTests();
-  }, [currentRole, testAttendance]);
+    if (authUser) {
+      console.log("User is authenticated", authUser);
+      getTests();
+    }
+  }, [authUser, testAttendance]);
 
   return (
     <TestContext.Provider
@@ -149,3 +163,4 @@ function TestProvider({ children }: TestProviderProps) {
 }
 
 export { TestContext, TestProvider };
+

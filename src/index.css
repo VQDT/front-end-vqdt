@@ -33,6 +33,10 @@ ul {
   min-height: 100vh
 }
 
+:root{
+  --toastify-color-progress-light: rgb(83, 203, 255);
+}
+
 @layer components {
   .button {
     @apply px-10 py-3 text-lg font-medium rounded-xl flex justify-center items-center flex-shrink-0 gap-2;
