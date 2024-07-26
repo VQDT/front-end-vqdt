@@ -17,7 +17,7 @@ import { CreatorQuestionPage } from "./pages/CreatorQuestionPage";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
-import CreatorPanel from "./pages/Creator/CreatorPanel";
+import CreatorPanel from "./pages/Creator/CreatorPanelPage";
 
 export const Router = createBrowserRouter([
   {
