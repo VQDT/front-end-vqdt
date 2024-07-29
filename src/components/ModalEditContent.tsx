@@ -52,7 +52,7 @@ export function ModalEditContent() {
                 onChange={handleContentImage}
                 required
               />
-            : <TextArea onChange={handleContent} children={contentAux.content} required/>
+            : <TextArea onChange={handleContent} value={contentAux.content} required/>
           }
         </div>
         <div className="mt-4 flex justify-end">

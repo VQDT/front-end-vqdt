@@ -6,14 +6,14 @@ import MaskedInput from "react-text-mask";
 import { Toaster } from "sonner";
 import GOV from "../../assets/GOV.png";
 import VQDT from "../../assets/VQDT.png";
-import instance from "../../axios";
-// import { useToast } from "../../hooks/useToast";
 import { AxiosError } from "axios";
 import { toast } from "react-toastify";
 import { LoginInput, LoginInputSchema } from "../../models/User";
 import Button from "../../components/Button";
+import { useAPI } from "../../axios";
 
 function LoginPage() {
+  const instance = useAPI();
   const {
     register,
     handleSubmit,
@@ -48,7 +48,7 @@ function LoginPage() {
         password,
       });
 
-      const { user, token } = await response.data;
+      const { user, token } = await response;
 
       if (
         signIn({

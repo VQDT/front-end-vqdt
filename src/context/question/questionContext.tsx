@@ -22,7 +22,6 @@ import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import instance from "../../axios";
 import { AxiosError } from "axios";
-import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -78,7 +77,7 @@ const initState: QuestionRequest = {
 };
 
 export function QuestionProvider({ children }: { children: ReactNode }) {
-  const authHeader = useAuthHeader();
+
   const [questionRequest, setQuestionRequest] = useState<QuestionRequest>(initState);
   const [content, setContent] = useState<CreateContentAux>({
     type: "" as TypeContentAux,
@@ -406,7 +405,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      console.log(questionRequest);
       const formData = new FormData();
       formData.append("level", questionRequest.level);
       formData.append("area", questionRequest.area);
@@ -414,6 +412,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       formData.append("skill", questionRequest.skill);
       formData.append("competence", questionRequest.competence);
       formData.append("type", questionRequest.type);
+
       questionRequest.contentAux.forEach((contentAux, index) => {
         formData.append(`contentAux[${index}][type]`, contentAux.type);
         formData.append(
@@ -421,15 +420,12 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
           String(contentAux.order)
         );
         if (contentAux.content instanceof File) {
-          formData.append(
-            `contentAux[${index}][content]`,
-            contentAux.content.name
-          );
-          formData.append("image", contentAux.content);
+          formData.append(`contentAux[${index}][content]`, contentAux.content);
         } else {
           formData.append(`contentAux[${index}][content]`, contentAux.content);
         }
       });
+
       questionRequest.alternatives.forEach((alternative, index) => {
         formData.append(`alternatives[${index}][content]`, alternative.content);
         formData.append(
@@ -438,14 +434,12 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         );
       });
 
-      console.log(authHeader);
+      const response = await instance.post("/questions", formData);
 
-      const response = await instance.post("/questions", {
-        headers: {
-          Authorization: authHeader,
-        },
-        formData: formData,
-      });
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
+
       if (response.status === 201) {
         toast.success("Questão criada com sucesso");
         setQuestionRequest(initState);

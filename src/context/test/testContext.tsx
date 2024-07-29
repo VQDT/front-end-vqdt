@@ -1,11 +1,10 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
-import instance from "../../axios";
 import { Question } from "../../models/Question";
 import { Test } from "../../models/Test";
 import { TestAttendance } from "../../models/TestAttendance";
 import { UserOutput } from "../../models/User";
-import useAuthHeader from 'react-auth-kit/hooks/useAuthHeader';
+import { useAPI } from './../../axios';
 
 interface TestProviderProps {
   children: ReactNode;
@@ -30,8 +29,8 @@ interface TestContextProps {
 const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
+  const AxiosInstance = useAPI();
   const authUser = useAuthUser() as UserOutput;
-  const authHeader = useAuthHeader();
   const [tests, setTests] = useState<Test[]>([]);
   const [test, setTest] = useState<Test | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -42,24 +41,16 @@ function TestProvider({ children }: TestProviderProps) {
     undefined
   );
 
-  async function getTests() {
+  const getTests = useCallback(async () => {
     const url = `/tests`;
-    const response = await instance.get(url, {
-      headers: {
-        Authorization: authHeader,
-      },
-    });
-    console.log(response.data);
-    setTests(response.data);
-  }
+    const response = await AxiosInstance.get(url);
+    console.log(response);
+    setTests(response);
+  }, [AxiosInstance, setTests]);
 
   async function getTest(id: string) {
     const url = `/tests/test/` + id;
-    const response = await instance.get(url, {
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    const response = await AxiosInstance.get(url);
     setTest(response.data);
   }
 
@@ -67,7 +58,7 @@ function TestProvider({ children }: TestProviderProps) {
     const url = `/questions/test/` + id;
 
     try {
-      const response = await instance.get(url);
+      const response = await AxiosInstance.get(url);
       if (response.status === 200) {
         const data = await response.data;
         setQuestions(data);
@@ -79,7 +70,7 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function getTestAttendance(id: string) {
     const url = `/testAttendance/` + id;
-    const response = await instance.get(url);
+    const response = await AxiosInstance.get(url);
     if (response.status === 200) {
       setTestAttendance(response.data);
     }
@@ -87,7 +78,7 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function getCandidates(id: string) {
     const url = `/users/candidates/` + id;
-    const response = await instance.get(url);
+    const response = await AxiosInstance.get(url);
     setCandidates(response.data);
   }
 
@@ -97,7 +88,7 @@ function TestProvider({ children }: TestProviderProps) {
     status: boolean
   ) {
     const url = `/testAttendance/result/`;
-    const response = await instance.put(url, { testId, score, status });
+    const response = await AxiosInstance.put(url, { testId, score, status });
     console.log(response.data);
   }
 
@@ -105,7 +96,7 @@ function TestProvider({ children }: TestProviderProps) {
     const url = `/testAttendance/presence/`;
     attendances.map(async (user) => {
       const userId = user.id;
-      const response = await instance.put(url, { userId, test });
+      const response = await AxiosInstance.put(url, { userId, test });
       console.log(response.data);
     });
   }
@@ -125,7 +116,7 @@ function TestProvider({ children }: TestProviderProps) {
 
   async function removeTestAttendance(id: string) {
     const url = `/testAttendance/` + id;
-    const response = await instance.delete(url);
+    const response = await AxiosInstance.delete(url);
     if (response.status === 200) {
       return true;
     }
@@ -133,11 +124,8 @@ function TestProvider({ children }: TestProviderProps) {
   }
 
   useEffect(() => {
-    if (authUser) {
-      console.log("User is authenticated", authUser);
-      getTests();
-    }
-  }, [authUser, testAttendance]);
+    getTests();
+  }, []);
 
   return (
     <TestContext.Provider
@@ -163,4 +151,3 @@ function TestProvider({ children }: TestProviderProps) {
 }
 
 export { TestContext, TestProvider };
-
