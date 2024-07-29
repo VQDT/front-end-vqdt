@@ -21,7 +21,7 @@ class API {
   public async get(path: string) {
     try {
       const response = await this.axiosInstance.get(`${path}`);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('GET request failed:', error);
       throw error;
@@ -37,11 +37,11 @@ class API {
             "Content-Type": "multipart/form-data",
           },
         });
-        return response.data;
+        return response;
       }
 
       const response = await this.axiosInstance.post(`${path}`, data);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('POST request failed:', error);
       throw error;
@@ -51,7 +51,7 @@ class API {
   public async put(path: string, data: FormData | object) {
     try {
       const response = await this.axiosInstance.put(`${path}`, data);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('PUT request failed:', error);
       throw error;
@@ -61,7 +61,7 @@ class API {
   public async delete(path: string) {
     try {
       const response = await this.axiosInstance.delete(`${path}`,);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('DELETE request failed:', error);
       throw error;

@@ -1,21 +1,29 @@
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import Button from "../../components/Button";
 import Main from "../../components/Main";
-import useTestContext from "../../context/test/useTest";
+import useTest from "../../context/test/useTest";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 function IntroductionTestPage() {
 
   const { id } = useParams();
-  const { test } = useTestContext();
+  const { test, getTest } = useTest();
 
   const navigation = useNavigate();
+
+  useEffect(() => { 
+    if (id) {
+      getTest(id);
+    }
+  },[])
 
   function NormalizeDate(date: string) {
     return date.split("T")[0].split("-").reverse().join("/");
   }
 
-  
+  console.log(test);
+
   return (
     <Main>
       <div className="my-8 py-7 px-8 bg-Blue rounded-xl">

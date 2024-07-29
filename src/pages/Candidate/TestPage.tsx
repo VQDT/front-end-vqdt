@@ -8,22 +8,22 @@ import Question from "../../components/question";
 import { Alternative } from "../../models/Alternative";
 import { Answer } from "../../models/Question";
 
-import instance from "../../axios";
 import useTest from "../../context/test/useTest";
 
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import logo from "../../assets/logo.png";
 import { ContentAuxResponse } from "../../models/ContentAux";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { UserOutput } from "../../models/User";
+import { useCandidate } from "../../hooks/useCandidate";
 
 function Test() {
   const user = useAuthUser() as UserOutput;
-  const { test, getTest, getQuestions, questions, setScoreAndStatus } =
-    useTest();
+  const { checkPassword, calculateResult } = useCandidate();
+  const { test, getTest, getQuestions, questions } = useTest();
   const [openEncerramento, setOpenEncerramento] = useState<boolean>(false);
   const [openPassword, setopenPassword] = useState<boolean>(false);
   const [password, setPassword] = useState<string>("");
@@ -31,7 +31,6 @@ function Test() {
   const [checkTimeEnd, setcheckTimeEnd] = useState<boolean>(false);
 
   const { id } = useParams<{ id: string }>();
-  const navigation = useNavigate();
 
   useEffect(() => {
     if (id) {
@@ -85,34 +84,13 @@ function Test() {
     );
   });
 
-  const calculateResult = useCallback(() => {
-    if (test) {
-      let score = 0;
-      let status = false;
-      list.map((item) => {
-        questions
-          .find((q) => q.id === item.idQuestion)
-          ?.alternatives.find((a) => a.id === item.idAlternatives)?.correct ===
-          true && score++;
-      });
-      if (score >= test.numberQuestion / 2) {
-        status = true;
-      }
-      setScoreAndStatus(test.id, score, status);
-      navigation("/comprovante-de-participacao/" + test.id);
-    }
-  }, [test, list, questions, setScoreAndStatus, navigation]);
 
   async function handleSubmit() {
-    try {
-      const auth = await instance.post("users/auth/login", {
-        cpf: user?.cpf,
-        password: password,
-      });
-      if (auth.status === 200) {
-        calculateResult();
-      }
-    } catch (error) {
+    const check = await checkPassword(user.cpf, password);
+    if (check && test) {
+      calculateResult(test, list, questions);
+    }
+    else { 
       alert("Senha incorreta");
     }
   }
@@ -177,8 +155,8 @@ function Test() {
   }
 
   useEffect(() => {
-    if (checkTimeEnd) {
-      calculateResult();
+    if (checkTimeEnd && test) {
+      calculateResult(test, list, questions);
     }
   }, [calculateResult, checkTimeEnd]);
 

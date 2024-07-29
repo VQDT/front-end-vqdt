@@ -33,11 +33,13 @@ function AboutTest({ variant = "default" }: AboutTest) {
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
 
+  console.log(id);
+
   useEffect(() => {
     if (id) {
       getTest(id);
     }
-  }, [getTest, id]);
+  }, [id]);
 
   async function removeAttendance() {
     if(id){
@@ -47,6 +49,8 @@ function AboutTest({ variant = "default" }: AboutTest) {
       }
     }
   }
+
+  console.log(test);
 
   if (test) {
     const {

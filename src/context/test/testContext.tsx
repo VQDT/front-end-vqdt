@@ -1,5 +1,4 @@
 import { createContext, ReactNode, useCallback, useEffect, useState } from "react";
-import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { Question } from "../../models/Question";
 import { Test } from "../../models/Test";
 import { TestAttendance } from "../../models/TestAttendance";
@@ -30,7 +29,6 @@ const TestContext = createContext<TestContextProps | null>(null);
 
 function TestProvider({ children }: TestProviderProps) {
   const AxiosInstance = useAPI();
-  const authUser = useAuthUser() as UserOutput;
   const [tests, setTests] = useState<Test[]>([]);
   const [test, setTest] = useState<Test | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -45,12 +43,13 @@ function TestProvider({ children }: TestProviderProps) {
     const url = `/tests`;
     const response = await AxiosInstance.get(url);
     console.log(response);
-    setTests(response);
+    setTests(response.data);
   }, [AxiosInstance, setTests]);
 
   async function getTest(id: string) {
     const url = `/tests/test/` + id;
     const response = await AxiosInstance.get(url);
+    console.log(response);
     setTest(response.data);
   }
 

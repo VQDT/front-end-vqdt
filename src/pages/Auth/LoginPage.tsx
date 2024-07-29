@@ -1,19 +1,18 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
 import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MaskedInput from "react-text-mask";
 import { Toaster } from "sonner";
 import GOV from "../../assets/GOV.png";
 import VQDT from "../../assets/VQDT.png";
-import { AxiosError } from "axios";
-import { toast } from "react-toastify";
 import { LoginInput, LoginInputSchema } from "../../models/User";
 import Button from "../../components/Button";
-import { useAPI } from "../../axios";
+import { useLogin } from "../../hooks/useLogin";
 
 function LoginPage() {
-  const instance = useAPI();
+  
+  const { handleLoginSubmit } = useLogin();
+
   const {
     register,
     handleSubmit,
@@ -22,8 +21,7 @@ function LoginPage() {
   } = useForm<LoginInput>({
     resolver: zodResolver(LoginInputSchema),
   });
-  const navigate = useNavigate();
-  const signIn = useSignIn();
+
   const cpfMask = [
     /\d/,
     /\d/,
@@ -42,35 +40,7 @@ function LoginPage() {
   ];
 
   const submitLogin = async ({ cpf, password }: LoginInput) => {
-    try {
-      const response = await instance.post("/account/login", {
-        cpf: cpf.replace(/[^\d]/g, ""),
-        password,
-      });
-
-      const { user, token } = await response;
-
-      if (
-        signIn({
-          auth: {
-            token: token,
-            type: "Bearer",
-          },
-          userState: user,
-        })
-      ) {
-        localStorage.setItem("currentRole", user.roles[0]);
-        navigate("/");
-      }
-    } catch (error) {
-      switch ((error as AxiosError)?.response?.status) {
-        case 404:
-          toast.error("Usuário ou senha inválidos");
-          break;
-        default:
-          toast.error("Erro ao realizar login");
-      }
-    }
+    handleLoginSubmit(cpf, password);
   };
 
   return (

@@ -20,7 +20,7 @@ import ContentImage from "../../components/ContentImage";
 import ContentAsking from "../../components/ContentAsking";
 import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
-import instance from "../../axios";
+import { useAPI } from "../../axios";
 import { AxiosError } from "axios";
 
 interface QuestionContextProps {
@@ -83,6 +83,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     type: "" as TypeContentAux,
     content: "",
   });
+
+  const instance = useAPI();
   const [contentAlternative, setContentAlternative] = useState<string>("");
   const [contentAux, setContentAux] = useState<CreateContentAux>({} as CreateContentAux);
   const [modalAddContentIsOpen, setmodalAddContentIsOpen] = useState(false);

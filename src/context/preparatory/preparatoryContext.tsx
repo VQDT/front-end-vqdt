@@ -1,7 +1,6 @@
 import { createContext, ReactNode, useCallback, useState } from "react";
-import instance from "../../axios";
 import { CourseAttendance, CourseDay } from "../../models/Course";
-import useAuthHeader from "react-auth-kit/hooks/useAuthHeader";
+import { useAPI } from './../../axios';
 
 interface PreparatoryProviderProps {
   children: ReactNode;
@@ -19,27 +18,19 @@ interface PreparatoryContextProps {
 const PreparatoryContext = createContext<PreparatoryContextProps | null>(null);
 
 function PreparatoryProvider({ children }: PreparatoryProviderProps) {
-  const authHeader = useAuthHeader();
+  const instance = useAPI();
   const [ CourseDays, setCouseDays ] = useState<CourseDay[]>([]);
   const [ courseCandidates, setCourseCandidates ] = useState<CourseAttendance[]| undefined>(undefined);
   
   const getPreparatoryCourseDays = useCallback(async (applicatorId: string) => {
       const url = `/courseDays/applicator/`+applicatorId;
-    const response = await instance.get(url, {
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    const response = await instance.get(url);
       setCouseDays(response.data);
-  }, [authHeader, setCouseDays]);
+  }, [instance]);
 
   async function getCourseCandidates(courseDayId: string){
       const url = `/users/courseDay/`+courseDayId;
-    const response = await instance.get(url, {
-      headers: {
-        Authorization: authHeader,
-      },
-    });
+    const response = await instance.get(url);
       setCourseCandidates(response.data);
   }
 
@@ -49,9 +40,6 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
       presents.map(async (elem) => {
         const userId = elem.user.id;
         await instance.put(url, {
-          headers: {
-            Authorization: authHeader,
-          },
           userId,
           courseDayId
         })
