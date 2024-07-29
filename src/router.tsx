@@ -56,7 +56,6 @@ export const Router = createBrowserRouter([
                 path: "/prova/introducao/:id",
                 element: <IntroductionTestPage />,
               },
-              { path: "/prova/:id", element: <Test /> },
             ],
           },
           {
@@ -102,6 +101,17 @@ export const Router = createBrowserRouter([
       //   element: <Protect permittedRoles={["admin"]} />,
       //   children: [],
       // },
+    ],
+  },
+
+  {
+    element: <Protect permittedRoles={["CANDIDATE", "ADMIN"]} />,
+    children: [
+      {
+        path: "/prova",
+        element: <TestLayout />,
+        children: [{ path: "/prova/:id", element: <Test /> }],
+      },
     ],
   },
 
