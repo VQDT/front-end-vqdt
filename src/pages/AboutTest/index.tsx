@@ -28,7 +28,7 @@ interface AboutTest {
 }
 
 function AboutTest({ variant = "default" }: AboutTest) {
-  
+
   const { id } = useParams();
   const { test, getTest, removeTestAttendance } = useTest();
   const navigate = useNavigate();
@@ -117,7 +117,7 @@ function AboutTest({ variant = "default" }: AboutTest) {
             }
             {
               testPeriod && testAttendances?.[0].presence && !testAttendances?.[0].testFinished &&
-              <Button onClick={() => navigate("/prova/introduction/" + id)}>REALIZAR PROVA</Button>
+              <Button onClick={() => navigate("/prova/introducao/" + id)}>REALIZAR PROVA</Button>
             }
           </div>
         </Container>
