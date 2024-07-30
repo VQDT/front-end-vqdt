@@ -5,6 +5,7 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { PrimeReactProvider } from "primereact/api";
 import { PreparatoryProvider } from "./context/preparatory/preparatoryContext";
 import { QuestionProvider } from "./context/question/questionContext";
 import { TestProvider } from "./context/test/testContext";
@@ -23,10 +24,12 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <ToastContainer />
       <AuthProvider store={store}>
         <TestProvider>
-          <PreparatoryProvider>
-            <QuestionProvider>
-              <RouterProvider router={router} />
-            </QuestionProvider>
+        <PreparatoryProvider>
+            <PrimeReactProvider>
+              <QuestionProvider>
+                <RouterProvider router={router} />
+              </QuestionProvider>
+            </PrimeReactProvider>
           </PreparatoryProvider>
         </TestProvider>
       </AuthProvider>

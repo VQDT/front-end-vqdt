@@ -18,6 +18,7 @@ import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
 import CreatorPanel from "./pages/Creator/CreatorPanelPage";
+import { AlterCreatorQuestionPage } from "./pages/Creator/AlterCreatorQuestionPage";
 
 export const Router = createBrowserRouter([
   {
@@ -87,6 +88,10 @@ export const Router = createBrowserRouter([
           {
             path: "/criar-questao",
             element: <CreatorQuestionPage />,
+          },
+          {
+            path: "/alter-criar-questao/",
+            element: <AlterCreatorQuestionPage />,
           },
           {
             path: "/painel-de-elaborador",

@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import { useAPI } from "../../axios";
 import { AxiosError } from "axios";
+import { EditorTextChangeEvent } from "primereact/editor";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -59,6 +60,8 @@ interface QuestionContextProps {
   handleOpenModalEditAlternative: (index: number) => void;
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
+  alterContent: EditorTextChangeEvent | undefined;
+  handleAlterContent: (alterContentAux: EditorTextChangeEvent) => void;
   handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
   contentAux: CreateContentAux;
 }
@@ -83,7 +86,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     type: "" as TypeContentAux,
     content: "",
   });
-
   const instance = useAPI();
   const [contentAlternative, setContentAlternative] = useState<string>("");
   const [contentAux, setContentAux] = useState<CreateContentAux>({} as CreateContentAux);
@@ -94,6 +96,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] =
     useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
+  const [alterContent, setAlterContent] = useState<EditorTextChangeEvent>();
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -208,6 +211,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       setIndexContentEdit(null);
       setModalEditContentIsOpen(false);
     }
+  }
+
+  function handleAlterContent(alterContentAux: EditorTextChangeEvent) {
+    setAlterContent(alterContentAux);
   }
 
   function handleOpenModalAddContent() {
@@ -386,7 +393,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if(questionRequest.contentAux.length === 0) {
+    if(!alterContent) {
       toast.error("Questão sem conteúdo!", {
         style: {
           backgroundColor: "#F63B42",
@@ -415,18 +422,9 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       formData.append("competence", questionRequest.competence);
       formData.append("type", questionRequest.type);
 
-      questionRequest.contentAux.forEach((contentAux, index) => {
-        formData.append(`contentAux[${index}][type]`, contentAux.type);
-        formData.append(
-          `contentAux[${index}][order]`,
-          String(contentAux.order)
-        );
-        if (contentAux.content instanceof File) {
-          formData.append(`contentAux[${index}][content]`, contentAux.content);
-        } else {
-          formData.append(`contentAux[${index}][content]`, contentAux.content);
-        }
-      });
+      formData.append("content", JSON.stringify(alterContent));
+
+      console.log(alterContent)
 
       questionRequest.alternatives.forEach((alternative, index) => {
         formData.append(`alternatives[${index}][content]`, alternative.content);
@@ -495,6 +493,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         handleEditAlternative,
         handleSubmitQuestion,
         contentAux,
+        alterContent,
+        handleAlterContent,
       }}
     >
       {children}
