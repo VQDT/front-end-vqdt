@@ -12,11 +12,11 @@ function CandidateResult() {
   const navigate = useNavigate()
 
   useEffect(() => {
-  if (id) {
-      getTest(id)
-      getTestAttendance(id)
-  }
-  }, [])
+    if (id) {
+        getTest(id)
+        getTestAttendance(id)
+    }
+  },[])
 
   const approved = (testAttendance && test) && (
     <CandidateApproved
