@@ -5,7 +5,6 @@ import Main from "../../components/Main";
 import { AiOutlinePlus } from "react-icons/ai";
 import Button from "../../components/Button";
 import { ModalAddContent } from "../../components/ModalAddContent";
-import DraggleItem from "../../components/DraggleItem";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 import { ModalEditContent } from "../../components/ModalEditContent";
 import { useQuestion } from "../../context/question/useQuestionContext";
@@ -13,8 +12,8 @@ import { Toaster } from "sonner";
 import { ModalAddAlternative } from "../../components/ModalAddAlternative";
 import { CreateAlternativeItem } from "../../components/CreateAlternativeItem";
 import { ModalEditAlternative } from "../../components/ModalEditAlternative";
-import { Editor, EditorTextChangeEvent } from "primereact/editor";
-import { ContentAux } from './../../models/ContentAux';
+import Tiptap from "../../components/TipTapEditor";
+import { JSONContent } from "@tiptap/react";
 
 export function AlterCreatorQuestionPage() {
   const {
@@ -30,14 +29,7 @@ export function AlterCreatorQuestionPage() {
     modalEditAlternativeIsOpen,
     handleSubmitQuestion,
     handleAlterContent,
-    alterContent
   } = useQuestion();
-
-  function ListContent(contentList: ContentAux[]) {
-    return contentList?.map(({ type, content  }, index) => (
-      <DraggleItem key={index} type={type} content={content} index={index} />
-    ));
-  }
 
   const alternativesList = alternatives.map((alternative, index) => {
     return (
@@ -173,10 +165,12 @@ export function AlterCreatorQuestionPage() {
           </section>
           <section className="mt-4 flex flex-col gap-8">
             <TitleSection title="Conteúdo da Questão" />
-            <Editor
-              value={alterContent?.toString()}
-              onTextChange={(e: EditorTextChangeEvent) => handleAlterContent(e)}
-              style={{ height: "320px" }}
+            <Tiptap
+              setContent={
+                handleAlterContent as React.Dispatch<
+                  React.SetStateAction<JSONContent>
+                >
+              }
             />
           </section>
           {questionRequest.type === "multiple-choice" && (
