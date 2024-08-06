@@ -30,11 +30,10 @@ class API {
 
   public async post(path: string, data: FormData | object) {
     try {
-      console.log('data', data);
       if (data instanceof FormData) {
-        const response = await this.axiosInstance.post(`${path}`, data, {
+        const response = await this.axiosInstance.post(`${path}`, data , {
           headers: {
-            "Content-Type": "multipart/form-data",
+            'Content-Type': 'multipart/form-data',
           },
         });
         return response;
@@ -42,6 +41,7 @@ class API {
 
       const response = await this.axiosInstance.post(`${path}`, data);
       return response;
+
     } catch (error) {
       console.error('POST request failed:', error);
       throw error;

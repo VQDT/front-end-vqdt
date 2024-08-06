@@ -11,7 +11,11 @@ import {
   QuestionLevel,
   QuestionRequest,
 } from "../../models/Question";
-import { ContentAuxRequest, CreateContentAux, TypeContentAux } from "../../models/ContentAux";
+import {
+  ContentAuxRequest,
+  CreateContentAux,
+  TypeContentAux,
+} from "../../models/ContentAux";
 import { DropResult } from "@hello-pangea/dnd";
 import ContentTitle from "../../components/ContentTitle";
 import ContentText from "../../components/ContentText";
@@ -22,6 +26,9 @@ import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import { useAPI } from "../../axios";
 import { AxiosError } from "axios";
+import { JSONContent } from "@tiptap/react";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -59,7 +66,9 @@ interface QuestionContextProps {
   handleOpenModalEditAlternative: (index: number) => void;
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
-  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
+  alterContent: JSONContent | undefined;
+  handleAlterContent: (alterContentAux: JSONContent) => void;
+  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => Promise<boolean>;
   contentAux: CreateContentAux;
 }
 
@@ -77,16 +86,17 @@ const initState: QuestionRequest = {
 };
 
 export function QuestionProvider({ children }: { children: ReactNode }) {
-
-  const [questionRequest, setQuestionRequest] = useState<QuestionRequest>(initState);
+  const [questionRequest, setQuestionRequest] =
+    useState<QuestionRequest>(initState);
   const [content, setContent] = useState<CreateContentAux>({
     type: "" as TypeContentAux,
     content: "",
   });
-
   const instance = useAPI();
   const [contentAlternative, setContentAlternative] = useState<string>("");
-  const [contentAux, setContentAux] = useState<CreateContentAux>({} as CreateContentAux);
+  const [contentAux, setContentAux] = useState<CreateContentAux>(
+    {} as CreateContentAux
+  );
   const [modalAddContentIsOpen, setmodalAddContentIsOpen] = useState(false);
   const [modalEditContentIsOpen, setModalEditContentIsOpen] = useState(false);
   const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] =
@@ -94,6 +104,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] =
     useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
+  const [alterContent, setAlterContent] = useState<JSONContent>();
+  const user = useAuthUser() as UserOutput;
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -119,7 +131,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   function handleContentImage(event: ChangeEvent<HTMLInputElement>) {
     const file = event.currentTarget.files && event.currentTarget.files[0];
-    console.log(file)
+    console.log(file);
     if (file) {
       setContent({
         type: "image",
@@ -175,7 +187,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     setIndexContentEdit(index);
     setContentAux({
       content: questionRequest.contentAux[index].content,
-      type: questionRequest.contentAux[index].type
+      type: questionRequest.contentAux[index].type,
     });
     setModalEditContentIsOpen(true);
   }
@@ -208,6 +220,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       setIndexContentEdit(null);
       setModalEditContentIsOpen(false);
     }
+  }
+
+  function handleAlterContent(alterContentAux: JSONContent) {
+    setAlterContent(alterContentAux);
   }
 
   function handleOpenModalAddContent() {
@@ -383,27 +399,30 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>): Promise<boolean> {
     event.preventDefault();
 
-    if(questionRequest.contentAux.length === 0) {
+    if (!alterContent) {
       toast.error("Questão sem conteúdo!", {
         style: {
           backgroundColor: "#F63B42",
-          color: "white"
-        }
+          color: "white",
+        },
       });
-      return;
+      return false;
     }
 
-    if(questionRequest.alternatives.length < 2 && questionRequest.type === "multiple-choice") {
+    if (
+      questionRequest.alternatives.length < 2 &&
+      questionRequest.type === "multiple-choice"
+    ) {
       toast.error("Questão deve ter no mínimo 2 alternativas", {
         style: {
           backgroundColor: "#F63B42",
-          color: "white"
-        }
+          color: "white",
+        },
       });
-      return;
+      return false;
     }
 
     try {
@@ -414,19 +433,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       formData.append("skill", questionRequest.skill);
       formData.append("competence", questionRequest.competence);
       formData.append("type", questionRequest.type);
-
-      questionRequest.contentAux.forEach((contentAux, index) => {
-        formData.append(`contentAux[${index}][type]`, contentAux.type);
-        formData.append(
-          `contentAux[${index}][order]`,
-          String(contentAux.order)
-        );
-        if (contentAux.content instanceof File) {
-          formData.append(`contentAux[${index}][content]`, contentAux.content);
-        } else {
-          formData.append(`contentAux[${index}][content]`, contentAux.content);
-        }
-      });
+      formData.append("content", JSON.stringify(alterContent));
 
       questionRequest.alternatives.forEach((alternative, index) => {
         formData.append(`alternatives[${index}][content]`, alternative.content);
@@ -436,17 +443,21 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         );
       });
 
+      formData.append("userId", user.id);
+
       const response = await instance.post("/questions", formData);
 
-      console.log('====================================');
+      console.log("====================================");
       console.log(response);
-      console.log('====================================');
+      console.log("====================================");
 
       if (response.status === 201) {
         toast.success("Questão criada com sucesso");
         setQuestionRequest(initState);
+        return true;
       } else {
         toast.error("Erro ao submeter questão");
+        return false;
       }
     } catch (error) {
       console.log(error);
@@ -455,6 +466,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       }
       toast.error("Erro ao criar questão");
     }
+
+    return false
   }
 
   return (
@@ -495,6 +508,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         handleEditAlternative,
         handleSubmitQuestion,
         contentAux,
+        alterContent,
+        handleAlterContent,
       }}
     >
       {children}
