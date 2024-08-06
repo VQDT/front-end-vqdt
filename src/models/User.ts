@@ -34,6 +34,16 @@ export type sessionUser = {
   idAddress: string;
 }
 
+export interface ICandidateApplicationRequest {
+  id: string,
+  cpf: string,
+  firstName: string,
+  lastName: string,
+  email: string,
+  testAttendances: {presence: boolean}[],
+  courseAttendances: { presence: boolean }[]
+}
+
 export const LoginInputSchema = z.object({
   cpf: z
     .string()

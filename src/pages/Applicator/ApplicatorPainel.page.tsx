@@ -16,7 +16,7 @@ function ApplicatorTestPainel() {
     const navigation = useNavigate();
 
     function navigateApplicatorTest(id: string) {
-        navigation("/application/" + id);
+        navigation("/aplicacao/" + id);
     }
 
     const listFutureTests = tests

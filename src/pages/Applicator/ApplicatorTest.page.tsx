@@ -12,9 +12,12 @@ import Paper from "@mui/material/Paper";
 import Checkbox from '@mui/material/Checkbox';
 import Button from "../../components/Button";
 import isFuture from "../../utils/isFuture";
+import { ICandidateApplicationRequest } from "../../models/User";
+import { Toaster } from "sonner";
+import { toast } from "react-toastify";
 
 function ApplicatorTestPage() {
-  const { id } = useParams()
+  const { id } = useParams();
   const { candidates, getCandidates, getTest, test, updateAttendance, updateCandidateList } = useTest();
   const [ isDisabled, setIsDisabled ] = useState<boolean>(false);
 
@@ -24,15 +27,20 @@ function ApplicatorTestPage() {
     }
   }
 
-  function handleSubmit(){
+  function handleSubmit() {
+
+    setIsDisabled(true);
+
     if(test && candidates){
       const time = new Date(test.timeEnd).getTime()/2
       if(!isFuture(time.toString())){
-        return 0
+        toast.error("Tempo de atualizar frequencia encerrado!");
+        return;
       }
       updateAttendance(candidates, test)
     }
-    setIsDisabled(true)
+
+    toast.success("Frequência finalizada com sucesso!")
   }
   
   useEffect(()=> {
@@ -44,21 +52,44 @@ function ApplicatorTestPage() {
 
   useEffect(()=> {
     if(test){
-      const time = new Date(test.timeEnd).getTime()/2
-      setIsDisabled(!isFuture(time.toString()))
+      const time = new Date(test.timeEnd).getTime() / 2
+      if (!isFuture(time.toString())) {
+        setIsDisabled(true)
+      }
     }
-  },[])
+  }, [])
+  
+  console.log(candidates);
+
+  function checkCourseAttendance(row: ICandidateApplicationRequest) {
+    let counter = 0;
+    if (row.courseAttendances) {
+      row.courseAttendances.map((attendance) => {
+        if (attendance.presence) {
+          counter++;
+        }
+      })
+      if (counter > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function checkTestPresence(row: ICandidateApplicationRequest) { 
+    if (row.testAttendances) {
+      return row.testAttendances[0].presence;
+    }
+    return false;
+  }
   
 
   return (
     <Main>
       <header className="bg-Blue text-white p-5 mx-3 w-full rounded-md font-semibold text-2xl">
-        {
-          test && test?.name
-        }        
+        {test && test?.name}
       </header>
-      {
-        candidates && 
+      {candidates && (
         <TableContainer component={Paper} className="m-3">
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -74,25 +105,43 @@ function ApplicatorTestPage() {
               {candidates.map((row) => (
                 <TableRow
                   key={row.cpf}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
                     {row.cpf}
                   </TableCell>
                   <TableCell align="center">{row.email}</TableCell>
-                  <TableCell align="center">{row.firstName + " " + row.lastName}</TableCell>
-                  <TableCell align="center">{row.courseAttendances?.[0].presence ? "SIM" : "NÃO"}</TableCell>
-                  <TableCell align="center"><Checkbox onChange={() => handleCheckbox(row.id)} checked={ row.testAttendances?.[0].presence } disabled={isDisabled}/></TableCell>
+                  <TableCell align="center">
+                    {row.firstName + " " + row.lastName}
+                  </TableCell>
+                  <TableCell align="center">
+                    {checkCourseAttendance(row) ? "SIM" : "NÃO"}
+                  </TableCell>
+                  <TableCell align="center">
+                    <Checkbox
+                      onChange={() => handleCheckbox(row.id)}
+                      checked={checkTestPresence(row)}
+                      disabled={isDisabled}
+                    />
+                  </TableCell>
                 </TableRow>
-
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-      }
+      )}
       <div className="m-3">
-        <Button onClick={handleSubmit} >FINALIZAR FREQUÊNCIA</Button>
+        <Button onClick={handleSubmit} type="submit">
+          FINALIZAR FREQUÊNCIA
+        </Button>
       </div>
+
+      <Toaster
+        duration={5000}
+        position="top-right"
+        pauseWhenPageIsHidden={true}
+        theme="light"
+      />
     </Main>
   );
 }
