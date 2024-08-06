@@ -29,7 +29,7 @@ const CreatorPanel = () => {
         <div className="container mx-auto mt-8 p-28">
             <div className="flex items-center justify-between">
                 <TitleSection underline title="SUAS QUESTÕES" />
-                <button className="button outline default py-1 px-5 text-sm flex items-center" type="button" onClick={()=>navigate("/criar-questao")} >
+                <button className="button outline default py-1 px-5 text-sm flex items-center" type="button" onClick={()=>navigate("/alter-criar-questao")} >
                     NOVA QUESTÃO
                     <AiOutlinePlus className="ml-2" />
                 </button>

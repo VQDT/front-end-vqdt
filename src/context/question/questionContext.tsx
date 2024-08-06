@@ -27,6 +27,8 @@ import { AlternativeRequest } from "../../models/Alternative";
 import { useAPI } from "../../axios";
 import { AxiosError } from "axios";
 import { JSONContent } from "@tiptap/react";
+import useAuthUser from "react-auth-kit/hooks/useAuthUser";
+import { UserOutput } from "../../models/User";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
@@ -66,7 +68,7 @@ interface QuestionContextProps {
   handleEditAlternative: () => void;
   alterContent: JSONContent | undefined;
   handleAlterContent: (alterContentAux: JSONContent) => void;
-  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => void;
+  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => Promise<boolean>;
   contentAux: CreateContentAux;
 }
 
@@ -103,6 +105,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
   const [alterContent, setAlterContent] = useState<JSONContent>();
+  const user = useAuthUser() as UserOutput;
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -396,7 +399,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>): Promise<boolean> {
     event.preventDefault();
 
     if (!alterContent) {
@@ -406,7 +409,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
           color: "white",
         },
       });
-      return;
+      return false;
     }
 
     if (
@@ -419,7 +422,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
           color: "white",
         },
       });
-      return;
+      return false;
     }
 
     try {
@@ -440,6 +443,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         );
       });
 
+      formData.append("userId", user.id);
+
       const response = await instance.post("/questions", formData);
 
       console.log("====================================");
@@ -449,8 +454,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       if (response.status === 201) {
         toast.success("Questão criada com sucesso");
         setQuestionRequest(initState);
+        return true;
       } else {
         toast.error("Erro ao submeter questão");
+        return false;
       }
     } catch (error) {
       console.log(error);
@@ -459,6 +466,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       }
       toast.error("Erro ao criar questão");
     }
+
+    return false
   }
 
   return (

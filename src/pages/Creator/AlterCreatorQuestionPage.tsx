@@ -14,6 +14,7 @@ import { CreateAlternativeItem } from "../../components/CreateAlternativeItem";
 import { ModalEditAlternative } from "../../components/ModalEditAlternative";
 import Tiptap from "../../components/TipTapEditor";
 import { JSONContent } from "@tiptap/react";
+import { useNavigate } from "react-router-dom";
 
 export function AlterCreatorQuestionPage() {
   const {
@@ -31,6 +32,8 @@ export function AlterCreatorQuestionPage() {
     handleAlterContent,
   } = useQuestion();
 
+  const navigate = useNavigate();
+
   const alternativesList = alternatives.map((alternative, index) => {
     return (
       <CreateAlternativeItem
@@ -44,6 +47,13 @@ export function AlterCreatorQuestionPage() {
     );
   });
 
+  async function submitQuestion(e: React.FormEvent<HTMLFormElement>) { 
+    const result = await handleSubmitQuestion(e);
+    if (result) {
+      navigate("/painel-de-elaborador");
+    }
+  }
+
   return (
     <>
       <Main>
@@ -51,7 +61,7 @@ export function AlterCreatorQuestionPage() {
           className="mt-4"
           action="#"
           encType="multpart/form-data"
-          onSubmit={handleSubmitQuestion}
+          onSubmit={submitQuestion}
         >
           <TitleSection title="Categorização" />
           <section className="mt-4 flex flex-col gap-8">

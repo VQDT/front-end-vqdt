@@ -26,6 +26,7 @@ const extensions = [
   Underline,
   Image.configure({
     inline: true,
+    allowBase64: true,
   }),
   Dropcursor,
   TextAlign.configure({
@@ -69,7 +70,7 @@ export default function Tiptap(props: Props) {
       };
       reader.readAsDataURL(file);
     };
-  
+
     const fileInput = document.createElement("input") as HTMLInputElement;
     fileInput.type = "file";
     fileInput.accept = "image/*"; // Aceita apenas imagens
@@ -105,7 +106,7 @@ export default function Tiptap(props: Props) {
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            active={editor?.isActive("heading", { level: 2 })}
+            active={editor?.isActive("heading", { level: 2 }) ? true : false}
           >
             <Title fontSize="large" />
           </ButtonEditorTipTap>
@@ -114,86 +115,86 @@ export default function Tiptap(props: Props) {
             onClick={() =>
               editor?.chain().focus().toggleHeading({ level: 3 }).run()
             }
-            active={editor?.isActive("heading", { level: 3 })}
+            active={editor?.isActive("heading", { level: 3 }) ? true : false}
           >
             <Title fontSize="small" />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleBlockquote().run()}
-            active={editor?.isActive("blockquote")}
+            active={editor?.isActive("blockquote") ? true : false}
           >
             <FormatQuote />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleBulletList().run()}
-            active={editor?.isActive("bulletList")}
+            active={editor?.isActive("bulletList") ? true : false}
           >
             <FormatListBulleted />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleOrderedList().run()}
-            active={editor?.isActive("orderedList")}
+            active={editor?.isActive("orderedList") ? true : false}
           >
             <FormatListNumbered />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleBold().run()}
-            active={editor?.isActive("bold")}
+            active={editor?.isActive("bold") ? true : false}
           >
             <FormatBold />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleItalic().run()}
-            active={editor?.isActive("italic")}
+            active={editor?.isActive("italic") ? true : false}
           >
             <FormatItalic />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleStrike().run()}
-            active={editor?.isActive("strike")}
+            active={editor?.isActive("strike") ? true : false}
           >
             <FormatStrikethrough />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor?.chain().focus().toggleUnderline().run()}
-            active={editor?.isActive("underline")}
+            active={editor?.isActive("underline") ? true : false}
           >
-            <FormatUnderlined/>
+            <FormatUnderlined />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            active={editor?.isActive({ textAlign: "left" })}
+            active={editor?.isActive({ textAlign: "left" }) ? true : false}
           >
             <FormatAlignLeft />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
-            active={editor?.isActive({ textAlign: "center" })}
+            active={editor?.isActive({ textAlign: "center" }) ? true : false}
           >
             <FormatAlignCenter />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
-            active={editor?.isActive({ textAlign: "right" })}
+            active={editor?.isActive({ textAlign: "right" }) ? true : false}
           >
             <FormatAlignRight />
           </ButtonEditorTipTap>
 
           <ButtonEditorTipTap
             onClick={addImage}
-            active={editor?.isActive("image")}
+            active={editor?.isActive("image") ? true : false}
           >
-            <InsertPhoto/>
+            <InsertPhoto />
           </ButtonEditorTipTap>
         </div>
 
