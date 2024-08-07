@@ -14,8 +14,8 @@ import {
 } from "../../models/Question";
 
 const CreatorPanel = () => {
-    const statusOptions = Object.values(QuestionStatusEnum);
-    const areaOptions = Object.values(QuestionAreaEnum);
+  const statusOptions = Object.values(QuestionStatusEnum);
+  const areaOptions = Object.values(QuestionAreaEnum);
   const navigate = useNavigate();
   const { getElaboratorQuestions, elaboratorQuestions } = useQuestion();
   const [search, setSearch] = useState<string>("");

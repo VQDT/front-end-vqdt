@@ -23,7 +23,8 @@ const FilterSelect: React.FC<FilterSelectProps> = ({ options, placeholder = "Sel
         className="w-full text-left flex items-center px-4 py-1 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <FunnelIcon className="h-5 w-5 text-gray-400 mr-2" /> {/* Ícone de filtro */}
+        <FunnelIcon className="h-5 w-5 text-gray-400 mr-2" />{" "}
+        {/* Ícone de filtro */}
         {selectedOption || placeholder}
       </button>
       {isOpen && (
@@ -31,7 +32,7 @@ const FilterSelect: React.FC<FilterSelectProps> = ({ options, placeholder = "Sel
           {options.map((option) => (
             <li
               key={option}
-              className="cursor-pointer select-none relative py-2 pl-10 pr-4 hover:bg-blue-300 hover:text-white"
+              className="cursor-pointer select-none relative py-2 pl-10 pr-4 hover:bg-blue-300 hover:text-white active:bg-blue-400"
               onClick={() => handleSelect(option)}
             >
               {option}

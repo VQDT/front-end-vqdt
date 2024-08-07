@@ -12,27 +12,47 @@ import {
 } from "../../models/Question";
 
 const ReviewerPanel = () => {
-  const statusOptions = Object.values(QuestionStatusEnum);
-  const areaOptions = Object.values(QuestionAreaEnum);
+  const statusOptions: string[] = [...Object.values(QuestionStatusEnum)];
+  const areaOptions: string[] = [...Object.values(QuestionAreaEnum)];
   const { getElaboratorQuestions, elaboratorQuestions } = useQuestion();
   const [search, setSearch] = useState<string>("");
   const [results, setResults] = useState<Question[]>(elaboratorQuestions);
+  const [knowledgeArea, setKnowledgeArea] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
 
   useEffect(() => {
     getElaboratorQuestions();
   }, []);
 
   useEffect(() => {
-    const results = elaboratorQuestions.filter(
+    let results = elaboratorQuestions.filter(
       (element) =>
         element.id.toLowerCase().includes(search.toLowerCase()) ||
         element.knowledgeArea.toLowerCase().includes(search.toLowerCase()) ||
         element.competence.toLowerCase().includes(search.toLowerCase())
     );
+    if (knowledgeArea) {
+      results = results.filter((element) => element.knowledgeArea === knowledgeArea);
+    }
     setResults(results);
-  }, [elaboratorQuestions, search]);
+  }, [elaboratorQuestions, knowledgeArea, search]);
 
-  const handleSelect = (selectedOption: string) => {
+  const handleSelect = (selectedOption: string, filter: string) => {
+    if (filter === "knowledgeArea") {
+      if (selectedOption === knowledgeArea) {
+        selectedOption="";
+        setKnowledgeArea("");
+      }
+      else {
+       setKnowledgeArea(selectedOption); 
+      }
+    } else {
+      if (selectedOption === status) {
+        selectedOption="";
+        setStatus("");
+      }
+      setStatus(selectedOption);
+    }
     console.log("Selected option:", selectedOption);
   };
 
@@ -50,14 +70,14 @@ const ReviewerPanel = () => {
             <FilterSelect
               placeholder="Filtrar por Area de Conhecimento"
               options={areaOptions}
-              onSelect={handleSelect}
+              onSelect={(e) => handleSelect(e, "knowledgeArea")}
             />
           </div>
           <div className=" flex items-center justify-center bg-gray-100">
             <FilterSelect
               placeholder="Filtrar por Status"
               options={statusOptions}
-              onSelect={handleSelect}
+              onSelect={(e) => handleSelect(e, "status")}
             />
           </div>
         </div>
