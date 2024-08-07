@@ -6,22 +6,13 @@ import {
   useState,
 } from "react";
 import {
+  Question,
   QuestionArea,
   QuestionDifficulty,
   QuestionLevel,
   QuestionRequest,
 } from "../../models/Question";
-import {
-  ContentAuxRequest,
-  CreateContentAux,
-  TypeContentAux,
-} from "../../models/ContentAux";
-import { DropResult } from "@hello-pangea/dnd";
-import ContentTitle from "../../components/ContentTitle";
-import ContentText from "../../components/ContentText";
-import { ContentRef } from "../../components/ContentRef";
-import ContentImage from "../../components/ContentImage";
-import ContentAsking from "../../components/ContentAsking";
+import { TypeContentAux } from "../../models/ContentAux";
 import { toast } from "sonner";
 import { AlternativeRequest } from "../../models/Alternative";
 import { useAPI } from "../../axios";
@@ -29,32 +20,16 @@ import { AxiosError } from "axios";
 import { JSONContent } from "@tiptap/react";
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 import { UserOutput } from "../../models/User";
+import { DropResult } from "@hello-pangea/dnd";
 
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
-  handleChangeCategories: (event: ChangeEvent<HTMLSelectElement>) => void;
-  contentsAux: ContentAuxRequest[];
-  modalAddContentIsOpen: boolean;
-  handleOpenModalAddContent: () => void;
-  handleCloseModalAddContent: () => void;
-  modalEditContentIsOpen: boolean;
-  handleOpenModalEditContent: (index: number) => void;
-  handleCloseModalEditContent: () => void;
-  content: CreateContentAux;
-  handleType: (event: ChangeEvent<HTMLSelectElement>) => void;
-  handleContent: (event: ChangeEvent<HTMLTextAreaElement>) => void;
-  handleContentImage: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleAddContentAux: () => void;
-  handleRemoveContentAux: (index: number) => void;
-  indexContentEdit: number | null;
-  setIndexContentEdit: (index: number | null) => void;
-  handleEditContentAux: () => void;
-  handleDragEnd: (event: DropResult) => void;
-  switchContent: (type: string, content: string | File) => ReactNode;
   alternatives: AlternativeRequest[];
-  changeCorrectAlternative: (index: number) => void;
   modalAddAlternativeIsOpen: boolean;
   contentAlternative: string;
+  content: JSONContent | undefined;
+  modalEditAlternativeIsOpen: boolean;
+  elaboratorQuestions: Question[];
   handleChangeContentAlternative: (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => void;
@@ -62,14 +37,16 @@ interface QuestionContextProps {
   handleCloseAddAlternative: () => void;
   handleOpenAddAlternative: () => void;
   deleteAlternative: (index: number) => void;
-  modalEditAlternativeIsOpen: boolean;
   handleOpenModalEditAlternative: (index: number) => void;
   handleCloseModalEditAlternative: () => void;
   handleEditAlternative: () => void;
-  alterContent: JSONContent | undefined;
-  handleAlterContent: (alterContentAux: JSONContent) => void;
+  handleDragEnd: (event: DropResult) => void;
+  handleChangeCategories: (event: ChangeEvent<HTMLSelectElement>) => void;
+  handleType: (event: ChangeEvent<HTMLSelectElement>) => void;
+  changeCorrectAlternative: (index: number) => void;
+  handleContent: (alterContentAux: JSONContent) => void;
   handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => Promise<boolean>;
-  contentAux: CreateContentAux;
+  getElaboratorQuestions: () => void; 
 }
 
 export const QuestionContext = createContext<QuestionContextProps | null>(null);
@@ -81,31 +58,32 @@ const initState: QuestionRequest = {
   skill: "",
   competence: "",
   alternatives: [],
-  contentAux: [],
   type: "multiple-choice",
 };
 
 export function QuestionProvider({ children }: { children: ReactNode }) {
   const [questionRequest, setQuestionRequest] =
     useState<QuestionRequest>(initState);
-  const [content, setContent] = useState<CreateContentAux>({
-    type: "" as TypeContentAux,
-    content: "",
-  });
   const instance = useAPI();
   const [contentAlternative, setContentAlternative] = useState<string>("");
-  const [contentAux, setContentAux] = useState<CreateContentAux>(
-    {} as CreateContentAux
-  );
-  const [modalAddContentIsOpen, setmodalAddContentIsOpen] = useState(false);
-  const [modalEditContentIsOpen, setModalEditContentIsOpen] = useState(false);
   const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] =
     useState(false);
   const [modalEditAlternativeIsOpen, setModalEditAlternativeIsOpen] =
     useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
-  const [alterContent, setAlterContent] = useState<JSONContent>();
+  const [content, setContent] = useState<JSONContent>();
+  const [elaboratorQuestions, setElaboratorQuestions] = useState<Question[]>([]);
   const user = useAuthUser() as UserOutput;
+
+  async function getElaboratorQuestions() {
+    try {
+      const response = await instance.get("/questions/elaborator/" + user.id);
+      console.log(response);
+      setElaboratorQuestions(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
@@ -122,172 +100,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function handleContent(event: ChangeEvent<HTMLTextAreaElement>) {
-    const value = event.target.value;
-    setContent((state) => {
-      return { ...state, content: value };
-    });
-  }
-
-  function handleContentImage(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.currentTarget.files && event.currentTarget.files[0];
-    console.log(file);
-    if (file) {
-      setContent({
-        type: "image",
-        content: file,
-      });
-    }
-  }
-
-  function handleResetContent() {
-    setContent({ type: "" as TypeContentAux, content: "" });
-  }
-
-  function addContentAux() {
-    setQuestionRequest((state) => {
-      return {
-        ...state,
-        contentAux: [
-          ...state.contentAux,
-          {
-            type: content.type,
-            content: content.content,
-            order: state.contentAux.length + 1,
-          },
-        ],
-      };
-    });
-  }
-
-  function handleAddContentAux() {
-    if (!content.type || !content.content || content.content === "") {
-      toast.error("Preencha todos os campos");
-    } else {
-      addContentAux();
-      handleResetContent();
-      setmodalAddContentIsOpen(false);
-    }
-  }
-
-  function handleRemoveContentAux(index: number) {
-    setQuestionRequest((state) => {
-      const contentAux = state.contentAux.filter((_, i) => i !== index);
-      return {
-        ...state,
-        contentAux: contentAux.map((item, index) => ({
-          ...item,
-          order: index,
-        })),
-      };
-    });
-  }
-
-  function handleOpenModalEditContent(index: number) {
-    setIndexContentEdit(index);
-    setContentAux({
-      content: questionRequest.contentAux[index].content,
-      type: questionRequest.contentAux[index].type,
-    });
-    setModalEditContentIsOpen(true);
-  }
-
-  function EditContentAux() {
-    setQuestionRequest((state) => {
-      const contentAux = state.contentAux.map((item, index) => {
-        if (index === indexContentEdit) {
-          return {
-            ...item,
-            type: content.type,
-            content: content.content,
-          };
-        }
-        return item;
-      });
-      return {
-        ...state,
-        contentAux,
-      };
-    });
-  }
-
-  function handleEditContentAux() {
-    if (!content.type || !content.content || content.content === "") {
-      toast.error("Preencha todos os campos");
-    } else {
-      EditContentAux();
-      handleResetContent();
-      setIndexContentEdit(null);
-      setModalEditContentIsOpen(false);
-    }
-  }
-
-  function handleAlterContent(alterContentAux: JSONContent) {
-    setAlterContent(alterContentAux);
-  }
-
-  function handleOpenModalAddContent() {
-    setmodalAddContentIsOpen(true);
-  }
-
-  function handleCloseModalEditContent() {
-    handleResetContent();
-    setIndexContentEdit(null);
-    setModalEditContentIsOpen(false);
-  }
-
-  function handleCloseModalAddContent() {
-    handleResetContent();
-    setmodalAddContentIsOpen(false);
-  }
-
-  function handleDragEnd(event: DropResult) {
-    const { source, destination } = event;
-
-    if (!destination) return;
-
-    const contentAux = questionRequest.contentAux;
-    const [removed] = contentAux.splice(source.index, 1);
-    contentAux
-      .splice(destination.index, 0, removed)
-      .map((item, index) => (item.order = index));
-
-    setQuestionRequest((state) => ({
-      ...state,
-      contentAux,
-    }));
-  }
-
-  function switchContent(type: string, content: string | File) {
-    switch (type) {
-      case "title":
-        return (
-          <ContentTitle>{typeof content === "string" && content}</ContentTitle>
-        );
-
-      case "text":
-        return (
-          <ContentText>{typeof content === "string" && content}</ContentText>
-        );
-
-      case "ref":
-        return (
-          <ContentRef>{typeof content === "string" && content}</ContentRef>
-        );
-
-      case "image":
-        if (typeof content !== "string") {
-          return <ContentImage src={URL.createObjectURL(content)} />;
-        }
-        break;
-
-      case "asking":
-        return (
-          <ContentAsking>
-            {typeof content === "string" && content}
-          </ContentAsking>
-        );
-    }
+  function handleContent(contentAux: JSONContent) {
+    setContent(contentAux);
   }
 
   function handleOpenAddAlternative() {
@@ -399,10 +213,34 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  async function handleSubmitQuestion(event: FormEvent<HTMLFormElement>): Promise<boolean> {
+  function handleDragEnd(event: DropResult) {
+    const { destination } = event;
+
+    if (!destination) return;
+
+    //trocar a ordem das alternativas
+    /*
+    const { source } = event;
+    const alternatives = questionRequest.alternatives;
+    const [removed] = alternatives.splice(source.index, 1);
+    alternatives
+      .splice(destination.index, 0, removed)
+      .map((item, index) => (item.content = index));
+
+    setQuestionRequest((state) => ({
+      ...state,
+      contentAux,
+    }));
+
+    */
+  }
+
+  async function handleSubmitQuestion(
+    event: FormEvent<HTMLFormElement>
+  ): Promise<boolean> {
     event.preventDefault();
 
-    if (!alterContent) {
+    if (!content) {
       toast.error("Questão sem conteúdo!", {
         style: {
           backgroundColor: "#F63B42",
@@ -433,7 +271,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       formData.append("skill", questionRequest.skill);
       formData.append("competence", questionRequest.competence);
       formData.append("type", questionRequest.type);
-      formData.append("content", JSON.stringify(alterContent));
+      formData.append("content", JSON.stringify(content));
 
       questionRequest.alternatives.forEach((alternative, index) => {
         formData.append(`alternatives[${index}][content]`, alternative.content);
@@ -467,7 +305,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       toast.error("Erro ao criar questão");
     }
 
-    return false
+    return false;
   }
 
   return (
@@ -475,24 +313,9 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       value={{
         questionRequest,
         handleChangeCategories,
-        contentsAux: questionRequest.contentAux,
-        modalAddContentIsOpen,
-        handleOpenModalAddContent,
-        handleCloseModalAddContent,
-        modalEditContentIsOpen,
-        handleOpenModalEditContent,
-        handleCloseModalEditContent,
         content: content,
         handleType,
         handleContent,
-        handleContentImage,
-        handleAddContentAux,
-        handleRemoveContentAux,
-        indexContentEdit,
-        setIndexContentEdit,
-        handleEditContentAux,
-        handleDragEnd,
-        switchContent,
         alternatives: questionRequest.alternatives,
         changeCorrectAlternative,
         modalAddAlternativeIsOpen,
@@ -507,9 +330,9 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         handleCloseModalEditAlternative,
         handleEditAlternative,
         handleSubmitQuestion,
-        contentAux,
-        alterContent,
-        handleAlterContent,
+        handleDragEnd,
+        getElaboratorQuestions,
+        elaboratorQuestions
       }}
     >
       {children}

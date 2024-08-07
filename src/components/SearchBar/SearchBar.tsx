@@ -2,24 +2,15 @@ import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
 interface SearchBarProps {
-    suggestions: string[];
+    setSearch: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ suggestions }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ setSearch }) => {
     const [query, setQuery] = useState("");
-    const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        setQuery(value);
-        if (value.length > 0) {
-            const filtered = suggestions.filter((suggestion) =>
-                suggestion.toLowerCase().includes(value.toLowerCase())
-            );
-            setFilteredSuggestions(filtered);
-        } else {
-            setFilteredSuggestions([]);
-        }
+        setQuery(event.target.value);
+        setSearch(event.target.value);
     };
 
     return (
@@ -34,22 +25,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ suggestions }) => {
                     placeholder="Buscar..."
                 />
             </div>
-            {filteredSuggestions.length > 0 && (
-                <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-lg mt-1">
-                    {filteredSuggestions.map((suggestion, index) => (
-                        <li
-                            key={index}
-                            className="p-2 cursor-pointer hover:bg-gray-200"
-                            onClick={() => {
-                                setQuery(suggestion);
-                                setFilteredSuggestions([]);
-                            }}
-                        >
-                            {suggestion}
-                        </li>
-                    ))}
-                </ul>
-            )}
         </div>
     );
 };

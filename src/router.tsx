@@ -2,23 +2,23 @@ import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "./layout/App.Layout";
 import Protect from "./layout/Protect.Layout";
 import TestLayout from "./layout/Test.Layout";
-import AboutTest from "./pages/AboutTest";
+import AboutTest from "./pages/AboutTest/AboutTest.page";
 import ApplicatorTestPainel from "./pages/Applicator/ApplicatorPainel.page";
 import ApplicatorTestPage from "./pages/Applicator/ApplicatorTest.page";
 import CourseAttendancePage from "./pages/Applicator/CourseAttendancePage";
 import Preparatory from "./pages/Applicator/PreparatoryPage";
-import Login from "./pages/Auth/LoginPage";
-import RecoverPassword from "./pages/Auth/RecoverPasswordPage";
-import CandidateResult from "./pages/Candidate/CandidateResultPage";
+import Login from "./pages/Auth/Login.page";
+import RecoverPassword from "./pages/Auth/RecoverPassword.page";
+import CandidateResult from "./pages/Candidate/CandidateResult.page";
 import IntroductionTestPage from "./pages/Candidate/IntroductionTest.page";
-import Test from "./pages/Candidate/TestPage";
-import TestPainel from "./pages/Candidate/TestPainelPage";
-import { CreatorQuestionPage } from "./pages/Creator/CreatorQuestionPage";
+import Test from "./pages/Candidate/Test.page";
+import TestPainel from "./pages/Candidate/TestPainel.page";
+import CreateQuestionPage from "./pages/Creator/CreateQuestion.page";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
-import CreatorPanel from "./pages/Creator/CreatorPanelPage";
-import { AlterCreatorQuestionPage } from "./pages/Creator/AlterCreatorQuestionPage";
+import CreatorPanel from "./pages/Creator/CreatorPanel.page";
+import ReviewerPanel from './pages/Review/ReviewerPanel.page';
 
 export const Router = createBrowserRouter([
   {
@@ -66,12 +66,17 @@ export const Router = createBrowserRouter([
         ],
       },
 
-      // // REVIEWER ROUTES
+      // REVIEWER ROUTES
 
-      // {
-      //   element: <Protect permittedRoles={["reviewer"]} />,
-      //   children: [],
-      // },
+      {
+        element: <Protect permittedRoles={["REVIEWER", "ADMIN"]} />,
+        children: [
+          {
+            path: "/painel-de-revisor",
+            element: <ReviewerPanel />,
+          },
+        ],
+      },
 
       // // SUPERVISOR ROUTES
 
@@ -87,11 +92,7 @@ export const Router = createBrowserRouter([
         children: [
           {
             path: "/criar-questao",
-            element: <CreatorQuestionPage />,
-          },
-          {
-            path: "/alter-criar-questao/",
-            element: <AlterCreatorQuestionPage />,
+            element: <CreateQuestionPage />,
           },
           {
             path: "/painel-de-elaborador",

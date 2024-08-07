@@ -1,31 +1,49 @@
 import { Alternative, AlternativeRequest } from "./Alternative";
-import { ContentAuxRequest, ContentAuxResponse } from "./ContentAux";	
+import { ContentAuxResponse } from "./ContentAux";
 
 export interface Question {
-    id: string;
-    type: string;
-    isCorrect?: boolean;
-    skill: string;
-    competence: string;
-    knowledgeArea: string;
-    knowledgeLevel: number;
-    difficulty: string;
-    review: string;
-    idCreator: string;
-    idReviewer: string;
-    alternatives: Alternative[]
-    ContentAux: ContentAuxResponse[];
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  type: string;
+  isCorrect?: boolean;
+  status: QuestionStatus;
+  skill: string;
+  competence: string;
+  knowledgeArea: string;
+  knowledgeLevel: number;
+  difficulty: string;
+  review: string;
+  idCreator: string;
+  idReviewer: string;
+  alternatives: Alternative[]
+  content: ContentAuxResponse[];
 }
 
 export type Answer = {
-    idQuestion: string;
-    idAlternatives: string;
+  idQuestion: string;
+  idAlternatives: string;
 }
 
 export type QuestionLevel = "INFANTIL" | "FUNDAMENTAL" | "MEDIO";
 export type QuestionArea = "LINGUAGENS" | "MATEMATICA" | "CIENCIAS_HUMANAS" | "CIENCIAS_NATUREZA";
 export type QuestionDifficulty = "1" | "2" | "3";
 export type QuestionType = "multiple-choice" | "true-or-false";
+export type QuestionStatus = "APROVADA" | "REJEITADA" | "EM ANÁLISE" | "RASCUNHO";
+//converta o QuestionArea para um enum
+export enum QuestionAreaEnum {
+  LINGUAGENS = "Linguagens",
+  MATEMATICA = "Matemática",
+  CIENCIAS_HUMANAS = "Ciências Humanas",
+  CIENCIAS_NATUREZA = "Ciências da Natureza"
+}
+
+export enum QuestionStatusEnum {
+  APPROVED = "APROVADA",
+  REJECTED = "REJEITADA",
+  UNDER_REVIEW = "EM ANÁLISE",
+  DRAFT = "RASCUNHO"
+}
 
 export interface QuestionRequest {
   level: QuestionLevel;
@@ -34,7 +52,6 @@ export interface QuestionRequest {
   skill: string;
   competence: string;
   alternatives: AlternativeRequest[];
-  contentAux: ContentAuxRequest[];
   type: QuestionType;
   isCorrect?: boolean;
 }

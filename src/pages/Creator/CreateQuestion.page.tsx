@@ -4,39 +4,31 @@ import { TitleSection } from "../../components/TitleSection";
 import Main from "../../components/Main";
 import { AiOutlinePlus } from "react-icons/ai";
 import Button from "../../components/Button";
-import { ModalAddContent } from "../../components/ModalAddContent";
-import DraggleItem from "../../components/DraggleItem";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
-import { ModalEditContent } from "../../components/ModalEditContent";
 import { useQuestion } from "../../context/question/useQuestionContext";
 import { Toaster } from "sonner";
 import { ModalAddAlternative } from "../../components/ModalAddAlternative";
 import { CreateAlternativeItem } from "../../components/CreateAlternativeItem";
 import { ModalEditAlternative } from "../../components/ModalEditAlternative";
-import { ContentAuxRequest } from "../../models/ContentAux";
+import Tiptap from "../../components/TipTapEditor";
+import { JSONContent } from "@tiptap/react";
+import { useNavigate } from "react-router-dom";
 
-export function CreatorQuestionPage() {
+export default function CreateQuestionPage() {
   const {
     questionRequest,
     handleChangeCategories,
-    contentsAux,
-    modalAddContentIsOpen,
-    handleOpenModalAddContent,
-    modalEditContentIsOpen: modalEditIsOpen,
-    handleDragEnd,
     alternatives,
     changeCorrectAlternative,
     modalAddAlternativeIsOpen,
     handleOpenAddAlternative,
     modalEditAlternativeIsOpen,
     handleSubmitQuestion,
+    handleContent,
+    handleDragEnd,
   } = useQuestion();
 
-  function ListContent(contentList: ContentAuxRequest[]) {
-    return contentList?.map(({ type, content }, index) => (
-      <DraggleItem key={index} type={type} content={content} index={index} />
-    ));
-  }
+  const navigate = useNavigate();
 
   const alternativesList = alternatives.map((alternative, index) => {
     return (
@@ -51,6 +43,13 @@ export function CreatorQuestionPage() {
     );
   });
 
+  async function submitQuestion(e: React.FormEvent<HTMLFormElement>) { 
+    const result = await handleSubmitQuestion(e);
+    if (result) {
+      navigate("/painel-de-elaborador");
+    }
+  }
+
   return (
     <>
       <Main>
@@ -58,7 +57,7 @@ export function CreatorQuestionPage() {
           className="mt-4"
           action="#"
           encType="multpart/form-data"
-          onSubmit={handleSubmitQuestion}
+          onSubmit={submitQuestion}
         >
           <TitleSection title="Categorização" />
           <section className="mt-4 flex flex-col gap-8">
@@ -171,27 +170,14 @@ export function CreatorQuestionPage() {
             </ContainerInput>
           </section>
           <section className="mt-4 flex flex-col gap-8">
-            <div className="flex justify-between items-center">
-              <TitleSection title="Conteúdo da Questão" />
-              <Button type="button" onClick={handleOpenModalAddContent}>
-                Adicionar
-                <AiOutlinePlus />
-              </Button>
-            </div>
-            <DragDropContext onDragEnd={handleDragEnd}>
-              <Droppable droppableId="ContentsAux">
-                {(provided) => (
-                  <div
-                    className="flex flex-col gap-4 "
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                  >
-                    {ListContent(contentsAux)}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <TitleSection title="Conteúdo da Questão" />
+            <Tiptap
+              setContent={
+                handleContent as React.Dispatch<
+                  React.SetStateAction<JSONContent>
+                >
+              }
+            />
           </section>
           {questionRequest.type === "multiple-choice" && (
             <section className="mt-4  flex flex-col gap-8">
@@ -202,7 +188,20 @@ export function CreatorQuestionPage() {
                   <AiOutlinePlus />
                 </Button>
               </div>
-              <div className="mb-4 flex flex-col gap-3">{alternativesList}</div>
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="ContentsAux">
+                  {(provided) => (
+                    <div
+                      className="flex flex-col gap-4 "
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {alternativesList}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
             </section>
           )}
           <div className="mt-2">
@@ -210,8 +209,6 @@ export function CreatorQuestionPage() {
           </div>
         </form>
       </Main>
-      {modalAddContentIsOpen && <ModalAddContent />}
-      {modalEditIsOpen && <ModalEditContent />}
       {modalAddAlternativeIsOpen && <ModalAddAlternative />}
       {modalEditAlternativeIsOpen && <ModalEditAlternative />}
       <Toaster duration={5000} position="top-right" />
