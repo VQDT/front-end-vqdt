@@ -29,25 +29,27 @@ export type QuestionLevel = "INFANTIL" | "FUNDAMENTAL" | "MEDIO";
 export type QuestionArea = "LINGUAGENS" | "MATEMATICA" | "CIENCIAS_HUMANAS" | "CIENCIAS_NATUREZA";
 export type QuestionDifficulty = "1" | "2" | "3";
 export type QuestionType = "multiple-choice" | "true-or-false";
-export type QuestionStatus = "APROVADA" | "REJEITADA" | "EM ANÁLISE" | "RASCUNHO";
+export type QuestionStatus = "APROVADA" | "REJEITADA" | "EM_ANALISE" | "RASCUNHO" | "PENDENTE";
 //converta o QuestionArea para um enum
 export enum QuestionAreaEnum {
   LINGUAGENS = "Linguagens",
   MATEMATICA = "Matemática",
   CIENCIAS_HUMANAS = "Ciências Humanas",
-  CIENCIAS_NATUREZA = "Ciências da Natureza"
+  CIENCIAS_NATUREZA = "Ciências da Natureza",
+  HISTORIA = "Historia"
 }
 
 export enum QuestionStatusEnum {
   APPROVED = "APROVADA",
   REJECTED = "REJEITADA",
   UNDER_REVIEW = "EM ANÁLISE",
-  DRAFT = "RASCUNHO"
+  DRAFT = "RASCUNHO",
+  PENDENT = "PENDENTE"
 }
 
 export interface QuestionRequest {
-  level: QuestionLevel;
-  area: QuestionArea;
+  knowledgeLevel: QuestionLevel;
+  knowledgeArea: QuestionArea;
   difficulty: QuestionDifficulty;
   skill: string;
   competence: string;

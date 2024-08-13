@@ -75,6 +75,10 @@ export const Router = createBrowserRouter([
             path: "/painel-de-revisor",
             element: <ReviewerPanel />,
           },
+          {
+            path: "/revisar-questao",
+            element: <ReviewQuestionPage />,
+          }
         ],
       },
 
@@ -98,6 +102,10 @@ export const Router = createBrowserRouter([
             path: "/painel-de-elaborador",
             element: <CreatorPanel />,
           },
+          {
+            path: "/editar-questao",
+            element: <CreateQuestionPage edit={true} />,
+          }
         ],
       },
 

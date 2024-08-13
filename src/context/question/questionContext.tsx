@@ -30,6 +30,7 @@ interface QuestionContextProps {
   content: JSONContent | undefined;
   modalEditAlternativeIsOpen: boolean;
   elaboratorQuestions: Question[];
+  reviewerQuestions: Question[];
   handleChangeContentAlternative: (
     event: ChangeEvent<HTMLTextAreaElement>
   ) => void;
@@ -45,15 +46,20 @@ interface QuestionContextProps {
   handleType: (event: ChangeEvent<HTMLSelectElement>) => void;
   changeCorrectAlternative: (index: number) => void;
   handleContent: (alterContentAux: JSONContent) => void;
-  handleSubmitQuestion: (event: FormEvent<HTMLFormElement>) => Promise<boolean>;
-  getElaboratorQuestions: () => void; 
+  handleSubmitQuestion: (
+    event: FormEvent<HTMLFormElement>,
+    questionId?: string
+  ) => Promise<boolean>;
+  getElaboratorQuestions: () => void;
+  getQuestionById: (questionId: string) => void;
+  getReviewerQuestions: () => void;
 }
 
 export const QuestionContext = createContext<QuestionContextProps | null>(null);
 
 const initState: QuestionRequest = {
-  level: "" as QuestionLevel,
-  area: "" as QuestionArea,
+  knowledgeLevel: "" as QuestionLevel,
+  knowledgeArea: "" as QuestionArea,
   difficulty: "" as QuestionDifficulty,
   skill: "",
   competence: "",
@@ -72,7 +78,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     useState(false);
   const [indexContentEdit, setIndexContentEdit] = useState<number | null>(null);
   const [content, setContent] = useState<JSONContent>();
-  const [elaboratorQuestions, setElaboratorQuestions] = useState<Question[]>([]);
+  const [elaboratorQuestions, setElaboratorQuestions] = useState<Question[]>(
+    []
+  );
+  const [reviewerQuestions, setReviewerQuestions] = useState<Question[]>([]);
   const user = useAuthUser() as UserOutput;
 
   async function getElaboratorQuestions() {
@@ -80,6 +89,26 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       const response = await instance.get("/questions/elaborator/" + user.id);
       console.log(response);
       setElaboratorQuestions(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getReviewerQuestions() {
+    try {
+      const response = await instance.get("/questions/reviewer/" + user.id);
+      console.log(response);
+      setReviewerQuestions(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function getQuestionById(questionId: string) {
+    try {
+      const response = await instance.get("/questions/" + questionId);
+      console.log(response);
+      setQuestionRequest(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -236,7 +265,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   }
 
   async function handleSubmitQuestion(
-    event: FormEvent<HTMLFormElement>
+    event: FormEvent<HTMLFormElement>,
+    questionId?: string
   ): Promise<boolean> {
     event.preventDefault();
 
@@ -265,8 +295,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
     try {
       const formData = new FormData();
-      formData.append("level", questionRequest.level);
-      formData.append("area", questionRequest.area);
+      formData.append("level", questionRequest.knowledgeLevel);
+      formData.append("area", questionRequest.knowledgeArea);
       formData.append("difficulty", questionRequest.difficulty);
       formData.append("skill", questionRequest.skill);
       formData.append("competence", questionRequest.competence);
@@ -283,11 +313,13 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
       formData.append("userId", user.id);
 
-      const response = await instance.post("/questions", formData);
+      if (questionId) {
+        formData.append("questionId", questionId);
+      }
 
-      console.log("====================================");
-      console.log(response);
-      console.log("====================================");
+      const response = questionId
+        ? await instance.put("/questions", formData)
+        : await instance.post("/questions", formData);
 
       if (response.status === 201) {
         toast.success("Questão criada com sucesso");
@@ -332,7 +364,10 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         handleSubmitQuestion,
         handleDragEnd,
         getElaboratorQuestions,
-        elaboratorQuestions
+        elaboratorQuestions,
+        getQuestionById,
+        getReviewerQuestions,
+        reviewerQuestions,
       }}
     >
       {children}

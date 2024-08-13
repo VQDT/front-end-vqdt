@@ -3,7 +3,7 @@ import { TitleSection } from "../../components/TitleSection";
 import SearchBar from "../../components/SearchBar/SearchBar";
 import StatusOption from "../../components/StatusOption/StatusOption";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
-import CreatorPanelTabel from "../../components/CreatorPanelTable/CreatorPanelTabel";
+import CreatorPanelTabel from "../../components/CreatorPanelTable/CreatorPanelTable";
 import { useNavigate } from "react-router-dom";
 import { useQuestion } from "./../../context/question/useQuestionContext";
 import { useEffect, useState } from "react";

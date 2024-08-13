@@ -50,6 +50,15 @@ class API {
 
   public async put(path: string, data: FormData | object) {
     try {
+      if (data instanceof FormData) {
+        const response = await this.axiosInstance.post(`${path}`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        return response;
+      }
+      
       const response = await this.axiosInstance.put(`${path}`, data);
       return response;
     } catch (error) {

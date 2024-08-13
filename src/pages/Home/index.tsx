@@ -12,6 +12,10 @@ const Home = () => {
       console.log("Redirecting to /painel-de-provas");
       return navigate("/painel-de-provas");
     }
+    if (user.roles[0] === "APPLICATOR") {
+      console.log("Redirecting to /preparatorio");
+      return navigate("/preparatorio");
+    }
   }, [user, navigate]);
 
   return <div>Home!</div>;

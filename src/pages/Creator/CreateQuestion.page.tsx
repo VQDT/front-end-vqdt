@@ -12,9 +12,14 @@ import { CreateAlternativeItem } from "../../components/CreateAlternativeItem";
 import { ModalEditAlternative } from "../../components/ModalEditAlternative";
 import Tiptap from "../../components/TipTapEditor";
 import { JSONContent } from "@tiptap/react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export default function CreateQuestionPage() {
+interface CreateQuestionPageProps {
+  edit?: boolean
+}
+
+export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
   const {
     questionRequest,
     handleChangeCategories,
@@ -26,9 +31,11 @@ export default function CreateQuestionPage() {
     handleSubmitQuestion,
     handleContent,
     handleDragEnd,
+    getQuestionById,
   } = useQuestion();
 
   const navigate = useNavigate();
+  const { state } = useLocation();
 
   const alternativesList = alternatives.map((alternative, index) => {
     return (
@@ -44,11 +51,22 @@ export default function CreateQuestionPage() {
   });
 
   async function submitQuestion(e: React.FormEvent<HTMLFormElement>) { 
-    const result = await handleSubmitQuestion(e);
+    const result = edit
+      ? await handleSubmitQuestion(e, state.questionId)
+      : await handleSubmitQuestion(e);
     if (result) {
       navigate("/painel-de-elaborador");
     }
   }
+
+  useEffect(() => {
+    if (edit) {
+      getQuestionById(state.questionId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [edit]);
+
+  console.log(questionRequest);
 
   return (
     <>
@@ -64,7 +82,7 @@ export default function CreateQuestionPage() {
             <ContainerInput>
               <SelectioField
                 label="Nível de Conhecimento"
-                value={questionRequest.level}
+                value={questionRequest.knowledgeLevel}
                 name="level"
                 onChange={handleChangeCategories}
                 className="max-w-none"
@@ -78,7 +96,7 @@ export default function CreateQuestionPage() {
               />
               <SelectioField
                 label="Área de Conhecimento"
-                value={questionRequest.area}
+                value={questionRequest.knowledgeArea}
                 name="area"
                 onChange={handleChangeCategories}
                 required
@@ -87,8 +105,9 @@ export default function CreateQuestionPage() {
                   { value: "", label: "Selecione uma área" },
                   { value: "MATEMATICA", label: "Matemática" },
                   { value: "LINGUAGENS", label: "Linguagens" },
-                  { value: "CIENCIAS_HUMANAS", label: "Ciências Humnas" },
+                  { value: "CIENCIAS_HUMANAS", label: "Ciências Humanas" },
                   { value: "CIENCIAS_NATUREZA", label: "Ciências da Natureza" },
+                  { value: "HISTORIA", label: "História" },
                 ]}
               />
             </ContainerInput>
@@ -205,7 +224,7 @@ export default function CreateQuestionPage() {
             </section>
           )}
           <div className="mt-2">
-            <Button type="submit">Criar Questão</Button>
+            <Button type="submit">{edit ? "Atualizar Questão" : "Criar Questão"}</Button>
           </div>
         </form>
       </Main>
