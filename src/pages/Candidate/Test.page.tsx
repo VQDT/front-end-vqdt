@@ -161,7 +161,7 @@ function Test() {
   }, [calculateResult, checkTimeEnd]);
 
   const questionList = questions?.map(
-    ({ id, type, knowledgeArea, alternatives, ContentAux }, index) => {
+    ({ id, type, knowledgeArea, alternatives, content }, index) => {
       return (
         <Question.Root key={id}>
           <div className="mb-5 flex justify-between">
@@ -170,7 +170,7 @@ function Test() {
               #{knowledgeArea}
             </span>
           </div>
-          <div>{switchContent(ContentAux)}</div>
+          <div>{switchContent(content)}</div>
           {type === "multiple-choice" ? (
             <div className="flex flex-col gap-3">
               {alternativeList(alternatives)}

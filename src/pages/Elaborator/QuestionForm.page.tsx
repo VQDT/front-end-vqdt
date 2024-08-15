@@ -15,11 +15,11 @@ import { JSONContent } from "@tiptap/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
-interface CreateQuestionPageProps {
-  edit?: boolean
+interface QuestionFormProps {
+  edit?: boolean;
 }
 
-export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
+export default function QuestionForm({ edit }: QuestionFormProps) {
   const {
     questionRequest,
     handleChangeCategories,
@@ -32,6 +32,8 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
     handleContent,
     handleDragEnd,
     getQuestionById,
+    cleanQuestion,
+    isLoading,
   } = useQuestion();
 
   const navigate = useNavigate();
@@ -50,7 +52,7 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
     );
   });
 
-  async function submitQuestion(e: React.FormEvent<HTMLFormElement>) { 
+  async function submitQuestion(e: React.FormEvent<HTMLFormElement>) {
     const result = edit
       ? await handleSubmitQuestion(e, state.questionId)
       : await handleSubmitQuestion(e);
@@ -60,13 +62,17 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
   }
 
   useEffect(() => {
-    if (edit) {
-      getQuestionById(state.questionId);
-    }
+      if (edit) {
+        getQuestionById(state.questionId);
+      } else {
+        cleanQuestion();
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [edit]);
 
-  console.log(questionRequest);
+  if (isLoading) {
+    return <p>Carregando...</p>;
+  }
 
   return (
     <>
@@ -83,12 +89,12 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
               <SelectioField
                 label="Nível de Conhecimento"
                 value={questionRequest.knowledgeLevel}
-                name="level"
+                name="knowledgeLevel"
                 onChange={handleChangeCategories}
                 className="max-w-none"
                 required
                 options={[
-                  { value: "", label: "Selecione um nível" },
+                  { value: "default", label: "Selecione um nível" },
                   { value: "INFANTIL", label: "Ensino Infantil" },
                   { value: "FUNDAMENTAL", label: "Ensino Fundamental" },
                   { value: "MEDIO", label: "Ensino Médio" },
@@ -97,7 +103,7 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
               <SelectioField
                 label="Área de Conhecimento"
                 value={questionRequest.knowledgeArea}
-                name="area"
+                name="knowledgeArea"
                 onChange={handleChangeCategories}
                 required
                 className="max-w-none"
@@ -190,13 +196,14 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
           </section>
           <section className="mt-4 flex flex-col gap-8">
             <TitleSection title="Conteúdo da Questão" />
-            <Tiptap
-              setContent={
-                handleContent as React.Dispatch<
-                  React.SetStateAction<JSONContent>
-                >
-              }
-            />
+              <Tiptap
+                setContent={
+                  handleContent as React.Dispatch<
+                    React.SetStateAction<JSONContent>
+                  >
+                }
+                originalContent={questionRequest.content}
+              />
           </section>
           {questionRequest.type === "multiple-choice" && (
             <section className="mt-4  flex flex-col gap-8">
@@ -224,7 +231,9 @@ export default function CreateQuestionPage({ edit }: CreateQuestionPageProps) {
             </section>
           )}
           <div className="mt-2">
-            <Button type="submit">{edit ? "Atualizar Questão" : "Criar Questão"}</Button>
+            <Button type="submit">
+              {edit ? "Atualizar Questão" : "Criar Questão"}
+            </Button>
           </div>
         </form>
       </Main>

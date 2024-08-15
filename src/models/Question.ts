@@ -27,7 +27,7 @@ export type Answer = {
 
 export type QuestionLevel = "INFANTIL" | "FUNDAMENTAL" | "MEDIO";
 export type QuestionArea = "LINGUAGENS" | "MATEMATICA" | "CIENCIAS_HUMANAS" | "CIENCIAS_NATUREZA";
-export type QuestionDifficulty = "1" | "2" | "3";
+export type QuestionDifficulty = "1" | "2" | "3" | "default";
 export type QuestionType = "multiple-choice" | "true-or-false";
 export type QuestionStatus = "APROVADA" | "REJEITADA" | "EM_ANALISE" | "RASCUNHO" | "PENDENTE";
 //converta o QuestionArea para um enum
@@ -48,6 +48,7 @@ export enum QuestionStatusEnum {
 }
 
 export interface QuestionRequest {
+  content: JSON;
   knowledgeLevel: QuestionLevel;
   knowledgeArea: QuestionArea;
   difficulty: QuestionDifficulty;

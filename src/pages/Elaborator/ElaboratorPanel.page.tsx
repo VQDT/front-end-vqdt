@@ -5,7 +5,7 @@ import StatusOption from "../../components/StatusOption/StatusOption";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
 import CreatorPanelTabel from "../../components/CreatorPanelTable/CreatorPanelTable";
 import { useNavigate } from "react-router-dom";
-import { useQuestion } from "./../../context/question/useQuestionContext";
+import { useQuestion } from "../../context/question/useQuestionContext";
 import { useEffect, useState } from "react";
 import {
   Question,
@@ -13,7 +13,7 @@ import {
   QuestionAreaEnum,
 } from "../../models/Question";
 
-const CreatorPanel = () => {
+const ElaboratorPanel = () => {
   const statusOptions = Object.values(QuestionStatusEnum);
   const areaOptions = Object.values(QuestionAreaEnum);
   const navigate = useNavigate();
@@ -92,4 +92,4 @@ const CreatorPanel = () => {
   );
 };
 
-export default CreatorPanel;
+export default ElaboratorPanel;

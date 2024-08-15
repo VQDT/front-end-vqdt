@@ -42,14 +42,12 @@ function TestProvider({ children }: TestProviderProps) {
   const getTests = useCallback(async () => {
     const url = `/tests`;
     const response = await AxiosInstance.get(url);
-    console.log(response);
     setTests(response.data);
   }, [AxiosInstance, setTests]);
 
   async function getTest(id: string) {
     const url = `/tests/test/` + id;
     const response = await AxiosInstance.get(url);
-    console.log(response);
     setTest(response.data);
   }
 
@@ -87,8 +85,7 @@ function TestProvider({ children }: TestProviderProps) {
     status: boolean
   ) {
     const url = `/testAttendance/result/`;
-    const response = await AxiosInstance.put(url, { testId, score, status });
-    console.log(response.data);
+    await AxiosInstance.put(url, { testId, score, status });
   }
 
   async function updateAttendance(attendances: UserOutput[], test: Test) {
@@ -124,6 +121,7 @@ function TestProvider({ children }: TestProviderProps) {
 
   useEffect(() => {
     getTests();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

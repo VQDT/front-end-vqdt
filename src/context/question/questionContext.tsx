@@ -25,6 +25,7 @@ import { DropResult } from "@hello-pangea/dnd";
 interface QuestionContextProps {
   questionRequest: QuestionRequest;
   alternatives: AlternativeRequest[];
+  isLoading: boolean;
   modalAddAlternativeIsOpen: boolean;
   contentAlternative: string;
   content: JSONContent | undefined;
@@ -53,11 +54,13 @@ interface QuestionContextProps {
   getElaboratorQuestions: () => void;
   getQuestionById: (questionId: string) => void;
   getReviewerQuestions: () => void;
+  cleanQuestion: () => void;
 }
 
 export const QuestionContext = createContext<QuestionContextProps | null>(null);
 
 const initState: QuestionRequest = {
+  content: {} as JSON,
   knowledgeLevel: "" as QuestionLevel,
   knowledgeArea: "" as QuestionArea,
   difficulty: "" as QuestionDifficulty,
@@ -65,12 +68,13 @@ const initState: QuestionRequest = {
   competence: "",
   alternatives: [],
   type: "multiple-choice",
+  isCorrect: undefined,
 };
 
 export function QuestionProvider({ children }: { children: ReactNode }) {
+  const instance = useAPI();
   const [questionRequest, setQuestionRequest] =
     useState<QuestionRequest>(initState);
-  const instance = useAPI();
   const [contentAlternative, setContentAlternative] = useState<string>("");
   const [modalAddAlternativeIsOpen, setModalAddAlternativeIsOpen] =
     useState(false);
@@ -83,11 +87,11 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   );
   const [reviewerQuestions, setReviewerQuestions] = useState<Question[]>([]);
   const user = useAuthUser() as UserOutput;
+  const [isLoading, setIsLoading] = useState(true);
 
   async function getElaboratorQuestions() {
     try {
       const response = await instance.get("/questions/elaborator/" + user.id);
-      console.log(response);
       setElaboratorQuestions(response.data);
     } catch (error) {
       console.log(error);
@@ -107,8 +111,11 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   async function getQuestionById(questionId: string) {
     try {
       const response = await instance.get("/questions/" + questionId);
-      console.log(response);
-      setQuestionRequest(response.data);
+      if (response) {
+        console.log(response);
+        setQuestionRequest(response.data);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -116,6 +123,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   function handleChangeCategories(event: ChangeEvent<HTMLSelectElement>) {
     const { name, value } = event.target;
+    console.log(name, value);
     setQuestionRequest({
       ...questionRequest,
       [name]: name === "isCorrect" ? value === "true" : value,
@@ -140,6 +148,11 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   function handleCloseAddAlternative() {
     setContentAlternative("");
     setModalAddAlternativeIsOpen(false);
+  }
+
+  function cleanQuestion() {
+    console.log("clean");
+    setQuestionRequest(initState);
   }
 
   function changeCorrectAlternative(index: number) {
@@ -302,6 +315,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       formData.append("competence", questionRequest.competence);
       formData.append("type", questionRequest.type);
       formData.append("content", JSON.stringify(content));
+      if (questionRequest.type === "true-or-false")
+        formData.append("isCorrect", JSON.stringify(questionRequest.isCorrect));
 
       questionRequest.alternatives.forEach((alternative, index) => {
         formData.append(`alternatives[${index}][content]`, alternative.content);
@@ -321,8 +336,12 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         ? await instance.put("/questions", formData)
         : await instance.post("/questions", formData);
 
-      if (response.status === 201) {
-        toast.success("Questão criada com sucesso");
+      if (response.status === 201 || response.status === 200) {
+        const message =
+          response.status === 201
+            ? "Questão criada com sucesso"
+            : "Questão editada com sucesso";
+        toast.success(message);
         setQuestionRequest(initState);
         return true;
       } else {
@@ -330,7 +349,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         return false;
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message || "Erro ao criar questão");
       }
@@ -368,6 +386,8 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
         getQuestionById,
         getReviewerQuestions,
         reviewerQuestions,
+        cleanQuestion,
+        isLoading,
       }}
     >
       {children}

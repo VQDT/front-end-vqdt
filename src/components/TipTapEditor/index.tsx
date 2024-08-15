@@ -1,4 +1,4 @@
-import { useEditor, EditorContent, JSONContent } from "@tiptap/react";
+import { useEditor, EditorContent, JSONContent, generateHTML } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ButtonEditorTipTap from "./ButtonEditorTipTap/index";
 import Dropcursor from "@tiptap/extension-dropcursor";
@@ -35,36 +35,46 @@ const extensions = [
   }),
 ];
 
-const content = "<p>Hello World!</p>";
-
 interface Props {
-  setContent: React.Dispatch<React.SetStateAction<JSONContent>>;
+  setContent?: React.Dispatch<React.SetStateAction<JSONContent>>;
+  reviewerMode?: boolean;
+  originalContent: JSON;
 }
 
 export default function Tiptap(props: Props) {
+  const jsonCotent: JSONContent = props.originalContent;
+  let content = '';
+  if (typeof jsonCotent === 'object' && jsonCotent !== null && Object.keys(jsonCotent).length === 0) {
+    content = '';
+  }
+  else { 
+    content = generateHTML(jsonCotent, extensions);
+  } 
+
   const editor = useEditor({
     extensions,
     content,
     editorProps: {
       attributes: {
         class:
-          "w-full min-h-48 p-3 border border-zinc-300 focus:border-zinc-700 focus:ring-2 focus:ring-zinc-700 focus:ring-opacity-50 rounded-md prose prose-sm sm:prose-base",
+          "w-full p-3 border border-zinc-300 focus:border-zinc-700 focus:ring-2 focus:ring-zinc-700 focus:ring-opacity-50 rounded-md",
       },
     },
     onUpdate: ({ editor }) => {
       const json = editor.getJSON();
-      props.setContent(json);
+      if (props.setContent) {
+        props.setContent(json);
+      }
       // send the content to an API here
     },
   });
 
   const addImage = useCallback(() => {
-  
     const handleFile = (file: File) => {
       const reader = new FileReader();
       reader.onload = (event: ProgressEvent<FileReader>) => {
         const fileURL = event.target?.result as string;
-        
+
         // Insere a imagem no editor Tiptap
         editor?.commands.setImage({ src: fileURL });
       };
@@ -75,7 +85,7 @@ export default function Tiptap(props: Props) {
     fileInput.type = "file";
     fileInput.accept = "image/*"; // Aceita apenas imagens
     fileInput.style.display = "none"; // Oculta o input
-  
+
     // Adiciona um listener para lidar com o arquivo selecionado
     fileInput.addEventListener("change", (event: Event) => {
       const target = event.target as HTMLInputElement;
@@ -86,14 +96,13 @@ export default function Tiptap(props: Props) {
         handleFile(file);
       }
     });
-  
+
     document.body.appendChild(fileInput);
-  
+
     fileInput.click();
-  
+
     // Remove o input do DOM após o uso
     document.body.removeChild(fileInput);
-  
   }, [editor?.commands]);
 
   if (!editor) return null;
@@ -198,12 +207,8 @@ export default function Tiptap(props: Props) {
           </ButtonEditorTipTap>
         </div>
 
-        <div>
-          <EditorContent
-            className="prose prose-lg sm:prose-base"
-            style={{ minHeight: "200px" }}
-            editor={editor}
-          />
+        <div className="w-full max-w-none prose xl:prose-lg">
+          <EditorContent style={{ minHeight: "200px" }} editor={editor} />
         </div>
       </div>
     </>

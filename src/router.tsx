@@ -13,12 +13,13 @@ import CandidateResult from "./pages/Candidate/CandidateResult.page";
 import IntroductionTestPage from "./pages/Candidate/IntroductionTest.page";
 import Test from "./pages/Candidate/Test.page";
 import TestPainel from "./pages/Candidate/TestPainel.page";
-import CreateQuestionPage from "./pages/Creator/CreateQuestion.page";
+import QuestionForm from "./pages/Elaborator/QuestionForm.page";
 import ErrorPage from "./pages/ErrorPage";
 import Home from "./pages/Home";
 import LogoutPage from "./pages/Logout/LogoutPage";
-import CreatorPanel from "./pages/Creator/CreatorPanel.page";
-import ReviewerPanel from './pages/Review/ReviewerPanel.page';
+import CreatorPanel from "./pages/Elaborator/ElaboratorPanel.page";
+import ReviewerPanel from "./pages/Review/ReviewerPanel.page";
+import { ReviewQuestion } from "./pages/Review/ReviewQuestion.page";
 
 export const Router = createBrowserRouter([
   {
@@ -77,8 +78,8 @@ export const Router = createBrowserRouter([
           },
           {
             path: "/revisar-questao",
-            element: <ReviewQuestionPage />,
-          }
+            element: <ReviewQuestion />,
+          },
         ],
       },
 
@@ -96,7 +97,7 @@ export const Router = createBrowserRouter([
         children: [
           {
             path: "/criar-questao",
-            element: <CreateQuestionPage />,
+            element: <QuestionForm />,
           },
           {
             path: "/painel-de-elaborador",
@@ -104,8 +105,8 @@ export const Router = createBrowserRouter([
           },
           {
             path: "/editar-questao",
-            element: <CreateQuestionPage edit={true} />,
-          }
+            element: <QuestionForm edit={true} />,
+          },
         ],
       },
 

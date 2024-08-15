@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { Question } from "../../models/Question";
 import StatusOption from "../StatusOption/StatusOption";
+import IconButton from "@mui/material/IconButton";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 type CreatorPanelTableProps = {
   data: Question[];
@@ -54,12 +56,12 @@ const CreatorPanelTable = ({ data, role }: CreatorPanelTableProps) => {
                 (
                   <tr
                     key={item.id}
-                    className="hover:bg-blue-100"
+                    className={
+                      role === "reviewer" ? undefined : "hover:bg-blue-100"
+                    }
                     onClick={() =>
                       role === "reviewer"
-                        ? navigate("/revisar-questao", {
-                            state: { questionId: item.id },
-                          })
+                        ? null
                         : navigate("/editar-questao", {
                             state: { questionId: item.id },
                           })
@@ -90,6 +92,20 @@ const CreatorPanelTable = ({ data, role }: CreatorPanelTableProps) => {
                           item.status.slice(1).toUpperCase().replace("_", " ")}
                       </StatusOption>
                     </td>
+                    {role === "reviewer" && (
+                      <td className="px-4 py-2 text-center">
+                        <IconButton
+                          color="primary"
+                          onClick={() =>
+                            navigate("/revisar-questao", {
+                              state: { questionId: item.id },
+                            })
+                          }
+                        >
+                          <OpenInNewIcon />
+                        </IconButton>
+                      </td>
+                    )}
                   </tr>
                 )
               )
