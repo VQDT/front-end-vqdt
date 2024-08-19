@@ -1,7 +1,12 @@
-import { useEditor, EditorContent, JSONContent, generateHTML } from "@tiptap/react";
+import {
+  useEditor,
+  EditorContent,
+  JSONContent,
+  generateHTML,
+} from "@tiptap/react";
+import { Editor } from '@tiptap/core';
 import StarterKit from "@tiptap/starter-kit";
 import ButtonEditorTipTap from "./ButtonEditorTipTap/index";
-import Dropcursor from "@tiptap/extension-dropcursor";
 import Underline from "@tiptap/extension-underline";
 import Image from "@tiptap/extension-image";
 import TextAlign from "@tiptap/extension-text-align";
@@ -25,10 +30,8 @@ const extensions = [
   StarterKit,
   Underline,
   Image.configure({
-    inline: true,
     allowBase64: true,
   }),
-  Dropcursor,
   TextAlign.configure({
     types: ["heading", "paragraph"],
     alignments: ["left", "center", "right"],
@@ -42,14 +45,18 @@ interface Props {
 }
 
 export default function Tiptap(props: Props) {
-  const jsonCotent: JSONContent = props.originalContent;
-  let content = '';
-  if (typeof jsonCotent === 'object' && jsonCotent !== null && Object.keys(jsonCotent).length === 0) {
-    content = '';
+  console.log(props.originalContent)
+  const jsonContent: JSONContent = props.originalContent;
+  let content = "";
+  if (
+    typeof jsonContent === "object" &&
+    jsonContent !== null &&
+    Object.keys(jsonContent).length === 0
+  ) {
+    content = "";
+  } else {
+    content = generateHTML(jsonContent, extensions);
   }
-  else { 
-    content = generateHTML(jsonCotent, extensions);
-  } 
 
   const editor = useEditor({
     extensions,
@@ -65,7 +72,6 @@ export default function Tiptap(props: Props) {
       if (props.setContent) {
         props.setContent(json);
       }
-      // send the content to an API here
     },
   });
 

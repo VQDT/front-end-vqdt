@@ -101,7 +101,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
   async function getReviewerQuestions() {
     try {
       const response = await instance.get("/questions/reviewer/" + user.id);
-      console.log(response);
       setReviewerQuestions(response.data);
     } catch (error) {
       console.log(error);
@@ -112,7 +111,6 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     try {
       const response = await instance.get("/questions/" + questionId);
       if (response) {
-        console.log(response);
         setQuestionRequest(response.data);
         setIsLoading(false);
       }
@@ -152,6 +150,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
 
   function cleanQuestion() {
     console.log("clean");
+    setIsLoading(false);
     setQuestionRequest(initState);
   }
 
@@ -307,6 +306,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
     }
 
     try {
+      console.log(content);
       const formData = new FormData();
       formData.append("level", questionRequest.knowledgeLevel);
       formData.append("area", questionRequest.knowledgeArea);
@@ -327,10 +327,7 @@ export function QuestionProvider({ children }: { children: ReactNode }) {
       });
 
       formData.append("userId", user.id);
-
-      if (questionId) {
-        formData.append("questionId", questionId);
-      }
+      if (questionId) formData.append("questionId", questionId);
 
       const response = questionId
         ? await instance.put("/questions", formData)
