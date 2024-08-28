@@ -11,7 +11,7 @@ export function useLogin() {
     
     const handleLoginSubmit = async (cpf: string, password: string) => {
         try {
-            const response = await instance.post("/account/login", {
+            const response = await instance.post("/login", {
                 cpf: cpf.replace(/[^\d]/g, ""),
                 password,
             });
