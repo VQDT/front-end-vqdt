@@ -93,7 +93,6 @@ function TestProvider({ children }: TestProviderProps) {
     attendances.map(async (user) => {
       const userId = user.id;
       const response = await AxiosInstance.put(url, { userId, test });
-      console.log(response.data);
     });
   }
 
@@ -103,7 +102,6 @@ function TestProvider({ children }: TestProviderProps) {
         if (user.id === id) {
           user.testAttendances[0].presence = !user.testAttendances[0].presence;
         }
-        console.log(user);
         return user;
       });
       setCandidates(newList);

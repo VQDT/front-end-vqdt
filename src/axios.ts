@@ -23,7 +23,6 @@ class API {
       const response = await this.axiosInstance.get(`${path}`);
       return response;
     } catch (error) {
-      console.error('GET request failed:', error);
       throw error;
     }
   }
@@ -43,7 +42,6 @@ class API {
       return response;
 
     } catch (error) {
-      console.error('POST request failed:', error);
       throw error;
     }
   }
@@ -62,7 +60,6 @@ class API {
       const response = await this.axiosInstance.put(`${path}`, data);
       return response;
     } catch (error) {
-      console.error('PUT request failed:', error);
       throw error;
     }
   }
@@ -72,7 +69,6 @@ class API {
       const response = await this.axiosInstance.delete(`${path}`,);
       return response;
     } catch (error) {
-      console.error('DELETE request failed:', error);
       throw error;
     }
   }

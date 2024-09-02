@@ -47,7 +47,6 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
       return true
     }
     catch (error) {
-      console.error(error);
       return false;
     }
   }
@@ -58,7 +57,6 @@ function PreparatoryProvider({ children }: PreparatoryProviderProps) {
         if(elem.user.id === id) {
           elem.presence = !elem.presence
         }
-        console.log(elem)
         return elem;
       })
       setCourseCandidates(newList)

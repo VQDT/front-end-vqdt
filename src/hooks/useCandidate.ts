@@ -37,7 +37,6 @@ export function useCandidate() {
                 return true;
             }
         } catch (error) {
-            console.error(error);
             return false;
         }
     }

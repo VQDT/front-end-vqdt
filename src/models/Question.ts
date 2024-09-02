@@ -48,7 +48,7 @@ export enum QuestionStatusEnum {
 }
 
 export interface QuestionRequest {
-  content: JSON;
+  content: string;
   knowledgeLevel: QuestionLevel;
   knowledgeArea: QuestionArea;
   difficulty: QuestionDifficulty;
